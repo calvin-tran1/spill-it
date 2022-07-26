@@ -25,6 +25,7 @@ app.get('/api/users', (req, res, next) => {
            "bio"
       from "users"
   `;
+
   db.query(sql)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
