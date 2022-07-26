@@ -7,6 +7,7 @@ const jsonMiddleware = express.json();
 const publicPath = path.join(__dirname, 'public');
 const ClientError = require('./client-error');
 const db = require('./db');
+const argon2 = require('argon2');
 
 app.use(jsonMiddleware);
 
@@ -57,6 +58,42 @@ app.get('/api/users/:userId', (req, res, next) => {
       res.status(200).json(result.rows[0]);
     })
     .catch(err => next(err));
+});
+
+app.post('/api/auth/sign-up', (req, res, next) => {
+  const { username, password, displayName, avatar, bio } = req.body;
+
+  if (!username || !password) {
+    throw new ClientError(400, 'username and password are required fields');
+  }
+
+  argon2.hash(password)
+    .then(hashedPassword => {
+      const sql = `
+        insert into "users" ("username", "hashedPassword", "displayName", "avatar", "bio")
+        values ($1, $2, $3, $4, $5)
+        returning "userId",
+                  "username",
+                  "displayName",
+                  "avatar",
+                  "bio",
+                  "createdAt"
+      `;
+      const params = [username, hashedPassword, displayName, avatar, bio];
+
+      db.query(sql, params)
+        .then(result => {
+          res.status(201).json(result.rows[0]);
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({ error: 'an unexpected error has occurred' });
+        });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'an unexpected error has occurred' });
+    });
 });
 
 app.use(errorMiddleware);
