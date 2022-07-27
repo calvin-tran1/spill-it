@@ -1,0 +1,97 @@
+* {
+  font-family: roboto, sans-serif;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.main-content {
+  max-width: 590px;
+  margin: 0 auto;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.bg-milk-brown {
+  background-color: #e0cda9;
+}
+
+.bg-cream {
+  background-color: #f7e7c8;
+}
+
+.heading {
+  font-family: Scada, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.sign-in-btn {
+  display: block;
+  margin: 0 auto;
+  width: 345px;
+  height: 45px;
+  border-style: solid;
+  border-radius: 30px;
+  border-color: #693504;
+  background-color: #f7e7c8;
+  color: #69bf64;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.login-fields {
+  text-align: center;
+}
+
+.input-username-password {
+  width: 345px;
+  height: 60px;
+  background-color: #e0cda9;
+  border-style: solid;
+  border-color: #693504;
+  text-align: center;
+}
+
+.input-username-password::placeholder {
+  font-size: 20px;
+  color: #d2ab7c;
+  text-align: center;
+}
+
+.sign-in-up-divider {
+  display: flex;
+  justify-content: center;
+}
+
+hr {
+  height: 2px;
+  background-color: #693504;
+  width: 153px;
+}
+
+.or {
+  padding: 0.2em 0.5em;
+  color: #693504;
+}
+
+.sign-up-btn {
+  display: block;
+  margin: 0 auto;
+  width: 345px;
+  height: 45px;
+  border-style: none;
+  border-radius: 30px;
+  background-color: #69bf64;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none !important;
+}
