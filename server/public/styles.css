@@ -1,0 +1,155 @@
+* {
+  font-family: roboto, sans-serif;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.main-content {
+  max-width: 590px;
+  margin: 0 auto;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.bg-milk-brown {
+  background-color: #e0cda9;
+}
+
+.bg-cream {
+  background-color: #f7e7c8;
+}
+
+.heading {
+  font-family: Scada, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.sign-in-btn {
+  display: block;
+  margin: 0 auto;
+  width: 345px;
+  height: 45px;
+  border-style: solid;
+  border-radius: 30px;
+  border-color: #693504;
+  background-color: #f7e7c8;
+  color: #69bf64;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.input-fields {
+  text-align: center;
+}
+
+.input-username-password {
+  width: 345px;
+  height: 60px;
+  background-color: #e0cda9;
+  border-style: solid;
+  border-color: #693504;
+  text-align: center;
+}
+
+.input-username-password::placeholder {
+  font-size: 20px;
+  color: #d2ab7c;
+  text-align: center;
+}
+
+.input-display-name {
+  width: 345px;
+  height: 60px;
+  background-color: #e0cda9;
+  border-style: solid;
+  border-color: #693504;
+  text-align: center;
+}
+
+.input-display-name::placeholder {
+  font-size: 20px;
+  color: #d2ab7c;
+  text-align: center;
+}
+
+.input-bio {
+  width: 345px;
+  height: 102px;
+  font-size: 20px;
+  background-color: #e0cda9;
+  color: #d2ab7c;
+  border-style: solid;
+  border-color: #693504;
+  text-align: center;
+}
+
+.input-bio::placeholder {
+  font-size: 20px;
+  color: #d2ab7c;
+  text-align: center;
+}
+
+.sign-in-up-divider {
+  display: flex;
+  justify-content: center;
+}
+
+hr {
+  height: 2px;
+  background-color: #693504;
+  width: 153px;
+}
+
+.or {
+  padding: 0.2em 0.5em;
+  color: #693504;
+}
+
+.finish-profile-btn,
+.sign-up-btn {
+  display: block;
+  margin: 0 auto;
+  width: 345px;
+  height: 45px;
+  border-style: none;
+  border-radius: 30px;
+  background-color: #69bf64;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.fa-mug-saucer {
+  color: #69bf64;
+  font-size: 63px;
+}
+
+.logo {
+  width: 345px;
+  margin: 1em auto;
+}
+
+.upload-avatar {
+  display: none;
+}
+
+.avatar-label {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #69bf64;
+}
