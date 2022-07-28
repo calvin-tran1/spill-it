@@ -31,7 +31,7 @@ export default class SignUp extends React.Component {
 
     fetch('/api/auth/sign-up', req)
       .then(res => res.json())
-      .then(data => {
+      .then(() => {
         window.location.hash = 'profile-setup';
       });
   }
@@ -43,15 +43,17 @@ export default class SignUp extends React.Component {
           <div className="col d-none d-lg-block" />
           <div className="col">
             <div className="main-content full-height">
-              <a
-                href="#">
-                <i className="fa-solid fa-mug-saucer " />
-              </a>
+              <div className="logo">
+                <a
+                  href="#">
+                  <i className="fa-solid fa-mug-saucer " />
+                </a>
+              </div>
               <p className="heading">
-                What we sippin&apos; on today?
+                Mother of pearl...
               </p>
               <form onSubmit={this.handleSubmit}>
-                <div className="login-fields">
+                <div className="input-fields">
                   <label name="username" />
                   <input
                   required
@@ -61,7 +63,7 @@ export default class SignUp extends React.Component {
                   name="username"
                   onChange={this.handleChange} />
                 </div>
-                <div className="login-fields">
+                <div className="input-fields">
                   <label name="password" />
                   <input
                   required

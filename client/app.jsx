@@ -1,6 +1,7 @@
 import React from 'react';
 import SignIn from './pages/sign-in';
 import SignUp from './pages/sign-up';
+import ProfileSetup from './pages/profile-setup';
 import parseRoute from './lib/parse-route';
 
 export default class App extends React.Component {
@@ -25,6 +26,9 @@ export default class App extends React.Component {
     }
     if (route.path === 'sign-up') {
       return <SignUp />;
+    }
+    if (route.path === 'profile-setup') {
+      return <ProfileSetup />;
     }
   }
 

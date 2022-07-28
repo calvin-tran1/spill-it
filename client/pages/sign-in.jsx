@@ -9,18 +9,20 @@ export default class SignIn extends React.Component {
           <div className="col d-none d-lg-block" />
           <div className="col">
             <div className="main-content full-height">
-              <a
-                href="#">
-                <i className="fa-solid fa-mug-saucer " />
-              </a>
+              <div className="logo">
+                <a
+                  href="#">
+                  <i className="fa-solid fa-mug-saucer " />
+                </a>
+              </div>
               <p className="heading">
                 What we sippin&apos; on today?
               </p>
-              <div className="login-fields">
+              <div className="input-fields">
                 <label name="username" />
                 <input className="input-username-password my-3" placeholder="Username" />
               </div>
-              <div className="login-fields">
+              <div className="input-fields">
                 <label name="password" />
                 <input type="password" className="input-username-password my-3" placeholder="Password" />
               </div>

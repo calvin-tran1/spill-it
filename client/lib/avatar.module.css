@@ -1,0 +1,19 @@
+.avatarimage {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 2px solid #693504;
+}
+
+.avatartext {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: white;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
