@@ -1,6 +1,41 @@
 import React from 'react';
 
 export default class SignUp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+      displayName: '',
+      avatar: 'img'
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value, displayName: this.state.username });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    };
+
+    fetch('/api/auth/sign-up', req)
+      .then(res => res.json())
+      .then(data => {
+        window.location.hash = 'profile-setup';
+      });
+  }
+
   render() {
     return (
       <div className="container-fluid bg-milk-brown">
@@ -15,30 +50,41 @@ export default class SignUp extends React.Component {
               <p className="heading">
                 What we sippin&apos; on today?
               </p>
-              <div className="login-fields">
-                <label name="username" />
-                <input className="input-username-password my-3" placeholder="Username" />
-              </div>
-              <div className="login-fields">
-                <label name="password" />
-                <input type="password" className="input-username-password my-3" placeholder="Password" />
-              </div>
-              <button type="submit" className="sign-in-btn my-3 hidden">
-                Sign in
-              </button>
-              <div className="sign-in-up-divider hidden">
-                <hr />
-                <p className="or">or</p>
-                <hr />
-              </div>
-              <a
-                href="#profile-setup">
+              <form onSubmit={this.handleSubmit}>
+                <div className="login-fields">
+                  <label name="username" />
+                  <input
+                  required
+                  type="text"
+                  className="input-username-password my-3"
+                  placeholder="Username"
+                  name="username"
+                  onChange={this.handleChange} />
+                </div>
+                <div className="login-fields">
+                  <label name="password" />
+                  <input
+                  required
+                  type="password"
+                  className="input-username-password my-3"
+                  placeholder="Password"
+                  name="password"
+                  onChange={this.handleChange} />
+                </div>
+                <button type="submit" className="sign-in-btn my-3 hidden">
+                  Sign in
+                </button>
+                <div className="sign-in-up-divider hidden">
+                  <hr />
+                  <p className="or">or</p>
+                  <hr />
+                </div>
                 <button type="submit" className="sign-up-btn my-1">
                   Sign up
                 </button>
-              </a>
+              </form>
+              </div>
             </div>
-          </div>
           <div className="col d-none d-lg-block" />
         </div>
       </div>

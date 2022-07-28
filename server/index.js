@@ -63,8 +63,8 @@ app.get('/api/users/:userId', (req, res, next) => {
 app.post('/api/auth/sign-up', (req, res, next) => {
   const { username, password, displayName, avatar, bio } = req.body;
 
-  if (!username || !password || !displayName || !avatar) {
-    throw new ClientError(400, 'username, password, display name, and avatar are required fields');
+  if (!username || !password) {
+    throw new ClientError(400, 'username and password are required fields');
   }
 
   argon2.hash(password)

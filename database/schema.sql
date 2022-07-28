@@ -7,8 +7,8 @@ CREATE TABLE "public"."users" (
     "userId" serial NOT NULL,
     "username" TEXT NOT NULL UNIQUE,
     "hashedPassword" TEXT NOT NULL,
-    "displayName" TEXT NOT NULL,
-    "avatar" TEXT NOT NULL,
+    "displayName" TEXT,
+    "avatar" TEXT,
     "bio" TEXT,
     "createdAt" timestamptz NOT NULL default now(),
     CONSTRAINT "users_pk" PRIMARY KEY ("userId")
