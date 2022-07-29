@@ -7,7 +7,7 @@ export default class SignUp extends React.Component {
       username: '',
       password: '',
       displayName: '',
-      avatar: 'img'
+      avatar: 'https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg'
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,8 +31,9 @@ export default class SignUp extends React.Component {
 
     fetch('/api/auth/sign-up', req)
       .then(res => res.json())
-      .then(() => {
-        window.location.hash = 'profile-setup';
+      .then(result => {
+        this.props.onSignIn(result);
+        window.location.hash = `${this.state.username}/profile-setup`;
       });
   }
 

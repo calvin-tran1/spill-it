@@ -2,7 +2,31 @@ import React from 'react';
 import Avatar from '../components/avatar';
 
 export default class ProfileSetup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null
+    };
+  }
+
+  componentDidMount() {
+    const token = window.localStorage.getItem('react-context-jwt');
+    const req = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': token
+      }
+    };
+
+    fetch('/api/user', req)
+      .then(res => res.text())
+      .then(user => this.setState({ user }));
+  }
+
   render() {
+    if (!this.state.user) return null;
+    console.log('Profile:', this.state.user); // eslint-disable-line
     return (
       <div className="container-fluid bg-milk-brown">
         <div className="row">
@@ -20,8 +44,8 @@ export default class ProfileSetup extends React.Component {
               </p>
               <form onSubmit={this.handleSubmit}>
                 <Avatar
-                  imageUrl="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
-                  name="calvin"
+                  imageUrl={this.state.user.avatar}
+                  name="test"
                 />
                 <div className="input-fields my-3">
                   <label className="avatar-label">

@@ -1,0 +1,27 @@
+GET http://localhost:3000/api/auth/sign-in
+
+###
+POST http://localhost:3000/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "hillbilly",
+  "password": "password1"
+}
+
+###
+GET http://localhost:3000/api/users/9
+
+
+###
+POST http://localhost:3000/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "lulw",
+  "password": "lulw"
+}
+
+###
+GET http://localhost:3000/api/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI3LCJ1c2VybmFtZSI6Imx1bHciLCJpYXQiOjE2NTkxMzAwMDB9.Jr-iW1FJgY6gp3WTLXUFN4GwuZLdH3xn2gLXZXWp93w
