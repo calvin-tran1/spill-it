@@ -129,11 +129,6 @@ a {
   text-decoration: none !important;
 }
 
-.avatar-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
 .fa-mug-saucer {
   color: #69bf64;
   font-size: 63px;
@@ -144,12 +139,17 @@ a {
   margin: 1em auto;
 }
 
-.upload-avatar {
-  display: none;
+.top-nav {
+  display: flex;
+  height: 53px;
+  background-color: #e0cda9;
+  padding: 0.5em;
+  border-bottom: solid #693504;
 }
 
-.avatar-label {
-  cursor: pointer;
-  text-decoration: underline;
-  color: #69bf64;
+.mobile-nav-title {
+  padding-left: 0.8em;
+  font-size: 21px;
+  font-weight: bold;
+  color: #693504;
 }

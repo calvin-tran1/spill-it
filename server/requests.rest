@@ -5,7 +5,7 @@ POST http://localhost:3000/api/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "hillbilly",
+  "username": "hillbilly1",
   "password": "password1"
 }
 
@@ -18,10 +18,10 @@ POST http://localhost:3000/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "username": "lulw",
-  "password": "lulw"
+  "username": "mickey",
+  "password": "mouse"
 }
 
 ###
 GET http://localhost:3000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI3LCJ1c2VybmFtZSI6Imx1bHciLCJpYXQiOjE2NTkxMzAwMDB9.Jr-iW1FJgY6gp3WTLXUFN4GwuZLdH3xn2gLXZXWp93w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjU5MTU2ODAxfQ.lFGLlAjUPA_4luBG9DnuSaL_ATbkYPgWJs0vZfOC6P0

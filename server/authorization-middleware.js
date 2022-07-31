@@ -2,16 +2,12 @@ const jwt = require('jsonwebtoken'); // eslint-disable-line
 const ClientError = require('./client-error'); // eslint-disable-line
 
 // function authorizationMiddleware(req, res, next) {
-//   try {
-//     const token = req.get('X-Access-Token');
-//     const payload = jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-//       if (err) return res.sendStatus(403);
-//       req.user = payload;
-//     });
-
-//   } catch (err) {
+//   const token = req.get('X-Access-Token');
+//   if (!token) {
 //     throw new ClientError(401, 'authentication required');
 //   }
+//   const payload = jwt.verify(token, process.env.TOKEN_SECRET);
+//   req.user = payload;
 //   next();
 // }
 

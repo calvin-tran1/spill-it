@@ -1,6 +1,7 @@
 import React from 'react';
 import Redirect from '../components/redirect';
 import AppContext from '../lib/app-context';
+import MobileTopNav from '../components/mobile-top-nav';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -29,9 +30,17 @@ export default class Home extends React.Component {
     if (!this.context.user) return <Redirect to="" />;
 
     return (
-      <h1>
-        home
-      </h1>
+      <div className="container-fluid bg-milk-brown">
+        <div className="row">
+          <MobileTopNav />
+          <div className="col d-none d-lg-block" />
+          <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
+          <div className="col ">
+            <div className="main-content full-height" />
+          </div>
+          <div className="col d-none d-lg-block" />
+        </div>
+      </div>
     );
   }
 }

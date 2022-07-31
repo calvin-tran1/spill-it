@@ -41,7 +41,7 @@ export default class App extends React.Component {
 
   renderPage() {
     const { user, route } = this.state;
-
+    // console.log('user:', user);
     if (route.path === '') {
       return <SignIn onSignIn={this.handleSignIn} />;
     }
