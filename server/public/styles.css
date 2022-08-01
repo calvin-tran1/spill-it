@@ -171,6 +171,13 @@ a {
   padding-top: 0.3em;
 }
 
+.fa-user {
+  color: #693504;
+  font-size: 30px;
+  padding-top: 0.3em;
+  margin-left: 0.15em;
+}
+
 .fa-plus {
   color: #69bf64;
   font-size: 30px;
@@ -190,4 +197,41 @@ a {
 .fa-magnifying-glass {
   color: #693504;
   font-size: 30px;
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  margin-top: 0.5em;
+}
+
+.sidebar-icon {
+  font-size: 50px;
+}
+
+.nav-sidebar-text {
+  font-size: 22px;
+  font-weight: bold;
+  margin-left: 1em;
+}
+
+.fa-user > .nav-sidebar-text {
+  margin-left: 1.2em;
+}
+
+.desktop-post-btn {
+  width: 225px;
+  height: 52px;
+  border-style: none;
+  background-color: #69bf64;
+  border-radius: 30px;
+  color: white;
+  font-size: 20px;
 }

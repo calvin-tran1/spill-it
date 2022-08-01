@@ -60,7 +60,7 @@ app.get('/api/users/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.post('/api/auth/sign-up', (req, res, next) => {
+app.post('/api/auth/sign-up', async (req, res, next) => {
   const { username, password, displayName, avatar, bio } = req.body;
 
   if (!username || !password) {
