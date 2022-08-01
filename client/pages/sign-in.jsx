@@ -37,10 +37,10 @@ export default class SignIn extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid bg-milk-brown">
+      <div className="container-fluid bg-primary-color">
         <div className="row">
           <div className="col d-none d-lg-block" />
-          <div className="col main-content full-height bg-milk-brown">
+          <div className="col main-content full-height bg-primary-color">
               <div className="logo">
                 <a
                   href="#">

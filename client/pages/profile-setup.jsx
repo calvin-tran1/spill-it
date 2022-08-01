@@ -28,7 +28,7 @@ export default class ProfileSetup extends React.Component {
     if (!this.state.user) return null;
     console.log('Profile:', this.state.user); // eslint-disable-line
     return (
-      <div className="container-fluid bg-milk-brown">
+      <div className="container-fluid bg-primary-color">
         <div className="row">
           <div className="col d-none d-lg-block" />
           <div className="col">
@@ -42,7 +42,7 @@ export default class ProfileSetup extends React.Component {
               <p className="heading">
                 Setup profile
               </p>
-              <form onSubmit={this.handleSubmit}>
+              <form className="profile-form" onSubmit={this.handleSubmit}>
                 <Avatar
                   imageUrl={this.state.user.avatar}
                   name="test"

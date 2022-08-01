@@ -1,12 +1,13 @@
 .avatarimage {
   border-radius: 50%;
-  border: 2px solid #693504;
+  border: 2px solid rgb(39, 39, 39);
 }
 
 .avatartext {
   width: 300px;
   height: 300px;
   border-radius: 50%;
+  border: 2px solid rgb(39, 39, 39);
   background: white;
   text-transform: uppercase;
   display: flex;
@@ -14,14 +15,4 @@
   align-items: center;
   font-size: 30px;
   font-weight: bold;
-}
-
-.upload-avatar {
-  display: none;
-}
-
-.avatar-label {
-  cursor: pointer;
-  text-decoration: underline;
-  color: #69bf64;
 }
