@@ -15,12 +15,12 @@ export default class ProfileSetup extends React.Component {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'X-Access-Token': token
+        'x-access-token': token
       }
     };
 
     fetch('/api/user', req)
-      .then(res => res.text())
+      .then(res => res.json())
       .then(user => this.setState({ user }));
   }
 
