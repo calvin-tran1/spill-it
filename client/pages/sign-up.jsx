@@ -42,51 +42,49 @@ export default class SignUp extends React.Component {
       <div className="container-fluid bg-milk-brown">
         <div className="row">
           <div className="col d-none d-lg-block" />
-          <div className="col">
-            <div className="main-content full-height">
-              <div className="logo">
-                <a
-                  href="#">
-                  <i className="fa-solid fa-mug-saucer " />
-                </a>
+          <div className="col main-content full-height bg-milk-brown">
+            <div className="logo">
+              <a
+                href="#">
+                <i className="fa-solid fa-mug-saucer " />
+              </a>
+            </div>
+            <p className="heading">
+              Mother of pearl...
+            </p>
+            <form onSubmit={this.handleSubmit}>
+              <div className="input-fields">
+                <label name="username" />
+                <input
+                required
+                type="text"
+                className="input-username-password my-3"
+                placeholder="Username"
+                name="username"
+                onChange={this.handleChange} />
               </div>
-              <p className="heading">
-                Mother of pearl...
-              </p>
-              <form onSubmit={this.handleSubmit}>
-                <div className="input-fields">
-                  <label name="username" />
-                  <input
-                  required
-                  type="text"
-                  className="input-username-password my-3"
-                  placeholder="Username"
-                  name="username"
-                  onChange={this.handleChange} />
-                </div>
-                <div className="input-fields">
-                  <label name="password" />
-                  <input
-                  required
-                  type="password"
-                  className="input-username-password my-3"
-                  placeholder="Password"
-                  name="password"
-                  onChange={this.handleChange} />
-                </div>
-                <button type="submit" className="sign-in-btn my-3 hidden">
-                  Sign in
-                </button>
-                <div className="sign-in-up-divider hidden">
-                  <hr />
-                  <p className="or">or</p>
-                  <hr />
-                </div>
-                <button type="submit" className="sign-up-btn my-1">
-                  Sign up
-                </button>
-              </form>
+              <div className="input-fields">
+                <label name="password" />
+                <input
+                required
+                type="password"
+                className="input-username-password my-3"
+                placeholder="Password"
+                name="password"
+                onChange={this.handleChange} />
               </div>
+              <button type="submit" className="sign-in-btn my-3 hidden">
+                Sign in
+              </button>
+              <div className="sign-in-up-divider hidden">
+                <hr />
+                <p className="or">or</p>
+                <hr />
+              </div>
+              <button type="submit" className="sign-up-btn my-1">
+                Sign up
+              </button>
+            </form>
             </div>
           <div className="col d-none d-lg-block" />
         </div>

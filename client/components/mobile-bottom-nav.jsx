@@ -14,7 +14,7 @@ export default class MobileBotNav extends React.Component {
             <i className="fa-solid fa-plus" />
           </a>
         </div>
-        <div className="col search-btn">
+        <div className="col mobile-search-btn">
           <button type="button">
             <i className="fa-solid fa-magnifying-glass" />
           </button>

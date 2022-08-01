@@ -40,8 +40,7 @@ export default class SignIn extends React.Component {
       <div className="container-fluid bg-milk-brown">
         <div className="row">
           <div className="col d-none d-lg-block" />
-          <div className="col">
-            <div className="main-content full-height">
+          <div className="col main-content full-height bg-milk-brown">
               <div className="logo">
                 <a
                   href="#">
@@ -86,7 +85,6 @@ export default class SignIn extends React.Component {
                   </button>
                 </a>
               </form>
-            </div>
           </div>
           <div className="col d-none d-lg-block" />
         </div>
