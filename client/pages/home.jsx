@@ -2,6 +2,7 @@ import React from 'react';
 import Redirect from '../components/redirect';
 import AppContext from '../lib/app-context';
 import MobileTopNav from '../components/mobile-top-nav';
+import MobileBotNav from '../components/mobile-bottom-nav';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -39,6 +40,7 @@ export default class Home extends React.Component {
             <div className="main-content full-height" />
           </div>
           <div className="col d-none d-lg-block" />
+          <MobileBotNav />
         </div>
       </div>
     );

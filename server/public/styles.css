@@ -147,9 +147,47 @@ a {
   border-bottom: solid #693504;
 }
 
+.bot-nav {
+  display: flex;
+  justify-content: space-between;
+  height: 53px;
+  background-color: #e0cda9;
+  padding: 0.5em;
+  border-top: solid #693504;
+  bottom: 0%;
+}
+
 .mobile-nav-title {
+  display: inline-block;
   padding-left: 0.8em;
   font-size: 21px;
   font-weight: bold;
   color: #693504;
+}
+
+.fa-house {
+  color: #693504;
+  font-size: 30px;
+  padding-top: 0.3em;
+}
+
+.fa-plus {
+  color: #69bf64;
+  font-size: 30px;
+  padding-top: 0.3em;
+}
+
+.search-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-btn > button {
+  background-color: transparent;
+  border-style: none;
+}
+
+.fa-magnifying-glass {
+  color: #693504;
+  font-size: 30px;
 }
