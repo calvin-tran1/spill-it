@@ -15,7 +15,7 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    const token = window.localStorage.getItem('react-context-jwt');
+    const token = window.localStorage.getItem('jwt');
     const req = {
       method: 'GET',
       headers: {

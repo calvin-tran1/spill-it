@@ -16,7 +16,7 @@ export default class ProfileSetup extends React.Component {
   }
 
   componentDidMount() {
-    const token = window.localStorage.getItem('react-context-jwt');
+    const token = window.localStorage.getItem('jwt');
     const req = {
       method: 'GET',
       headers: {
@@ -50,7 +50,7 @@ export default class ProfileSetup extends React.Component {
     e.preventDefault();
 
     const formData = new FormData();
-    const token = window.localStorage.getItem('react-context-jwt');
+    const token = window.localStorage.getItem('jwt');
     let path = '/api/user/profile/no-image';
     let req = {
       method: 'PATCH',

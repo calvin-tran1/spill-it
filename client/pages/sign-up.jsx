@@ -55,22 +55,22 @@ export default class SignUp extends React.Component {
               <div className="input-fields">
                 <label name="username" />
                 <input
-                required
-                type="text"
-                className="input-username-password my-3"
-                placeholder="Username"
-                name="username"
-                onChange={this.handleChange} />
+                  required
+                  type="text"
+                  className="input-username-password my-3"
+                  placeholder="Username"
+                  name="username"
+                  onChange={this.handleChange} />
               </div>
               <div className="input-fields">
                 <label name="password" />
                 <input
-                required
-                type="password"
-                className="input-username-password my-3"
-                placeholder="Password"
-                name="password"
-                onChange={this.handleChange} />
+                  required
+                  type="password"
+                  className="input-username-password my-3"
+                  placeholder="Password"
+                  name="password"
+                  onChange={this.handleChange} />
               </div>
               <button type="submit" className="sign-in-btn my-3 hidden">
                 Sign in
