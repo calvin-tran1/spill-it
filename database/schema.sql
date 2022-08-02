@@ -8,7 +8,7 @@ CREATE TABLE "public"."users" (
     "username" TEXT NOT NULL UNIQUE,
     "hashedPassword" TEXT NOT NULL,
     "displayName" TEXT,
-    "avatar" TEXT,
+    "image" TEXT,
     "bio" TEXT,
     "createdAt" timestamptz NOT NULL default now(),
     CONSTRAINT "users_pk" PRIMARY KEY ("userId")
@@ -19,7 +19,7 @@ CREATE TABLE "public"."posts" (
     "postId" serial NOT NULL,
     "userId" integer NOT NULL,
     "textContent" TEXT,
-    "imageUrl" TEXT,
+    "image" TEXT,
     "createdAt" timestamptz NOT NULL default now(),
     CONSTRAINT "posts_pk" PRIMARY KEY ("postId")
 ) WITH (
@@ -39,7 +39,7 @@ CREATE TABLE "public"."comments" (
     "commentId" serial NOT NULL,
     "userId" integer NOT NULL,
     "textContent" TEXT,
-    "imageUrl" TEXT,
+    "image" TEXT,
     "createdAt" timestamptz NOT NULL default now(),
     CONSTRAINT "comments_pk" PRIMARY KEY ("commentId")
 ) WITH (
@@ -51,7 +51,7 @@ CREATE TABLE "public"."reviews" (
     "storeName" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "rating" integer NOT NULL,
-    "imageUrl" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
     "review" TEXT NOT NULL,
     "createdAt" timestamptz NOT NULL default now(),
     CONSTRAINT "reviews_pk" PRIMARY KEY ("reviewId")

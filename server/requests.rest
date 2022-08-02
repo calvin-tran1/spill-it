@@ -1,0 +1,27 @@
+GET http://localhost:3000/api/auth/sign-in
+
+###
+POST http://localhost:3000/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "hillbilly1",
+  "password": "password1"
+}
+
+###
+GET http://localhost:3000/api/users/9
+
+
+###
+POST http://localhost:3000/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "mickey",
+  "password": "mouse"
+}
+
+###
+GET http://localhost:3000/api/user
+x-access-token:
