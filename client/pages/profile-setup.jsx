@@ -123,7 +123,8 @@ export default class ProfileSetup extends React.Component {
                     required
                     type="text"
                     className="input-display-name my-3"
-                    placeholder={this.state.displayName}
+                    placeholder="Display Name"
+                    value={!this.state.displayName ? null : this.state.displayName}
                     name="displayName"
                     onChange={this.handleChange} />
                 </div>

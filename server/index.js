@@ -62,7 +62,7 @@ app.get('/api/users/:userId', (req, res, next) => {
 });
 
 app.post('/api/auth/sign-up', async (req, res, next) => {
-  const { username, password, displayName, image, bio } = req.body;
+  const { username, password, image, bio } = req.body;
 
   if (!username || !password) {
     throw new ClientError(400, 'username and password are required fields');
@@ -71,8 +71,8 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
   argon2.hash(password)
     .then(hashedPassword => {
       const sql = `
-        insert into "users" ("username", "hashedPassword", "displayName", "image", "bio")
-        values ($1, $2, $3, $4, $5)
+        insert into "users" ("username", "hashedPassword", "image", "bio")
+        values ($1, $2, $3, $4)
         returning "userId",
                   "username",
                   "displayName",
@@ -80,7 +80,7 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
                   "bio",
                   "createdAt"
       `;
-      const params = [username, hashedPassword, displayName, image, bio];
+      const params = [username, hashedPassword, image, bio];
 
       db.query(sql, params)
         .then(result => {
