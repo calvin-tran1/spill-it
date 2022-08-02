@@ -24,4 +24,4 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjU5Mzc0NjY0fQ.qfhZKzfminYuEllYPonkVVRIcRHM1fal1i9yjza4394
+x-access-token:

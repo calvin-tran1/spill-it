@@ -9,6 +9,7 @@ const db = require('./db');
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
 const authorizationMiddleware = require('./authorization-middleware.js');
+const uploadsMiddleware = require('./uploads-middleware');
 
 if (process.env.NODE_ENV === 'development') {
   app.use(require('./dev-middleware')(publicPath));
@@ -22,7 +23,7 @@ app.get('/api/users', (req, res, next) => {
     select "userId",
            "username",
            "displayName",
-           "avatar",
+           "image",
            "bio"
       from "users"
   `;
@@ -43,7 +44,7 @@ app.get('/api/users/:userId', (req, res, next) => {
     select "userId",
            "username",
            "displayName",
-           "avatar",
+           "image",
            "bio"
       from "users"
      where "userId" = $1
@@ -61,7 +62,7 @@ app.get('/api/users/:userId', (req, res, next) => {
 });
 
 app.post('/api/auth/sign-up', async (req, res, next) => {
-  const { username, password, displayName, avatar, bio } = req.body;
+  const { username, password, displayName, image, bio } = req.body;
 
   if (!username || !password) {
     throw new ClientError(400, 'username and password are required fields');
@@ -70,16 +71,16 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
   argon2.hash(password)
     .then(hashedPassword => {
       const sql = `
-        insert into "users" ("username", "hashedPassword", "displayName", "avatar", "bio")
+        insert into "users" ("username", "hashedPassword", "displayName", "image", "bio")
         values ($1, $2, $3, $4, $5)
         returning "userId",
                   "username",
                   "displayName",
-                  "avatar",
+                  "image",
                   "bio",
                   "createdAt"
       `;
-      const params = [username, hashedPassword, displayName, avatar, bio];
+      const params = [username, hashedPassword, displayName, image, bio];
 
       db.query(sql, params)
         .then(result => {
@@ -153,7 +154,7 @@ app.get('/api/user', (req, res, next) => {
     select "userId",
            "username",
            "displayName",
-           "avatar",
+           "image",
            "bio"
       from "users"
      where "userId" = $1
@@ -170,31 +171,61 @@ app.get('/api/user', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// app.put('/api/posts', (req, res, next) => {
-//   const userId = Number(req.params.userId);
+app.patch('/api/user/profile', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const { displayName, bio } = req.body;
 
-//   if (!userId) {
-//     throw new ClientError(400, 'userId must be a positive integer');
-//   }
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
 
-//   const sql = `
-//     insert into "users" ("displayName", "avatar", "bio")
-//     values ($1, $2, $3)
-//     returning "displayName",
-//               "avatar",
-//               "bio"
-//   `;
-//   const params = [userId];
+  const image = `/images/${req.file.filename}`;
+  const sql = `
+      update "users"
+      set    "image" = $1,
+             "displayName" = $2,
+             "bio" = $3
+       where "userId" = $4
+   returning *
+  `;
+  const params = [image, displayName, bio, userId];
 
-//   db.query(sql, params)
-//     .then(result => {
-//       if (!result.rows[0]) {
-//         throw new ClientError(404, `could not find userId: ${userId}`);
-//       }
-//       res.status(200).json(result.rows[0]);
-//     })
-//     .catch(err => next(err));
-// });
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `could not find userId: ${userId}`);
+      }
+      res.status(200).json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.patch('/api/user/profile/no-image', (req, res, next) => {
+  const { userId } = req.user;
+  const { displayName, bio } = req.body;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+      update "users"
+      set    "displayName" = $1,
+             "bio" = $2
+       where "userId" = $3
+   returning *
+  `;
+  const params = [displayName, bio, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `could not find userId: ${userId}`);
+      }
+      res.status(200).json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
 
 app.use(errorMiddleware);
 
