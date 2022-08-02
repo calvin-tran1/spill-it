@@ -1,5 +1,6 @@
 import React from 'react';
 import Avatar from '../components/avatar';
+import Redirect from '../components/redirect';
 
 export default class ProfileSetup extends React.Component {
   constructor(props) {
@@ -81,7 +82,7 @@ export default class ProfileSetup extends React.Component {
   }
 
   render() {
-    if (!this.state.user) return null;
+    if (!this.context.user) return <Redirect to="" />;
 
     return (
       <div className="container-fluid bg-primary-color">

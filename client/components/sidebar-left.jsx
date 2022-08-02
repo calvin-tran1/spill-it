@@ -2,18 +2,47 @@ import React from 'react';
 import Avatar from './avatar';
 
 export default class SidebarLeft extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      displayName: '',
+      image: '',
+      bio: ''
+    };
+  }
+
+  componentDidMount() {
+    const token = window.localStorage.getItem('react-context-jwt');
+    const req = {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch('/api/user', req)
+      .then(res => res.json())
+      .then(user => this.setState({
+        username: user.username,
+        displayName: user.displayName,
+        image: user.image,
+        bio: user.bio
+      }));
+  }
+
   render() {
     return (
       <div className="sidebar-left">
         <nav className="my-3 mx-5">
           <ul>
             <li>
-              <a href="#">
+              <a href="#home">
                 <i className="fa-solid fa-mug-saucer" />
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="#home">
                 <i className="fa-solid fa-house sidebar-icon px-2">
                   <span className="nav-sidebar-text">Home</span>
                 </i>
@@ -37,17 +66,17 @@ export default class SidebarLeft extends React.Component {
         </nav>
         <div className="desktop-sign-out">
           <Avatar
-            imageUrl="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
+            imageUrl={this.state.image}
             name="test"
             width="48px"
             height="48px" />
           <div>
             <span className="displayname-text">
-              Calvin
+              {this.state.displayName}
               <br />
             </span>
             <span className="username-text">
-              @calvin1
+              @{this.state.username}
             </span>
           </div>
         </div>

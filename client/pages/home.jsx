@@ -29,7 +29,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    console.log(this.state.user); // eslint-disable-line
+    // console.log(this.state.user); // eslint-disable-line
     if (!this.context.user) return <Redirect to="" />;
 
     return (
