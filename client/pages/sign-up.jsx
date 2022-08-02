@@ -33,7 +33,7 @@ export default class SignUp extends React.Component {
       .then(res => res.json())
       .then(result => {
         this.props.onSignIn(result);
-        window.location.hash = `${this.state.username}/profile-setup`;
+        window.location.hash = 'profile-setup';
       });
   }
 

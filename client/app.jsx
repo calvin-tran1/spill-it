@@ -40,24 +40,23 @@ export default class App extends React.Component {
   }
 
   renderPage() {
-    const { user, route } = this.state;
-    // console.log('user:', user);
+    const { route } = this.state;
+
     if (route.path === '') {
       return <SignIn onSignIn={this.handleSignIn} />;
     }
     if (route.path === 'sign-up') {
       return <SignUp onSignIn={this.handleSignIn} />;
     }
-    if (route.path === `${user.username}/profile-setup`) {
+    if (route.path === 'profile-setup') {
       return <ProfileSetup />;
     }
     if (route.path === 'home') {
-      return <Home />;
+      return <Home onSignOut={this.handleSignOut} />;
     }
   }
 
   render() {
-    if (this.state.isAuthorizing) return null;
     const { user, route } = this.state;
     const { handleSignIn, handleSignOut } = this;
     const contextValue = { user, route, handleSignIn, handleSignOut };

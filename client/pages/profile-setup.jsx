@@ -1,6 +1,5 @@
 import React from 'react';
 import Avatar from '../components/avatar';
-import Redirect from '../components/redirect';
 
 export default class ProfileSetup extends React.Component {
   constructor(props) {
@@ -28,7 +27,11 @@ export default class ProfileSetup extends React.Component {
 
     fetch('/api/user', req)
       .then(res => res.json())
-      .then(user => this.setState({ user }));
+      .then(user => this.setState({
+        image: user.image,
+        displayName: user.displayName,
+        bio: user.bio
+      }));
   }
 
   handleChange(e) {
@@ -82,8 +85,6 @@ export default class ProfileSetup extends React.Component {
   }
 
   render() {
-    if (!this.context.user) return <Redirect to="" />;
-
     return (
       <div className="container-fluid bg-primary-color">
         <div className="row">
@@ -101,7 +102,7 @@ export default class ProfileSetup extends React.Component {
               </p>
               <form className="profile-form" onSubmit={this.handleSubmit}>
                 <Avatar
-                  imageUrl={this.state.image === '' ? this.state.user.image : this.state.image}
+                  imageUrl={this.state.image}
                   name="test"
                   width="300px"
                   height="300px" />
@@ -122,7 +123,7 @@ export default class ProfileSetup extends React.Component {
                     required
                     type="text"
                     className="input-display-name my-3"
-                    placeholder={this.state.user.displayName === 'null' ? 'Display Name' : this.state.user.displayName}
+                    placeholder={this.state.displayName}
                     name="displayName"
                     onChange={this.handleChange} />
                 </div>
@@ -130,7 +131,7 @@ export default class ProfileSetup extends React.Component {
                   <input
                     type="text"
                     className="input-bio"
-                    placeholder={this.state.user.bio === null || this.state.user.bio === '' ? 'Your bio' : this.state.user.bio}
+                    placeholder={this.state.bio === null ? 'Your bio' : this.state.bio}
                     name="bio"
                     onChange={this.handleChange} />
                 </div>

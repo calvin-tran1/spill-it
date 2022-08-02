@@ -401,3 +401,48 @@ article > p {
   padding: 0 1em;
   font-size: 16px;
 }
+
+.modal-overlay {
+  position: fixed;
+  z-index: 9997;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.445);
+}
+
+.modal-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.sign-out-modal {
+  position: absolute;
+  z-index: 9999;
+  bottom: 8%;
+  left: 15%;
+  width: 200px;
+  height: 52px;
+  border-radius: 30px;
+  text-align: center;
+  padding-top: 1em;
+  padding-right: 0.25em;
+  background-color: #41474b;
+  color: white;
+  cursor: pointer;
+}
+
+.arrow-down {
+  position: absolute;
+  z-index: 9998;
+  bottom: 7%;
+  left: 38%;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid white;
+}

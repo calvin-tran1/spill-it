@@ -28,8 +28,13 @@ export default class Home extends React.Component {
       .then(user => this.setState({ user }));
   }
 
+  handleClick() {
+    this.setState(prevState => ({
+      active: !prevState.active
+    }));
+  }
+
   render() {
-    // console.log(this.state.user); // eslint-disable-line
     if (!this.context.user) return <Redirect to="" />;
 
     return (
@@ -37,7 +42,7 @@ export default class Home extends React.Component {
         <div className="row">
           <MobileTopNav />
           <div className="col bg-secondary-color d-none d-lg-block">
-            <SidebarLeft />
+            <SidebarLeft onSignOut={this.props.onSignOut} />
           </div>
           <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
           <div className="main-content full-height border-left border-right bg-primary-color">

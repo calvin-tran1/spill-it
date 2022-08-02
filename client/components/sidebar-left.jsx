@@ -1,5 +1,7 @@
 import React from 'react';
 import Avatar from './avatar';
+import SignOutModal from './sign-out-modal';
+import ModalOverlay from './modal-overlay.jsx';
 
 export default class SidebarLeft extends React.Component {
   constructor(props) {
@@ -8,8 +10,10 @@ export default class SidebarLeft extends React.Component {
       username: '',
       displayName: '',
       image: '',
-      bio: ''
+      bio: '',
+      active: false
     };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -31,9 +35,18 @@ export default class SidebarLeft extends React.Component {
       }));
   }
 
+  handleClick() {
+    this.setState(prevState => ({
+      active: !prevState.active
+    }));
+  }
+
   render() {
     return (
       <div className="sidebar-left">
+        <ModalOverlay
+          active={this.state.active ? 'modal-overlay' : 'd-none'}
+          onClick={this.handleClick} />
         <nav className="my-3 mx-5">
           <ul>
             <li>
@@ -64,7 +77,12 @@ export default class SidebarLeft extends React.Component {
             </li>
           </ul>
         </nav>
-        <div className="desktop-sign-out">
+        <SignOutModal
+          username={this.state.username}
+          modal={this.state.active ? 'sign-out-modal' : 'd-none'}
+          arrow={this.state.active ? 'arrow-down' : 'd-none'}
+          onSignOut={this.props.onSignOut} />
+        <div className="desktop-sign-out" onClick={this.handleClick}>
           <Avatar
             imageUrl={this.state.image}
             name="test"
