@@ -5,13 +5,17 @@ import MobileTopNav from '../components/mobile-top-nav';
 import MobileBotNav from '../components/mobile-bottom-nav';
 import SidebarLeft from '../components/sidebar-left';
 import DesktopSearchbar from '../components/search-bar';
+import ModalOverlay from '../components/modal-overlay';
+import MobileNavMenu from '../components/mobile-nav-menu';
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      active: false
     };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -35,14 +39,22 @@ export default class Home extends React.Component {
   }
 
   render() {
-    if (!this.context.user) return <Redirect to="" />;
+    const { user, handleSignOut } = this.context;
+
+    if (!user) return <Redirect to="" />;
 
     return (
       <div className="container-fluid bg-primary-color">
+        <ModalOverlay
+          active={this.state.active ? 'modal-overlay bg-opacity-40' : 'd-none'}
+          onClick={this.handleClick} />
+        <MobileNavMenu
+          active={this.state.active ? 'mobile-nav-menu' : 'd-none'}
+          onClick={this.handleClick} />
         <div className="row">
-          <MobileTopNav />
+          <MobileTopNav onClick={this.handleClick} />
           <div className="col bg-secondary-color d-none d-lg-block">
-            <SidebarLeft onSignOut={this.props.onSignOut} />
+            <SidebarLeft onSignOut={handleSignOut} />
           </div>
           <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
           <div className="main-content full-height border-left border-right bg-primary-color">

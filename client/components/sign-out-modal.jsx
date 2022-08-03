@@ -1,10 +1,13 @@
 import React from 'react';
+import AppContext from '../lib/app-context';
 
 export default class SignOutModal extends React.Component {
   render() {
+    const { handleSignOut } = this.context;
+
     return (
       <>
-        <div className={this.props.modal} onClick={this.props.onSignOut}>
+        <div className={this.props.modal} onClick={handleSignOut}>
           <span>
             Sign out @{this.props.username}
           </span>
@@ -14,3 +17,5 @@ export default class SignOutModal extends React.Component {
     );
   }
 }
+
+SignOutModal.contextType = AppContext;

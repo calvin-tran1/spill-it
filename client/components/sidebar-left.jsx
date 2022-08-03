@@ -2,6 +2,7 @@ import React from 'react';
 import Avatar from './avatar';
 import SignOutModal from './sign-out-modal';
 import ModalOverlay from './modal-overlay.jsx';
+import AppContext from '../lib/app-context';
 
 export default class SidebarLeft extends React.Component {
   constructor(props) {
@@ -45,7 +46,7 @@ export default class SidebarLeft extends React.Component {
     return (
       <div className="sidebar-left">
         <ModalOverlay
-          active={this.state.active ? 'modal-overlay' : 'd-none'}
+          active={this.state.active ? 'modal-overlay bg-transparent' : 'd-none'}
           onClick={this.handleClick} />
         <nav className="my-3 mx-5">
           <ul>
@@ -85,14 +86,14 @@ export default class SidebarLeft extends React.Component {
         <div className="desktop-sign-out" onClick={this.handleClick}>
           <Avatar
             imageUrl={this.state.image}
-            name="test"
+            name={this.state.username}
             width="48px"
             height="48px" />
           <div>
             <span className="displayname-text">
               {this.state.displayName}
-              <br />
             </span>
+            <br />
             <span className="username-text">
               @{this.state.username}
             </span>
@@ -102,3 +103,5 @@ export default class SidebarLeft extends React.Component {
     );
   }
 }
+
+SidebarLeft.contextType = AppContext;
