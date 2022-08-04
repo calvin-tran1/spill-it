@@ -105,7 +105,8 @@ export default class ProfileSetup extends React.Component {
                   imageUrl={this.state.image}
                   name="test"
                   width="300px"
-                  height="300px" />
+                  height="300px"
+                />
                 <div className="input-fields my-3">
                   <label className="avatar-label">
                     Change avatar

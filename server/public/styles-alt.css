@@ -465,7 +465,8 @@ article > p {
   height: 100%;
   width: calc(390px * 0.73);
   left: 0;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1.5em);
   animation: slidein 700ms ease-in forwards;
 }
 
@@ -498,12 +499,16 @@ article > p {
   border-style: none;
   color: white;
   margin-top: 0.45em;
-  margin-right: 1em;
+  margin-right: 0.6em;
   font-size: 1.5em;
 }
 
 .color-white {
   color: white;
+}
+
+.color-text-content {
+  color: rgb(201, 201, 201);
 }
 
 .mobile-nav-wrapper {
@@ -535,4 +540,51 @@ article > p {
 .mobile-sign-out {
   font-size: 18px;
   cursor: pointer;
+}
+
+.post-modal {
+  position: fixed;
+  z-index: 9999;
+  top: 20%;
+  right: 34%;
+  margin-right: 0.3em;
+  width: 600px;
+  height: 50%;
+  border-radius: 30px;
+  background-color: #aeb2b5;
+}
+
+.post-avatar {
+  max-width: 50px !important;
+}
+
+.textarea-post-content {
+  resize: none;
+  width: 100%;
+  outline: none;
+  background-color: transparent;
+  border-style: none;
+  font-size: 18px;
+}
+
+.fa-image {
+  font-size: 20px;
+  color: #c5e9ea;
+}
+
+.submit-post-btn {
+  width: 75px;
+  height: 36px;
+  border-style: none;
+  border-radius: 30px;
+  background-color: #c5e9ea;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.submit-post-btn-wrapper {
+  max-width: 80px !important;
+  margin-bottom: 1em;
+  margin-right: 3em;
 }

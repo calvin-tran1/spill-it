@@ -47,7 +47,8 @@ export default class SidebarLeft extends React.Component {
       <div className="sidebar-left">
         <ModalOverlay
           active={this.state.active ? 'modal-overlay bg-transparent' : 'd-none'}
-          onClick={this.handleClick} />
+          onClick={this.handleClick}
+        />
         <nav className="my-3 mx-5">
           <ul>
             <li>
@@ -70,11 +71,9 @@ export default class SidebarLeft extends React.Component {
               </a>
             </li>
             <li>
-              <a href="#">
-                <button type="button" className="desktop-post-btn my-4">
-                  Post
-                </button>
-              </a>
+              <button type="button" className="desktop-post-btn my-4" onClick={this.props.openPost}>
+                Post
+              </button>
             </li>
           </ul>
         </nav>
@@ -82,13 +81,15 @@ export default class SidebarLeft extends React.Component {
           username={this.state.username}
           modal={this.state.active ? 'sign-out-modal' : 'd-none'}
           arrow={this.state.active ? 'arrow-down' : 'd-none'}
-          onSignOut={this.props.onSignOut} />
+          onSignOut={this.props.onSignOut}
+        />
         <div className="desktop-sign-out" onClick={this.handleClick}>
           <Avatar
             imageUrl={this.state.image}
             name={this.state.username}
             width="48px"
-            height="48px" />
+            height="48px"
+          />
           <div>
             <span className="displayname-text">
               {this.state.displayName}

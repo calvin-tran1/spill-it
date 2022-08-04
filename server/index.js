@@ -174,12 +174,12 @@ app.get('/api/user', (req, res, next) => {
 app.patch('/api/user/profile', uploadsMiddleware, (req, res, next) => {
   const { userId } = req.user;
   const { displayName, bio } = req.body;
+  const image = `/images/${req.file.filename}`;
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
   }
 
-  const image = `/images/${req.file.filename}`;
   const sql = `
       update "users"
       set    "image" = $1,
@@ -223,6 +223,57 @@ app.patch('/api/user/profile/no-image', (req, res, next) => {
         throw new ClientError(404, `could not find userId: ${userId}`);
       }
       res.status(200).json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/new/post/no-image', (req, res, next) => {
+  const { userId } = req.user;
+  const { textContent } = req.body;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    insert into "posts" ("userId", "textContent")
+    values ($1, $2)
+    returning *
+  `;
+  const params = [userId, textContent];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `could not find userId: ${userId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const { textContent } = req.body;
+  const image = `/images/${req.file.filename}`;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    insert into "posts" ("userId", "textContent", "image")
+    values ($1, $2, $3)
+    returning *
+  `;
+  const params = [userId, textContent, image];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `could not find userId: ${userId}`);
+      }
+      res.json(result.rows[0]);
     })
     .catch(err => next(err));
 });

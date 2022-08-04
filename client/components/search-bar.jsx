@@ -8,7 +8,7 @@ export default class DesktopSearchbar extends React.Component {
           <button type="submit" className="search-btn">
             <i className="fa-solid fa-magnifying-glass" />
           </button>
-          <input type="text" placeholder="Search" name="searchbar"></input>
+          <input type="text" placeholder="Search" name="searchbar" />
         </form>
       </div>
     );

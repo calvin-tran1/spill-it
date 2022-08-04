@@ -49,7 +49,8 @@ export default class MobileNavMenu extends React.Component {
               imageUrl={this.state.image}
               name={this.state.username}
               width="40px"
-              height="40px" />
+              height="40px"
+            />
           </div>
           <div className="mx-2 my-0">
             <span className="displayname-text color-white">

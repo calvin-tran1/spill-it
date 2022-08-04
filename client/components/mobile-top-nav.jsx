@@ -38,10 +38,11 @@ export default class MobileTopNav extends React.Component {
 
     if (route.path === 'home') {
       return <Avatar
-              imageUrl={this.state.image}
-              name="test"
-              width="33px"
-              height="33px" />;
+                imageUrl={this.state.image}
+                name="test"
+                width="33px"
+                height="33px"
+              />;
     }
   }
 
