@@ -81,7 +81,7 @@ export default class PostForm extends React.Component {
                   <label name="content" />
                   <textarea className="textarea-post-content px-2 pt-1" type="text" maxLength={280} rows={9} placeholder="What's on your mind?" onChange={this.handleChange} />
               </div>
-              <div className="row d-flex justify-content-between">
+              <div className="row">
                 <div className="col">
                   <i className="fa-solid fa-image" />
                 </div>

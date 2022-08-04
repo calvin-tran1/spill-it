@@ -10,9 +10,9 @@ export default class MobileBotNav extends React.Component {
           </a>
         </div>
         <div className="col text-center">
-          <a href="#">
+          <button type="button" className="mobile-post-btn" onClick={this.props.openPost}>
             <i className="fa-solid fa-plus" />
-          </a>
+          </button>
         </div>
         <div className="col mobile-search-btn">
           <button type="button">

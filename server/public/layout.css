@@ -2,4 +2,13 @@
   .main-content {
     border-style: none !important;
   }
+
+  .post-modal {
+    position: fixed !important;
+    max-width: 390px !important;
+    height: 100% !important;
+    border-radius: 0% !important;
+    top: 0% !important;
+    right: 0% !important;
+  }
 }

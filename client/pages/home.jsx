@@ -77,7 +77,7 @@ export default class Home extends React.Component {
               onClick={this.postModal}
             />
             <PostForm
-              post={this.state.post ? 'post-modal' : 'd-none'}
+              post={this.state.post ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
             />
             <article className="post">
@@ -122,7 +122,9 @@ export default class Home extends React.Component {
           <div className="col bg-secondary-color d-none d-lg-block">
             <DesktopSearchbar />
           </div>
-          <MobileBotNav />
+          <MobileBotNav
+            openPost={this.postModal}
+          />
         </div>
       </div>
     );
