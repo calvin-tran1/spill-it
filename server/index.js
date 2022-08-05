@@ -278,6 +278,29 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/posts', (req, res, next) => {
+  const { userId } = req.user;
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select *
+      from "posts"
+     where "userId" = $1
+  `;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows) {
+        throw new ClientError(404, `could not find userId: ${userId}`);
+      }
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

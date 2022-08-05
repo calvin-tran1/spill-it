@@ -9,7 +9,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/user
-x-access-token:
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjU5NzMwNDk5fQ.JJb3KzS_s0665rHJ4lPx2a4Os1XgxGI83_x-PsDqqzM
 
 ###
 POST http://localhost:3000/api/new/post/no-image
@@ -20,3 +20,7 @@ x-access-token:
   "userId": 2,
   "textContent": "test3"
 }
+
+###
+GET http://localhost:3000/api/posts
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjU5NzMwNDk5fQ.JJb3KzS_s0665rHJ4lPx2a4Os1XgxGI83_x-PsDqqzM

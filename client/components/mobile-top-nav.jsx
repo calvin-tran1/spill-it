@@ -43,7 +43,7 @@ export default class MobileTopNav extends React.Component {
                   name="test"
                   width="33px"
                   height="33px"
-                />;
+                />
               </button>;
     }
     if (route.path === 'profile') {

@@ -20,8 +20,9 @@ export default class Profile extends React.Component {
       avatar: '',
       bio: '',
       active: false,
-      post: false,
-      mobileView: false
+      postForm: false,
+      mobileView: false,
+      posts: []
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
@@ -46,6 +47,12 @@ export default class Profile extends React.Component {
         bio: user.bio
       }));
 
+    fetch('/api/posts', req)
+      .then(res => res.json())
+      .then(post => {
+        this.setState({ posts: post });
+      });
+
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
@@ -69,7 +76,7 @@ export default class Profile extends React.Component {
 
   postModal() {
     this.setState(prevState => ({
-      post: !prevState.post
+      postForm: !prevState.postForm
     }));
   }
 
@@ -99,11 +106,11 @@ export default class Profile extends React.Component {
           <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
           <div className="main-content full-height border-left border-right bg-primary-color">
             <ModalOverlay
-              active={this.state.post ? 'modal-overlay bg-opacity-40' : 'd-none'}
+              active={this.state.postForm ? 'modal-overlay bg-opacity-40' : 'd-none'}
               onClick={this.postModal}
             />
             <PostForm
-              post={this.state.post ? 'container post-modal' : 'd-none'}
+              post={this.state.postForm ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
             />
             <div className="profile-banner mx-0 px-0">
@@ -132,7 +139,7 @@ export default class Profile extends React.Component {
                   <p className="profile-display-name mx-1 mt-2 mb-0 p-0">{this.state.displayName}</p>
                 </div>
               </div>
-              <div className="row m-0 p-0">
+              <div className="row m-0">
                 <div className="col m-0 p-0">
                   <p className="profile-username mx-1 mt-0 mb-0 p-0">@{this.state.username}</p>
                 </div>
@@ -142,15 +149,14 @@ export default class Profile extends React.Component {
                   <p className="profile-bio mx-1 my-2">{this.state.bio}</p>
                 </div>
               </div>
-              <div className="row">
-                <div className="col">
+              <div className="row tabs-border mt-2 mx-0 px-0">
+                <div className="col mx-0 px-0">
                   <button type="button" className="posts-tab tab-active">Posts</button>
                 </div>
-                <div className="col d-flex justify-content-end">
+                <div className="col d-flex justify-content-end mx-0 px-0">
                   <button type="button" className="likes-tab">Likes</button>
                 </div>
               </div>
-              <div className="row tabs-border mx-0 px-0" />
             </div>
             <div className="posts-container">
 
@@ -159,9 +165,7 @@ export default class Profile extends React.Component {
           <div className="col bg-secondary-color d-none d-lg-block">
             <DesktopSearchbar />
           </div>
-          <MobileBotNav
-            openPost={this.postModal}
-          />
+          <MobileBotNav openPost={this.postModal} />
         </div>
       </div>
     );
