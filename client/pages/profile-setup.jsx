@@ -93,7 +93,7 @@ export default class ProfileSetup extends React.Component {
             <div className="main-content full-height">
               <div className="logo">
                 <a
-                  href="#">
+                  href="#home">
                   <i className="fa-solid fa-mug-saucer " />
                 </a>
               </div>
@@ -135,7 +135,8 @@ export default class ProfileSetup extends React.Component {
                   <input
                     type="text"
                     className="input-bio"
-                    placeholder={this.state.bio === null ? 'Your bio' : this.state.bio}
+                    placeholder={this.state.bio === null || this.state.bio === '' ? 'Your bio' : this.state.bio}
+                    value={this.state.bio === '' ? null : this.state.bio}
                     name="bio"
                     onChange={this.handleChange}
                   />

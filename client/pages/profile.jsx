@@ -8,6 +8,7 @@ import DesktopSearchbar from '../components/search-bar';
 import ModalOverlay from '../components/modal-overlay';
 import MobileNavMenu from '../components/mobile-nav-menu';
 import PostForm from '../components/post-form';
+import Avatar from '../components/avatar';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -15,8 +16,12 @@ export default class Profile extends React.Component {
     this.state = {
       user: null,
       username: '',
+      displayName: '',
+      avatar: '',
+      bio: '',
       active: false,
-      post: false
+      post: false,
+      mobileView: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
@@ -32,8 +37,28 @@ export default class Profile extends React.Component {
     };
 
     fetch('/api/user', req)
-      .then(res => res.text())
-      .then(user => this.setState({ user, username: user.username }));
+      .then(res => res.json())
+      .then(user => this.setState({
+        user,
+        username: user.username,
+        displayName: user.displayName,
+        avatar: user.image,
+        bio: user.bio
+      }));
+
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
+  }
+
+  resize() {
+    if (window.innerWidth <= 400) {
+      return this.setState({ mobileView: true });
+    }
+    this.setState({ mobileView: false });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize.bind(this));
   }
 
   handleClick() {
@@ -81,7 +106,55 @@ export default class Profile extends React.Component {
               post={this.state.post ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
             />
-            <h1>Profile</h1>
+            <div className="profile-banner mx-0 px-0">
+              <div className="row mx-0 px-0">
+                {/* <h1>{this.state.displayName}</h1> */}
+              </div>
+              <div className="row mx-0 px-0">
+                <div className="col">
+                  <Avatar
+                    imageUrl={this.state.avatar}
+                    name={this.state.username}
+                    width={this.state.mobileView ? '85px' : '134px' }
+                    height={this.state.mobileView ? '85px' : '134px'}
+                  />
+                </div>
+                <div className="col d-flex justify-content-end m-auto">
+                  <button type="submit" className="setup-profile-btn">
+                    <a href="#profile-setup">
+                      Set up profile
+                    </a>
+                  </button>
+                </div>
+              </div>
+              <div className="row m-0 p-0">
+                <div className="col m-0 p-0">
+                  <p className="profile-display-name mx-1 mt-2 mb-0 p-0">{this.state.displayName}</p>
+                </div>
+              </div>
+              <div className="row m-0 p-0">
+                <div className="col m-0 p-0">
+                  <p className="profile-username mx-1 mt-0 mb-0 p-0">@{this.state.username}</p>
+                </div>
+              </div>
+              <div className="row m-0 p-0">
+                <div className="col m-0 p-0">
+                  <p className="profile-bio mx-1 my-2">{this.state.bio}</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button type="button" className="posts-tab tab-active">Posts</button>
+                </div>
+                <div className="col d-flex justify-content-end">
+                  <button type="button" className="likes-tab">Likes</button>
+                </div>
+              </div>
+              <div className="row tabs-border mx-0 px-0" />
+            </div>
+            <div className="posts-container">
+
+            </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">
             <DesktopSearchbar />

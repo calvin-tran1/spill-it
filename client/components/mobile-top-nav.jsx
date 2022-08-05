@@ -37,12 +37,21 @@ export default class MobileTopNav extends React.Component {
     const { route } = this.context;
 
     if (route.path === 'home') {
-      return <Avatar
-                imageUrl={this.state.image}
-                name="test"
-                width="33px"
-                height="33px"
-              />;
+      return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
+                <Avatar
+                  imageUrl={this.state.image}
+                  name="test"
+                  width="33px"
+                  height="33px"
+                />;
+              </button>;
+    }
+    if (route.path === 'profile') {
+      return <button type="button" className="mobile-back-btn">
+              <a href="#home">
+                <i className="fa-solid fa-arrow-left" />
+              </a>
+              </button>;
     }
   }
 
@@ -52,15 +61,16 @@ export default class MobileTopNav extends React.Component {
     if (route.path === 'home') {
       return <p className="mobile-nav-title">Home</p>;
     }
+    if (route.path === 'profile') {
+      return <p className = "mobile-nav-title">{this.state.displayName}</p>;
+    }
   }
 
   render() {
     return (
       <div className="row top-nav p-0 m-0 position-fixed d-lg-block d-lg-none d-xl-block d-xl-none">
         <div className="col">
-          <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
-            {this.renderNavComponent()}
-          </button>
+          {this.renderNavComponent()}
           {this.renderHeading()}
         </div>
       </div>

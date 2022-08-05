@@ -5,7 +5,7 @@ export default class MobileBotNav extends React.Component {
     return (
       <div className="row bot-nav p-0 m-0 position-fixed d-lg-block d-lg-none d-xl-block d-xl-none">
         <div className="col">
-          <a href="#">
+          <a href="#home">
             <i className="fa-solid fa-house" />
           </a>
         </div>

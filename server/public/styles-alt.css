@@ -621,3 +621,79 @@ textarea::-webkit-scrollbar {
   border-radius: 50%;
   background-color: rgba(141, 141, 141, 0.719);
 }
+
+.mobile-back-btn {
+  background-color: transparent;
+  border-style: none;
+  margin-left: 0.5em;
+  margin-top: 0.3em;
+}
+
+.mobile-back-btn > a {
+  text-decoration: none;
+  color: rgb(39, 39, 39);
+}
+
+.mobile-back-btn > .fa-arrow-left {
+  font-size: 20px;
+}
+
+.setup-profile-btn {
+  width: 129px;
+  height: 34px;
+  background-color: transparent;
+  border-style: solid;
+  border-color: white;
+  border-radius: 30px;
+}
+
+.setup-profile-btn > a {
+  color: white !important;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.profile-display-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.profile-username {
+  color: #aeb2b5;
+}
+
+.profile-bio {
+  color: white;
+  font-size: 18px;
+}
+
+.posts-tab {
+  border-style: none;
+  background: transparent;
+  color: rgb(39, 39, 39);
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.likes-tab {
+  border-style: none;
+  background: transparent;
+  color: rgb(39, 39, 39);
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.tab-active {
+  color: #c5e9ea !important;
+}
+
+.tabs-border {
+  position: relative;
+  width: 100% !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  border-bottom: solid rgb(39, 39, 39);
+}

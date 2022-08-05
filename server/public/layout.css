@@ -16,4 +16,8 @@
     max-width: 294px !important;
     max-height: 288px !important;
   }
+
+  .profile-banner {
+    margin-top: 4em !important;
+  }
 }
