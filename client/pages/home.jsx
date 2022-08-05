@@ -14,6 +14,7 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       user: null,
+      username: '',
       active: false,
       post: false
     };
@@ -32,7 +33,7 @@ export default class Home extends React.Component {
 
     fetch('/api/user', req)
       .then(res => res.text())
-      .then(user => this.setState({ user }));
+      .then(user => this.setState({ user, username: user.username }));
   }
 
   handleClick() {

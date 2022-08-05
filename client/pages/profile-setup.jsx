@@ -40,8 +40,8 @@ export default class ProfileSetup extends React.Component {
   }
 
   handleChangeImage(e) {
-    if (!e.target.files) {
-      return this.setState({ image: this.state.user.image });
+    if (!e.target.files[0]) {
+      return;
     }
     this.setState({ image: URL.createObjectURL(e.target.files[0]) });
   }
@@ -108,7 +108,7 @@ export default class ProfileSetup extends React.Component {
                   height="300px"
                 />
                 <div className="input-fields my-3">
-                  <label className="avatar-label">
+                  <label name="avatar" className="avatar-label">
                     Change avatar
                     <input
                       type="file"
@@ -116,7 +116,8 @@ export default class ProfileSetup extends React.Component {
                       name="image"
                       ref={this.fileInputRef}
                       accept=".png, .jpg, .jpeg"
-                      onChange={this.handleChangeImage} />
+                      onChange={this.handleChangeImage}
+                    />
                   </label>
                 </div>
                 <div className="input-fields">
@@ -127,7 +128,8 @@ export default class ProfileSetup extends React.Component {
                     placeholder="Display Name"
                     value={!this.state.displayName ? null : this.state.displayName}
                     name="displayName"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="input-fields">
                   <input
@@ -135,7 +137,8 @@ export default class ProfileSetup extends React.Component {
                     className="input-bio"
                     placeholder={this.state.bio === null ? 'Your bio' : this.state.bio}
                     name="bio"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <button type="submit" className="finish-profile-btn my-3">
                   Finish

@@ -543,9 +543,9 @@ article > p {
 }
 
 .post-modal {
-  position: fixed;
+  position: absolute;
   z-index: 9999;
-  top: 20%;
+  top: 10%;
   right: 34%;
   width: 604px !important;
   border-radius: 30px;
@@ -563,6 +563,11 @@ article > p {
   background-color: transparent;
   border-style: none;
   font-size: 18px;
+  color: white;
+}
+
+textarea::-webkit-scrollbar {
+  display: none;
 }
 
 .fa-image {
@@ -589,4 +594,30 @@ article > p {
 .mobile-post-btn {
   border-style: none;
   background-color: transparent;
+}
+
+.upload-image {
+  cursor: pointer;
+}
+
+.upload-image-input {
+  display: none;
+}
+
+.upload-image-placeholder {
+  max-width: 504px;
+  max-height: 610px;
+  border-radius: 30px;
+}
+
+.clear-upload-image {
+  position: absolute;
+  left: 3%;
+  top: 6%;
+  width: 30px;
+  height: 30px;
+  margin: 0.2em;
+  border-style: none;
+  border-radius: 50%;
+  background-color: rgba(141, 141, 141, 0.719);
 }
