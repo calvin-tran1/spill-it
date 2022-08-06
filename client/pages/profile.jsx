@@ -123,7 +123,12 @@ export default class Profile extends React.Component {
             />
           </div>
           <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
-          <div className="main-content full-height border-left border-right bg-primary-color">
+          <div className="main-content full-height border-left border-right bg-primary-color p-0">
+            <div className="row page-head m-0 px-3">
+              <div className="col my-2 mx-0 p-0">
+                <span className="page-head-title m-0 p-0">Profile</span>
+              </div>
+            </div>
             <ModalOverlay
               active={this.state.postForm ? 'modal-overlay bg-opacity-40' : 'd-none'}
               onClick={this.postModal}
@@ -133,10 +138,7 @@ export default class Profile extends React.Component {
               onClick={this.postModal}
             />
             <div className="profile-banner mx-0 px-0">
-              <div className="row mx-0 px-0">
-                {/* <h1>{this.state.displayName}</h1> */}
-              </div>
-              <div className="row mx-0 px-0">
+              <div className="row mx-0 mb-3 px-0">
                 <div className="col">
                   <Avatar
                     imageUrl={this.state.avatar}
@@ -155,39 +157,30 @@ export default class Profile extends React.Component {
               </div>
               <div className="row m-0 p-0">
                 <div className="col m-0 p-0">
-                  <p className="profile-display-name mx-1 mt-2 mb-0 p-0">{this.state.displayName}</p>
+                  <span className="profile-display-name mx-1 mt-2 mb-0 px-3">{this.state.displayName}</span>
                 </div>
               </div>
               <div className="row m-0">
                 <div className="col m-0 p-0">
-                  <p className="profile-username mx-1 mt-0 mb-0 p-0">@{this.state.username}</p>
+                  <span className="profile-username mx-1 my-0 px-3">@{this.state.username}</span>
                 </div>
               </div>
               <div className="row m-0 p-0">
-                <div className="col m-0 p-0">
-                  <p className="profile-bio mx-1 my-2">{this.state.bio}</p>
+                <div className="col mx-0 my-1 p-0">
+                  <span className="profile-bio mx-1 my-0 px-3">{this.state.bio}</span>
                 </div>
               </div>
               <div className="row tabs-border mt-2 mx-0 px-0">
                 <div className="col mx-0 px-0">
-                  <button type="button" className="posts-tab tab-active">Posts</button>
+                  <button type="button" className="posts-tab tab-active mx-1 px-3">Posts</button>
                 </div>
-                <div className="col d-flex justify-content-end mx-0 px-0">
+                <div className="col d-flex justify-content-end mx-1 px-3">
                   <button type="button" className="likes-tab">Likes</button>
                 </div>
               </div>
             </div>
             <div className="posts-container">
               {posts}
-              {/* <PostCard
-                // key={post.postId}
-                avatarImg={this.state.avatar}
-                avatarName={this.state.username}
-                displayName={this.state.displayName}
-                username={this.state.username}
-                textContent="test"
-                postImg="https://media.moddb.com/images/members/5/4550/4549205/duck.jpg"
-              /> */}
             </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">
