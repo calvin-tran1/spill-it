@@ -89,10 +89,10 @@ export default class Profile extends React.Component {
         return (
           <PostCard
             key={post.postId}
-            avatarImg={this.state.avatar}
-            avatarName={this.state.username}
-            displayName={this.state.displayName}
-            username={this.state.username}
+            avatarImg={post.avatar}
+            avatarName={post.username}
+            displayName={post.displayName}
+            username={post.username}
             textContent={post.textContent}
             textContentClass={post.textContent !== null ? 'row m-0 p-0' : 'd-none'}
             postImg={post.image}
@@ -147,7 +147,7 @@ export default class Profile extends React.Component {
                     height={this.state.mobileView ? '85px' : '134px'}
                   />
                 </div>
-                <div className="col d-flex justify-content-end m-auto">
+                <div className="col d-flex justify-content-end m-auto me-1">
                   <button type="submit" className="setup-profile-btn">
                     <a href="#profile-setup">
                       Set up profile
@@ -170,12 +170,12 @@ export default class Profile extends React.Component {
                   <span className="profile-bio mx-1 my-0 px-3">{this.state.bio}</span>
                 </div>
               </div>
-              <div className="row tabs-border mt-2 mx-0 px-0">
+              <div className="row tabs-border mt-2 mx-0 px-3">
                 <div className="col mx-0 px-0">
-                  <button type="button" className="posts-tab tab-active mx-1 px-3">Posts</button>
+                  <button type="button" className="posts-tab tab-active mx-1 px-0">Posts</button>
                 </div>
-                <div className="col d-flex justify-content-end mx-1 px-3">
-                  <button type="button" className="likes-tab">Likes</button>
+                <div className="col d-flex justify-content-end mx-0 px-0">
+                  <button type="button" className="likes-tab mx-1 px-0">Likes</button>
                 </div>
               </div>
             </div>

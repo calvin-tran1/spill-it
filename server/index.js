@@ -228,19 +228,19 @@ app.patch('/api/user/profile/no-image', (req, res, next) => {
 });
 
 app.post('/api/new/post/no-image', (req, res, next) => {
-  const { userId } = req.user;
-  const { textContent } = req.body;
+  const { userId, username } = req.user;
+  const { displayName, avatar, textContent } = req.body;
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
   }
 
   const sql = `
-    insert into "posts" ("userId", "textContent")
-    values ($1, $2)
+    insert into "posts" ("userId", "username", "displayName", "avatar", "textContent")
+    values ($1, $2, $3, $4, $5)
     returning *
   `;
-  const params = [userId, textContent];
+  const params = [userId, username, displayName, avatar, textContent];
 
   db.query(sql, params)
     .then(result => {
@@ -253,8 +253,8 @@ app.post('/api/new/post/no-image', (req, res, next) => {
 });
 
 app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
-  const { userId } = req.user;
-  const { textContent } = req.body;
+  const { userId, username } = req.user;
+  const { displayName, avatar, textContent } = req.body;
   const image = `/images/${req.file.filename}`;
 
   if (!userId) {
@@ -262,11 +262,11 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
   }
 
   const sql = `
-    insert into "posts" ("userId", "textContent", "image")
-    values ($1, $2, $3)
+    insert into "posts" ("userId", "username", "displayName", "avatar", "textContent", "image")
+    values ($1, $2, $3, $4, $5, $6)
     returning *
   `;
-  const params = [userId, textContent, image];
+  const params = [userId, username, displayName, avatar, textContent, image];
 
   db.query(sql, params)
     .then(result => {

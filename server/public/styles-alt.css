@@ -164,8 +164,8 @@ a {
   display: flex;
   height: 53px;
   background-color: #41474b;
-  padding: 0.5em;
   border-bottom: solid rgb(39, 39, 39);
+  padding: 0.5em;
 }
 
 .bot-nav {
@@ -459,7 +459,7 @@ article > p {
 }
 
 .mobile-nav-menu {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   height: 100%;
   width: calc(390px * 0.73);
@@ -654,6 +654,10 @@ a:hover {
   text-decoration: none;
 }
 
+a:visited {
+  color: inherit;
+}
+
 .profile-display-name {
   font-size: 18px;
   font-weight: bold;
@@ -741,4 +745,21 @@ a:hover {
 
 .page-head-username {
   color: #aeb2b5;
+}
+
+.fa-comment {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.fa-retweet {
+  font-size: 18px;
+  color: #c5e9ea;
+  cursor: pointer;
+}
+
+.fa-heart {
+  font-size: 18px;
+  color: #fa2c8b;
+  cursor: pointer;
 }

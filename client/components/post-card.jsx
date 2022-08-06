@@ -34,7 +34,18 @@ export default class PostCard extends React.Component {
             </div>
             <div className={this.props.postImgClass}>
               <div className="col mt-1 mb-0 p-0">
-                <img className="post-image mb-4" src={this.props.postImg} />
+                <img className="post-image mb-3" src={this.props.postImg} />
+              </div>
+            </div>
+            <div className="row m-0 p-0">
+              <div className="col mx-0 mt-0 mb-1 p-0">
+                <i className="fa-regular fa-comment" />
+              </div>
+              <div className="col d-flex justify-content-center mx-0 mt-0 mb-1 p-0">
+                <i className="fa-solid fa-retweet" />
+              </div>
+              <div className="col d-flex justify-content-end mx-0 mt-0 mb-1 py-0 me-2">
+                <i className="fa-regular fa-heart" />
               </div>
             </div>
           </div>

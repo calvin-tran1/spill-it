@@ -18,6 +18,9 @@ CREATE TABLE "public"."users" (
 CREATE TABLE "public"."posts" (
     "postId" serial NOT NULL,
     "userId" integer NOT NULL,
+    "username" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "avatar" TEXT NOT NULL,
     "textContent" TEXT,
     "image" TEXT,
     "createdAt" timestamptz NOT NULL default now(),
@@ -66,6 +69,9 @@ CREATE TABLE "public"."following" (
   OIDS=FALSE
 );
 ALTER TABLE "posts" ADD CONSTRAINT "posts_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+ALTER TABLE "posts" ADD CONSTRAINT "posts_fk1" FOREIGN KEY ("username") REFERENCES "users"("username");
+ALTER TABLE "posts" ADD CONSTRAINT "posts_fk2" FOREIGN KEY ("displayName") REFERENCES "users"("displayName");
+ALTER TABLE "posts" ADD CONSTRAINT "posts_fk3" FOREIGN KEY ("avatar") REFERENCES "users"("image");
 ALTER TABLE "likes" ADD CONSTRAINT "likes_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 ALTER TABLE "likes" ADD CONSTRAINT "likes_fk1" FOREIGN KEY ("postId") REFERENCES "posts"("postId");
 ALTER TABLE "likes" ADD CONSTRAINT "likes_fk2" FOREIGN KEY ("reviewId") REFERENCES "reviews"("reviewId");

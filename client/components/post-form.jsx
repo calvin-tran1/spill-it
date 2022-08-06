@@ -88,6 +88,9 @@ export default class PostForm extends React.Component {
       formData.append('image', this.fileInputRef.current.files[0]);
       formData.append('textContent', this.state.textContent);
       formData.append('userId', this.state.userId);
+      formData.append('username', this.state.username);
+      formData.append('displayName', this.state.displayName);
+      formData.append('avatar', this.state.avatar);
     }
 
     fetch(path, req)
