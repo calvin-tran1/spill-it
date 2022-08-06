@@ -9,6 +9,7 @@ import ModalOverlay from '../components/modal-overlay';
 import MobileNavMenu from '../components/mobile-nav-menu';
 import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
+import PostCard from '../components/post-card';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -82,6 +83,24 @@ export default class Profile extends React.Component {
 
   render() {
     const { user, handleSignOut } = this.context;
+    let posts;
+    if (this.state.posts.length !== 0) {
+      posts = this.state.posts.map(post => {
+        return (
+          <PostCard
+            key={post.postId}
+            avatarImg={this.state.avatar}
+            avatarName={this.state.username}
+            displayName={this.state.displayName}
+            username={this.state.username}
+            textContent={post.textContent}
+            textContentClass={post.textContent !== null ? 'row m-0 p-0' : 'd-none'}
+            postImg={post.image}
+            postImgClass={post.image !== null ? 'row m-0 p-0' : 'd-none'}
+          />
+        );
+      });
+    }
 
     if (!user) return <Redirect to="" />;
 
@@ -159,7 +178,16 @@ export default class Profile extends React.Component {
               </div>
             </div>
             <div className="posts-container">
-
+              {posts}
+              {/* <PostCard
+                // key={post.postId}
+                avatarImg={this.state.avatar}
+                avatarName={this.state.username}
+                displayName={this.state.displayName}
+                username={this.state.username}
+                textContent="test"
+                postImg="https://media.moddb.com/images/members/5/4550/4549205/duck.jpg"
+              /> */}
             </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">

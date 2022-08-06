@@ -288,6 +288,7 @@ app.get('/api/posts', (req, res, next) => {
     select *
       from "posts"
      where "userId" = $1
+  order by "postId" DESC
   `;
   const params = [userId];
 

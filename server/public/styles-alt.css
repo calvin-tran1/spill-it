@@ -374,9 +374,7 @@ li {
 }
 
 article {
-  display: flex;
-  justify-content: center;
-  margin: 1em -0.75em;
+  margin: 1em 0;
   max-width: 598px;
   max-height: 610px;
   border-bottom: solid 1px black;
@@ -696,4 +694,30 @@ a:hover {
   margin-left: 0 !important;
   padding-left: 0 !important;
   border-bottom: solid rgb(39, 39, 39);
+}
+
+.post-image {
+  border-radius: 30px;
+  max-width: 294px;
+  max-height: 393px;
+}
+
+.post-avatar-wrapper {
+  max-width: 70px !important;
+}
+
+.post-displayname {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.post-username {
+  font-size: 18px;
+  color: #aeb2b5;
+}
+
+.post-text-content {
+  font-size: 16px;
+  color: white;
 }
