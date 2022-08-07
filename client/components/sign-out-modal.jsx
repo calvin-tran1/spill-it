@@ -6,7 +6,7 @@ export default class SignOutModal extends React.Component {
     const { handleSignOut } = this.context;
 
     return (
-        <div className="sign-out-modal-wrapper m-0 p-0">
+        <div className="m-0 p-0">
           <div className={this.props.modal} onClick={handleSignOut}>
             <span>
               Sign out @{this.props.username}

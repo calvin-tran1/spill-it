@@ -23,8 +23,8 @@ export default class PostCard extends React.Component {
                 <p className="post-username my-0 py-0 ps-1 pe-0">
                   @{this.props.username}
                 </p>
-                <i className="fa-solid fa-circle px-1" />
-                <p className="post-date">{this.props.date}</p>
+                <i className="fa-solid fa-circle my-0 px-1" />
+                <p className="post-date my-0 p-0">{this.props.date}</p>
               </div>
             </div>
             <div className={this.props.textContentClass}>

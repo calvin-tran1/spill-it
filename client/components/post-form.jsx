@@ -101,6 +101,7 @@ export default class PostForm extends React.Component {
       .catch(err => console.error(err));
 
     this.setState({ image: null, textContent: '' });
+    this.props.reRender();
   }
 
   render() {
@@ -129,6 +130,7 @@ export default class PostForm extends React.Component {
                   type="text"
                   maxLength={280}
                   placeholder="What's the tea?"
+                  value={this.state.textContent}
                   onKeyDown={this.handleKeyDown}
                   onChange={this.handleChange}
                 />

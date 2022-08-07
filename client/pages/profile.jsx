@@ -28,6 +28,7 @@ export default class Profile extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
+    this.reRender = this.reRender.bind(this);
   }
 
   componentDidMount() {
@@ -80,6 +81,22 @@ export default class Profile extends React.Component {
     this.setState(prevState => ({
       postForm: !prevState.postForm
     }));
+  }
+
+  reRender() {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch('/api/posts', req)
+      .then(res => res.json())
+      .then(post => {
+        this.setState({ posts: post });
+      });
   }
 
   render() {
@@ -138,6 +155,7 @@ export default class Profile extends React.Component {
             <PostForm
               post={this.state.postForm ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
+              reRender={this.reRender}
             />
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">

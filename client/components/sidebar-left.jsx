@@ -81,11 +81,11 @@ export default class SidebarLeft extends React.Component {
           <div className="row sign-out-wrapper m-0 p-0">
             <div className="row ms-4">
               <SignOutModal
-              username={this.state.username}
-              modal={this.state.active ? 'sign-out-modal' : 'd-none'}
-              arrow={this.state.active ? 'arrow-down' : 'd-none'}
-              onSignOut={this.props.onSignOut}
-            />
+                username={this.state.username}
+                modal={this.state.active ? 'sign-out-modal' : 'd-none'}
+                arrow={this.state.active ? 'arrow-down' : 'd-none'}
+                onSignOut={this.props.onSignOut}
+              />
             </div>
             <div className="col my-0 mx-2 p-0 d-flex justify-content-end">
               <Avatar
@@ -103,7 +103,6 @@ export default class SidebarLeft extends React.Component {
                 @{this.state.username}
               </span>
             </div>
-
           </div>
         </div>
       </div>
