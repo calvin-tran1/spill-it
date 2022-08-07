@@ -270,10 +270,8 @@ li {
 }
 
 .desktop-sign-out {
-  display: flex;
   cursor: pointer;
-  margin: 1em auto;
-  margin-right: 9em;
+  margin-right: 6.3em;
 }
 
 .border-right {
@@ -284,12 +282,14 @@ li {
   border-left: 2px solid rgb(39, 39, 39);
 }
 
+.sign-out-wrapper {
+  width: 250px !important;
+}
+
 .displayname-text {
   font-size: 18px;
   font-weight: bold;
   color: rgb(39, 39, 39);
-  margin: 0 0.5em;
-  padding: 0;
 }
 
 .username-text {
@@ -426,10 +426,7 @@ article > p {
 }
 
 .sign-out-modal {
-  position: absolute;
-  z-index: 9999;
-  bottom: 8%;
-  left: 15%;
+  margin: 0 auto;
   width: 200px;
   height: 52px;
   border-radius: 30px;
@@ -442,15 +439,12 @@ article > p {
 }
 
 .arrow-down {
-  position: absolute;
-  z-index: 9998;
-  bottom: 7%;
-  left: 38%;
+  margin: 0 auto;
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 20px solid white;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white;
 }
 
 .mobile-nav-btn {
@@ -684,12 +678,20 @@ a:visited {
   font-size: 21px;
 }
 
+.posts-tab:hover {
+  color: #c5e9ea;
+}
+
 .likes-tab {
   border-style: none;
   background: transparent;
   color: rgb(39, 39, 39);
   font-weight: bold;
   font-size: 21px;
+}
+
+.likes-tab:hover {
+  color: #c5e9ea;
 }
 
 .tab-active {
@@ -752,14 +754,34 @@ a:visited {
   cursor: pointer;
 }
 
+.fa-comment:hover {
+  color: rgb(201, 201, 201);
+}
+
 .fa-retweet {
   font-size: 18px;
-  color: #c5e9ea;
   cursor: pointer;
+}
+
+.fa-retweet:hover {
+  color: #c5e9ea;
 }
 
 .fa-heart {
   font-size: 18px;
-  color: #fa2c8b;
   cursor: pointer;
+}
+
+.fa-heart:hover {
+  color: #fa2c8b;
+}
+
+.fa-circle {
+  font-size: 3px;
+  color: #aeb2b5;
+  padding-top: 3.4em;
+}
+
+.post-date {
+  color: #aeb2b5;
 }

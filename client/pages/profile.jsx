@@ -10,6 +10,7 @@ import MobileNavMenu from '../components/mobile-nav-menu';
 import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
 import PostCard from '../components/post-card';
+import dateFormat from 'dateformat';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -93,6 +94,7 @@ export default class Profile extends React.Component {
             avatarName={post.username}
             displayName={post.displayName}
             username={post.username}
+            date={dateFormat(post.createdAt, 'mmm d, yyyy')}
             textContent={post.textContent}
             textContentClass={post.textContent !== null ? 'row m-0 p-0' : 'd-none'}
             postImg={post.image}

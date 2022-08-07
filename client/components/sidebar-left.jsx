@@ -77,27 +77,33 @@ export default class SidebarLeft extends React.Component {
             </li>
           </ul>
         </nav>
-        <SignOutModal
-          username={this.state.username}
-          modal={this.state.active ? 'sign-out-modal' : 'd-none'}
-          arrow={this.state.active ? 'arrow-down' : 'd-none'}
-          onSignOut={this.props.onSignOut}
-        />
-        <div className="desktop-sign-out" onClick={this.handleClick}>
-          <Avatar
-            imageUrl={this.state.image}
-            name={this.state.username}
-            width="48px"
-            height="48px"
-          />
-          <div>
-            <span className="displayname-text">
-              {this.state.displayName}
-            </span>
-            <br />
-            <span className="username-text">
-              @{this.state.username}
-            </span>
+        <div className="desktop-sign-out d-flex justify-content-end my-3" onClick={this.handleClick}>
+          <div className="row sign-out-wrapper m-0 p-0">
+            <div className="row ms-4">
+              <SignOutModal
+              username={this.state.username}
+              modal={this.state.active ? 'sign-out-modal' : 'd-none'}
+              arrow={this.state.active ? 'arrow-down' : 'd-none'}
+              onSignOut={this.props.onSignOut}
+            />
+            </div>
+            <div className="col my-0 mx-2 p-0 d-flex justify-content-end">
+              <Avatar
+                imageUrl={this.state.image}
+                name={this.state.username}
+                width="48px"
+                height="48px"
+              />
+            </div>
+            <div className="col m-0 p-0 text-nowrap ">
+              <p className="displayname-text m-0 p-0">
+                {this.state.displayName}
+              </p>
+              <span className="username-text m-0 p-0">
+                @{this.state.username}
+              </span>
+            </div>
+
           </div>
         </div>
       </div>
