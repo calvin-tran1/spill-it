@@ -297,7 +297,7 @@ li {
 
 .username-text {
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   color: #41474b;
   margin: 0.5em;
   margin-bottom: 0.5em;
@@ -309,7 +309,7 @@ li {
   height: 44px;
   background-color: #41474b;
   position: sticky;
-  top: 1%;
+  top: 0%;
   margin-left: 3.5em;
   padding-top: 1px;
 }
@@ -327,8 +327,9 @@ li {
 .searchbar > input {
   background: transparent;
   border-style: none;
-  width: 250px;
+  width: 275px;
   outline: none;
+  padding: 0;
 }
 
 .searchbar > input::placeholder {
@@ -342,7 +343,7 @@ li {
 }
 
 .search-btn > .fa-magnifying-glass {
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .card {
@@ -787,5 +788,10 @@ a:visited {
 
 .post-date {
   font-size: 15px;
+  font-weight: 300;
   color: #aeb2b5;
+}
+
+.space-break {
+  height: 200px;
 }

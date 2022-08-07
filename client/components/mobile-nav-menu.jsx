@@ -53,7 +53,7 @@ export default class MobileNavMenu extends React.Component {
             />
           </div>
           <div className="mx-2 my-0">
-            <span className="displayname-text color-white">
+            <span className="displayname-text color-white mx-2">
               {this.state.displayName}
             </span>
             <br />

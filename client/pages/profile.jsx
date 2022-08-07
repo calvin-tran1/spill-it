@@ -101,6 +101,9 @@ export default class Profile extends React.Component {
 
   render() {
     const { user, handleSignOut } = this.context;
+
+    if (!user) return <Redirect to="" />;
+
     let posts;
     if (this.state.posts.length !== 0) {
       posts = this.state.posts.map(post => {
@@ -121,8 +124,6 @@ export default class Profile extends React.Component {
       });
     }
 
-    if (!user) return <Redirect to="" />;
-
     return (
       <div className="container-fluid bg-primary-color">
         <ModalOverlay
@@ -141,7 +142,6 @@ export default class Profile extends React.Component {
               openPost={this.postModal}
             />
           </div>
-          <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
           <div className="main-content full-height border-left border-right bg-primary-color p-0">
             <div className="row page-head m-0 px-3">
               <div className="col my-2 mx-0 p-0">
@@ -177,12 +177,12 @@ export default class Profile extends React.Component {
               </div>
               <div className="row m-0 p-0">
                 <div className="col m-0 p-0">
-                  <span className="profile-display-name mx-1 mt-2 mb-0 px-3">{this.state.displayName}</span>
+                  <span className="profile-display-name mx-1 mt-2 mb-0 px-3 py-0">{this.state.displayName}</span>
                 </div>
               </div>
-              <div className="row m-0">
+              <div className="row m-0 p-0">
                 <div className="col m-0 p-0">
-                  <span className="profile-username mx-1 my-0 px-3">@{this.state.username}</span>
+                  <span className="profile-username mx-1 my-0 px-3 py-0">@{this.state.username}</span>
                 </div>
               </div>
               <div className="row m-0 p-0">
@@ -201,6 +201,7 @@ export default class Profile extends React.Component {
             </div>
             <div className="posts-container">
               {posts}
+              <div className="space-break" />
             </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">

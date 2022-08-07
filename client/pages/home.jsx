@@ -16,10 +16,12 @@ export default class Home extends React.Component {
       user: null,
       username: '',
       active: false,
-      post: false
+      post: false,
+      posts: []
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
+    this.reRender = this.reRender.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +50,22 @@ export default class Home extends React.Component {
     }));
   }
 
+  reRender() {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch('/api/posts', req)
+      .then(res => res.json())
+      .then(post => {
+        this.setState({ posts: post });
+      });
+  }
+
   render() {
     const { user, handleSignOut } = this.context;
 
@@ -71,7 +89,6 @@ export default class Home extends React.Component {
               openPost={this.postModal}
             />
           </div>
-          <div className="w-100 d-sm-none d-md-block d-md-none d-lg-block d-lg-none d-xl-block d-xl-none" />
           <div className="main-content full-height border-left border-right bg-primary-color p-0">
             <div className="row page-head m-0 px-3">
               <div className="col my-2 mx-0 p-0">
@@ -85,6 +102,7 @@ export default class Home extends React.Component {
             <PostForm
               post={this.state.post ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
+              reRender={this.reRender}
             />
             <article className="post">
               <p className="color-text-content">

@@ -244,9 +244,6 @@ app.post('/api/new/post/no-image', (req, res, next) => {
 
   db.query(sql, params)
     .then(result => {
-      if (!result.rows[0]) {
-        throw new ClientError(404, `could not find userId: ${userId}`);
-      }
       res.json(result.rows[0]);
     })
     .catch(err => next(err));
@@ -270,9 +267,6 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
 
   db.query(sql, params)
     .then(result => {
-      if (!result.rows[0]) {
-        throw new ClientError(404, `could not find userId: ${userId}`);
-      }
       res.json(result.rows[0]);
     })
     .catch(err => next(err));
@@ -280,6 +274,7 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
 
 app.get('/api/posts', (req, res, next) => {
   const { userId } = req.user;
+
   if (!userId) {
     throw new ClientError(400, 'could not find user');
   }
@@ -294,9 +289,6 @@ app.get('/api/posts', (req, res, next) => {
 
   db.query(sql, params)
     .then(result => {
-      if (!result.rows) {
-        throw new ClientError(404, `could not find userId: ${userId}`);
-      }
       res.json(result.rows);
     })
     .catch(err => next(err));
