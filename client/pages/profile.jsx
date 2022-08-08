@@ -28,13 +28,12 @@ export default class Profile extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
-    this.reRender = this.reRender.bind(this);
+    this.updatePosts = this.updatePosts.bind(this);
   }
 
   componentDidMount() {
     const token = window.localStorage.getItem('jwt');
     const req = {
-      method: 'GET',
       headers: {
         'X-Access-Token': token
       }
@@ -83,10 +82,9 @@ export default class Profile extends React.Component {
     }));
   }
 
-  reRender() {
+  updatePosts() {
     const token = window.localStorage.getItem('jwt');
     const req = {
-      method: 'GET',
       headers: {
         'X-Access-Token': token
       }
@@ -94,8 +92,8 @@ export default class Profile extends React.Component {
 
     fetch('/api/posts', req)
       .then(res => res.json())
-      .then(post => {
-        this.setState({ posts: post });
+      .then(newPosts => {
+        this.setState({ posts: newPosts });
       });
   }
 
@@ -116,9 +114,9 @@ export default class Profile extends React.Component {
             username={post.username}
             date={dateFormat(post.createdAt, 'mmm d, yyyy')}
             textContent={post.textContent}
-            textContentClass={post.textContent !== null ? 'row m-0 p-0' : 'd-none'}
+            textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
             postImg={post.image}
-            postImgClass={post.image !== null ? 'row m-0 p-0' : 'd-none'}
+            postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
           />
         );
       });
@@ -155,7 +153,7 @@ export default class Profile extends React.Component {
             <PostForm
               post={this.state.postForm ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
-              reRender={this.reRender}
+              updatePosts={this.updatePosts}
             />
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">

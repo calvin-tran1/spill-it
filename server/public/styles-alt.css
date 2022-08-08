@@ -137,7 +137,7 @@ hr {
   border-style: none;
   border-radius: 30px;
   background-color: #c5e9ea;
-  color: white;
+  color: #aeb2b5;
   font-size: 20px;
   font-weight: bold;
 }
@@ -264,7 +264,7 @@ li {
   border-style: none;
   background-color: #c5e9ea;
   border-radius: 30px;
-  color: white;
+  color: #aeb2b5;
   font-size: 22px;
   font-weight: bold;
 }
@@ -663,7 +663,7 @@ a:visited {
 }
 
 .profile-username {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 300;
   color: #aeb2b5;
 }
@@ -679,7 +679,7 @@ a:visited {
   background: transparent;
   color: rgb(39, 39, 39);
   font-weight: bold;
-  font-size: 21px;
+  font-size: 18px;
 }
 
 .posts-tab:hover {
@@ -691,7 +691,7 @@ a:visited {
   background: transparent;
   color: rgb(39, 39, 39);
   font-weight: bold;
-  font-size: 21px;
+  font-size: 18px;
 }
 
 .likes-tab:hover {
@@ -720,19 +720,19 @@ a:visited {
 }
 
 .post-displayname {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   color: white;
 }
 
 .post-username {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 300;
   color: #aeb2b5;
 }
 
 .post-text-content {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 300;
   color: white;
 }

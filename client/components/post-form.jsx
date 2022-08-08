@@ -101,7 +101,7 @@ export default class PostForm extends React.Component {
       .catch(err => console.error(err));
 
     this.setState({ image: null, textContent: '' });
-    this.props.reRender();
+    this.props.updatePosts();
   }
 
   render() {

@@ -21,7 +21,7 @@ export default class Home extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
-    this.reRender = this.reRender.bind(this);
+    this.updatePosts = this.updatePosts.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +50,7 @@ export default class Home extends React.Component {
     }));
   }
 
-  reRender() {
+  updatePosts() {
     const token = window.localStorage.getItem('jwt');
     const req = {
       method: 'GET',
@@ -102,7 +102,7 @@ export default class Home extends React.Component {
             <PostForm
               post={this.state.post ? 'container post-modal' : 'd-none'}
               onClick={this.postModal}
-              reRender={this.reRender}
+              updatePosts={this.updatePosts}
             />
             <article className="post">
               <p className="color-text-content">
