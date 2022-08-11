@@ -174,12 +174,12 @@ app.get('/api/user', (req, res, next) => {
 app.patch('/api/user/profile', uploadsMiddleware, (req, res, next) => {
   const { userId } = req.user;
   const { displayName, bio } = req.body;
+  const image = `/images/${req.file.filename}`;
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
   }
 
-  const image = `/images/${req.file.filename}`;
   const sql = `
       update "users"
       set    "image" = $1,
@@ -223,6 +223,73 @@ app.patch('/api/user/profile/no-image', (req, res, next) => {
         throw new ClientError(404, `could not find userId: ${userId}`);
       }
       res.status(200).json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/new/post/no-image', (req, res, next) => {
+  const { userId, username } = req.user;
+  const { displayName, avatar, textContent } = req.body;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    insert into "posts" ("userId", "username", "displayName", "avatar", "textContent")
+    values ($1, $2, $3, $4, $5)
+    returning *
+  `;
+  const params = [userId, username, displayName, avatar, textContent];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
+  const { userId, username } = req.user;
+  const { displayName, avatar, textContent } = req.body;
+  const image = `/images/${req.file.filename}`;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    insert into "posts" ("userId", "username", "displayName", "avatar", "textContent", "image")
+    values ($1, $2, $3, $4, $5, $6)
+    returning *
+  `;
+  const params = [userId, username, displayName, avatar, textContent, image];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/posts', (req, res, next) => {
+  const { userId } = req.user;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select *
+      from "posts"
+     where "userId" = $1
+  order by "postId" DESC
+  `;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
     })
     .catch(err => next(err));
 });

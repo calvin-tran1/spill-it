@@ -2,6 +2,7 @@ import React from 'react';
 import Avatar from './avatar';
 import SignOutModal from './sign-out-modal';
 import ModalOverlay from './modal-overlay.jsx';
+import AppContext from '../lib/app-context';
 
 export default class SidebarLeft extends React.Component {
   constructor(props) {
@@ -45,8 +46,9 @@ export default class SidebarLeft extends React.Component {
     return (
       <div className="sidebar-left">
         <ModalOverlay
-          active={this.state.active ? 'modal-overlay' : 'd-none'}
-          onClick={this.handleClick} />
+          active={this.state.active ? 'modal-overlay bg-transparent' : 'd-none'}
+          onClick={this.handleClick}
+        />
         <nav className="my-3 mx-5">
           <ul>
             <li>
@@ -62,43 +64,50 @@ export default class SidebarLeft extends React.Component {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="#profile">
                 <i className="fa-solid fa-user sidebar-icon px-2">
                   <span className="nav-sidebar-text">Profile</span>
                 </i>
               </a>
             </li>
             <li>
-              <a href="#">
-                <button type="button" className="desktop-post-btn my-4">
-                  Post
-                </button>
-              </a>
+              <button type="button" className="desktop-post-btn my-4" onClick={this.props.openPost}>
+                Post
+              </button>
             </li>
           </ul>
         </nav>
-        <SignOutModal
-          username={this.state.username}
-          modal={this.state.active ? 'sign-out-modal' : 'd-none'}
-          arrow={this.state.active ? 'arrow-down' : 'd-none'}
-          onSignOut={this.props.onSignOut} />
-        <div className="desktop-sign-out" onClick={this.handleClick}>
-          <Avatar
-            imageUrl={this.state.image}
-            name="test"
-            width="48px"
-            height="48px" />
-          <div>
-            <span className="displayname-text">
-              {this.state.displayName}
-              <br />
-            </span>
-            <span className="username-text">
-              @{this.state.username}
-            </span>
+        <div className="desktop-sign-out d-flex justify-content-end my-3" onClick={this.handleClick}>
+          <div className="row sign-out-wrapper m-0 p-0">
+            <div className="row ms-4">
+              <SignOutModal
+                username={this.state.username}
+                modal={this.state.active ? 'sign-out-modal' : 'd-none'}
+                arrow={this.state.active ? 'arrow-down' : 'd-none'}
+                onSignOut={this.props.onSignOut}
+              />
+            </div>
+            <div className="col my-0 mx-2 p-0 d-flex justify-content-end">
+              <Avatar
+                imageUrl={this.state.image}
+                name={this.state.username}
+                width="48px"
+                height="48px"
+              />
+            </div>
+            <div className="col m-0 p-0 text-nowrap ">
+              <p className="displayname-text m-0 p-0">
+                {this.state.displayName}
+              </p>
+              <span className="username-text m-0 p-0">
+                @{this.state.username}
+              </span>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
+
+SidebarLeft.contextType = AppContext;

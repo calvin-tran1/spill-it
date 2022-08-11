@@ -40,8 +40,8 @@ export default class ProfileSetup extends React.Component {
   }
 
   handleChangeImage(e) {
-    if (!e.target.files) {
-      return this.setState({ image: this.state.user.image });
+    if (!e.target.files[0]) {
+      return;
     }
     this.setState({ image: URL.createObjectURL(e.target.files[0]) });
   }
@@ -93,7 +93,7 @@ export default class ProfileSetup extends React.Component {
             <div className="main-content full-height">
               <div className="logo">
                 <a
-                  href="#">
+                  href="#home">
                   <i className="fa-solid fa-mug-saucer " />
                 </a>
               </div>
@@ -105,9 +105,10 @@ export default class ProfileSetup extends React.Component {
                   imageUrl={this.state.image}
                   name="test"
                   width="300px"
-                  height="300px" />
+                  height="300px"
+                />
                 <div className="input-fields my-3">
-                  <label className="avatar-label">
+                  <label name="avatar" className="avatar-label">
                     Change avatar
                     <input
                       type="file"
@@ -115,7 +116,8 @@ export default class ProfileSetup extends React.Component {
                       name="image"
                       ref={this.fileInputRef}
                       accept=".png, .jpg, .jpeg"
-                      onChange={this.handleChangeImage} />
+                      onChange={this.handleChangeImage}
+                    />
                   </label>
                 </div>
                 <div className="input-fields">
@@ -126,15 +128,18 @@ export default class ProfileSetup extends React.Component {
                     placeholder="Display Name"
                     value={!this.state.displayName ? null : this.state.displayName}
                     name="displayName"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="input-fields">
                   <input
                     type="text"
                     className="input-bio"
-                    placeholder={this.state.bio === null ? 'Your bio' : this.state.bio}
+                    placeholder={this.state.bio === null || this.state.bio === '' ? 'Your bio' : this.state.bio}
+                    value={this.state.bio === '' ? null : this.state.bio}
                     name="bio"
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <button type="submit" className="finish-profile-btn my-3">
                   Finish

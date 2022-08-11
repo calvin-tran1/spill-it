@@ -54,21 +54,23 @@ export default class SignIn extends React.Component {
                 <div className="input-fields">
                   <label name="username" />
                   <input
-                  required
-                  type="text"
-                  className="input-username-password my-3"
-                  placeholder="Username"
-                  name="username"
-                  onChange={this.handleChange} />
+                    required
+                    type="text"
+                    className="input-username-password my-3"
+                    placeholder="Username"
+                    name="username"
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className="input-fields">
                   <label name="password" />
                   <input
-                  type="password"
-                  className="input-username-password my-3"
-                  placeholder="Password"
-                  name="password"
-                  onChange={this.handleChange} />
+                    type="password"
+                    className="input-username-password my-3"
+                    placeholder="Password"
+                    name="password"
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <button type="submit" className="sign-in-btn my-3">
                   Sign in
@@ -78,8 +80,7 @@ export default class SignIn extends React.Component {
                   <p className="or">or</p>
                   <hr />
                 </div>
-                <a
-                  href="#sign-up">
+                <a href="#sign-up">
                   <button type="button" className="sign-up-btn my-1">
                     Sign up
                   </button>

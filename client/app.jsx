@@ -4,6 +4,7 @@ import SignIn from './pages/sign-in';
 import SignUp from './pages/sign-up';
 import ProfileSetup from './pages/profile-setup';
 import Home from './pages/home';
+import Profile from './pages/profile';
 import parseRoute from './lib/parse-route';
 import jwtDecode from 'jwt-decode';
 
@@ -12,6 +13,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       user: null,
+      username: '',
       isAuthorizing: true,
       route: parseRoute(window.location.hash)
     };
@@ -54,9 +56,14 @@ export default class App extends React.Component {
     if (route.path === 'home') {
       return <Home onSignOut={this.handleSignOut} />;
     }
+    if (route.path === 'profile') {
+      return <Profile />;
+    }
   }
 
   render() {
+    if (this.state.isAuthorizing) return null;
+
     const { user, route } = this.state;
     const { handleSignIn, handleSignOut } = this;
     const contextValue = { user, route, handleSignIn, handleSignOut };
