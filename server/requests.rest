@@ -26,3 +26,7 @@ x-access-token:
 ###
 GET http://localhost:3000/api/posts
 x-access-token:
+
+###
+DELETE http://localhost:3000/api/posts/72
+x-access-token:

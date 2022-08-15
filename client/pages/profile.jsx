@@ -24,11 +24,15 @@ export default class Profile extends React.Component {
       active: false,
       postForm: false,
       mobileView: false,
-      posts: []
+      posts: [],
+      deletePostId: null,
+      optionsMenu: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
     this.updatePosts = this.updatePosts.bind(this);
+    this.handleOptions = this.handleOptions.bind(this);
+    this.handleResetOptions = this.handleResetOptions.bind(this);
   }
 
   componentDidMount() {
@@ -97,6 +101,20 @@ export default class Profile extends React.Component {
       });
   }
 
+  handleOptions(e) {
+    this.setState({
+      deletePostId: parseInt(e.target.getAttribute('data-post-id')),
+      optionsMenu: true
+    });
+  }
+
+  handleResetOptions() {
+    this.setState({
+      optionsMenu: false,
+      deletePostId: null
+    });
+  }
+
   render() {
     const { user, handleSignOut } = this.context;
 
@@ -108,6 +126,7 @@ export default class Profile extends React.Component {
         return (
           <PostCard
             key={post.postId}
+            postId={post.postId}
             avatarImg={post.avatar}
             avatarName={post.username}
             displayName={post.displayName}
@@ -117,6 +136,9 @@ export default class Profile extends React.Component {
             textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
             postImg={post.image}
             postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
+            optionsMenu={this.state.optionsMenu ? 'post-options-menu' : 'd-none'}
+            postOptionsBtn={this.handleOptions}
+            postOptionsBtnClass={this.state.optionsMenu ? 'd-none' : 'post-options-btn'}
           />
         );
       });
@@ -124,6 +146,10 @@ export default class Profile extends React.Component {
 
     return (
       <div className="container-fluid bg-primary-color">
+        <ModalOverlay
+          active={this.state.optionsMenu ? 'modal-overlay bg-transparent' : 'd-none'}
+          onClick={this.handleResetOptions}
+        />
         <ModalOverlay
           active={this.state.active ? 'modal-overlay bg-opacity-40' : 'd-none'}
           onClick={this.handleClick}

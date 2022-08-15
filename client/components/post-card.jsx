@@ -15,7 +15,7 @@ export default class PostCard extends React.Component {
             />
           </div>
           <div className="col mx-1 my-0 p-0">
-            <div className="row m-0 p-0">
+            <div className="row m-0 p-0 d-flex justify-content-between">
               <div className="col d-flex m-0 p-0">
                 <p className="post-displayname my-0 py-0">
                   {this.props.displayName}
@@ -25,6 +25,14 @@ export default class PostCard extends React.Component {
                 </p>
                 <i className="fa-solid fa-circle my-0 px-1" />
                 <p className="post-date my-0 p-0">{this.props.date}</p>
+              </div>
+              <div className="col ms-0 me-3 p-0 d-flex justify-content-end">
+                <div className={this.props.optionsMenu}>
+                  <span>Delete</span>
+                </div>
+                <button type="button" className={this.props.postOptionsBtnClass} onClick={this.props.postOptionsBtn}>
+                  <i className="fa-solid fa-ellipsis" data-post-id={this.props.postId} />
+                </button>
               </div>
             </div>
             <div className={this.props.textContentClass}>

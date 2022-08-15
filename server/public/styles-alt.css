@@ -795,3 +795,15 @@ a:visited {
 .space-break {
   height: 200px;
 }
+
+.post-options-btn {
+  border-style: none;
+  background-color: transparent;
+  color: #aeb2b5;
+}
+
+.post-options-menu {
+  position: absolute;
+  z-index: 9998;
+  background-color: #393d41;
+}
