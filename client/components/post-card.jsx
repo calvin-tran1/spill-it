@@ -28,7 +28,9 @@ export default class PostCard extends React.Component {
               </div>
               <div className="col ms-0 me-3 p-0 d-flex justify-content-end">
                 <div className={this.props.optionsMenu}>
-                  <span>Delete</span>
+                  <button type="button" className="delete-btn" onClick={this.props.deleteBtn}>
+                    <i className="fa-solid fa-trash-can" />
+                  </button>
                 </div>
                 <button type="button" className={this.props.postOptionsBtnClass} onClick={this.props.postOptionsBtn}>
                   <i className="fa-solid fa-ellipsis" data-post-id={this.props.postId} />
