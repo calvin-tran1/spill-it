@@ -298,9 +298,6 @@ app.delete('/api/posts/:postId', (req, res, next) => {
   const { userId } = req.user;
   const postId = Number(req.params.postId);
 
-  if (!userId) {
-    throw new ClientError(400, 'could not find user');
-  }
   if (!Number.isInteger(postId) || postId <= 0) {
     throw new ClientError(400, 'postId must be a positive integer');
   }
