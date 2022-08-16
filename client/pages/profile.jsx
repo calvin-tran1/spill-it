@@ -177,7 +177,7 @@ export default class Profile extends React.Component {
             postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
             optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
             postOptionsBtn={this.handleOptions}
-            postOptionsBtnClass={postOptions ? 'd-none' : 'post-options-btn'}
+            postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
           />
         );
