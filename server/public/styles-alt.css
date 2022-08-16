@@ -407,6 +407,17 @@ article > p {
 
 .modal-overlay {
   position: fixed;
+  z-index: 9996;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.delete-post-modal-overlay {
+  position: fixed;
   z-index: 9997;
   top: 0;
   bottom: 0;
@@ -794,4 +805,62 @@ a:visited {
 
 .space-break {
   height: 200px;
+}
+
+.post-options-btn {
+  border-style: none;
+  background-color: transparent;
+  color: #aeb2b5;
+}
+
+.post-options-menu {
+  position: absolute;
+  z-index: 9998;
+}
+
+.fa-trash-can {
+  color: rgb(255, 101, 101);
+}
+
+.delete-btn {
+  background-color: transparent;
+  border-style: none;
+}
+
+.delete-modal {
+  position: fixed;
+  z-index: 9999;
+  left: 42%;
+  top: 42%;
+  background-color: #41474b;
+  border-radius: 30px;
+  width: 300px;
+  height: 200px;
+  text-align: center;
+}
+
+.delete-modal > span {
+  color: white;
+  font-size: 18px;
+}
+
+.confirm-delete-btn {
+  width: 210px;
+  height: 35px;
+  margin: 1.5em auto;
+  border-style: none;
+  border-radius: 30px;
+  background-color: red;
+  color: white;
+}
+
+.cancel-delete-btn {
+  width: 210px;
+  height: 35px;
+  margin: 0 auto;
+  border-color: white;
+  border-style: solid;
+  border-radius: 30px;
+  background-color: #aeb2b5;
+  color: white;
 }

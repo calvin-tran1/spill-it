@@ -294,6 +294,29 @@ app.get('/api/posts', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/posts/:postId', (req, res, next) => {
+  const { userId } = req.user;
+  const postId = Number(req.params.postId);
+
+  if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a positive integer');
+  }
+
+  const sql = `
+    delete from "posts"
+    where "postId" = $1
+    and "userId" = $2
+    returning *
+  `;
+  const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
