@@ -64,7 +64,7 @@ export default class SidebarLeft extends React.Component {
               </a>
             </li>
             <li>
-              <a href="#profile">
+              <a href={`#${this.state.username}`}>
                 <i className="fa-solid fa-user sidebar-icon px-2">
                   <span className="nav-sidebar-text">Profile</span>
                 </i>

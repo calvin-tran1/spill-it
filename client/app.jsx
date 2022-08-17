@@ -27,7 +27,7 @@ export default class App extends React.Component {
     });
     const token = window.localStorage.getItem('jwt');
     const user = token ? jwtDecode(token) : null;
-    this.setState({ user, isAuthorizing: false });
+    this.setState({ user, username: user.username, isAuthorizing: false });
   }
 
   handleSignIn(result) {
@@ -42,7 +42,7 @@ export default class App extends React.Component {
   }
 
   renderPage() {
-    const { route } = this.state;
+    const { route, username } = this.state;
 
     if (route.path === '') {
       return <SignIn onSignIn={this.handleSignIn} />;
@@ -56,7 +56,7 @@ export default class App extends React.Component {
     if (route.path === 'home') {
       return <Home onSignOut={this.handleSignOut} />;
     }
-    if (route.path === 'profile') {
+    if (route.path === `${username}`) {
       return <Profile />;
     }
   }
