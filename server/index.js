@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-app.get('/api/users', (req, res, next) => {
+app.get('/api/search/users', (req, res, next) => {
   const sql = `
     select "userId",
            "username",

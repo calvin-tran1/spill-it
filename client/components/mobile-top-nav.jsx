@@ -46,7 +46,7 @@ export default class MobileTopNav extends React.Component {
                 />
               </button>;
     }
-    if (route.path === 'profile') {
+    if (route.path === `${this.state.username}`) {
       return <button type="button" className="mobile-back-btn">
               <a href="#home">
                 <i className="fa-solid fa-arrow-left" />
@@ -61,8 +61,8 @@ export default class MobileTopNav extends React.Component {
     if (route.path === 'home') {
       return <p className="mobile-nav-title">Home</p>;
     }
-    if (route.path === 'profile') {
-      return <p className = "mobile-nav-title">{this.state.displayName}</p>;
+    if (route.path === `${this.state.username}`) {
+      return <p className="mobile-nav-title py-1">{this.state.displayName}</p>;
     }
   }
 
