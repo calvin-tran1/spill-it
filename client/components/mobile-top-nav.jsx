@@ -1,5 +1,6 @@
 import React from 'react';
 import Avatar from './avatar';
+// import DesktopSearchbar from './search-bar';
 import AppContext from '../lib/app-context';
 
 export default class MobileTopNav extends React.Component {
@@ -59,7 +60,7 @@ export default class MobileTopNav extends React.Component {
     const { route } = this.context;
 
     if (route.path === 'home') {
-      return <p className="mobile-nav-title">Home</p>;
+      return <p className="mobile-nav-title py-1">Home</p>;
     }
     if (route.path === `${this.state.username}`) {
       return <p className="mobile-nav-title py-1">{this.state.displayName}</p>;
