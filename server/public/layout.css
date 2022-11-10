@@ -38,4 +38,9 @@
     height: 100% !important;
     background-color: white;
   }
+
+  .searchbar-wrapper,
+  .searchbar {
+    width: 275px !important;
+  }
 }

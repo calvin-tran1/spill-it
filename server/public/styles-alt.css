@@ -868,3 +868,8 @@ a:visited {
 .mobile-search {
   display: none;
 }
+
+.post-card-btn {
+  border-style: none;
+  background-color: transparent;
+}

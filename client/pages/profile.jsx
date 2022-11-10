@@ -27,6 +27,7 @@ export default class Profile extends React.Component {
       mobileSearch: true,
       mobileView: false,
       posts: [],
+      likes: [],
       deletePostId: null,
       optionsMenu: false,
       deleteModal: false
@@ -38,6 +39,7 @@ export default class Profile extends React.Component {
     this.handleResetOptions = this.handleResetOptions.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleLike = this.handleLike.bind(this);
   }
 
   componentDidMount() {
@@ -152,6 +154,21 @@ export default class Profile extends React.Component {
 
   }
 
+  handleLike(e) {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/likes/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
   render() {
     const { user, handleSignOut } = this.context;
 
@@ -181,6 +198,7 @@ export default class Profile extends React.Component {
             postOptionsBtn={this.handleOptions}
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
+            likeBtn={this.handleLike}
           />
         );
       });
