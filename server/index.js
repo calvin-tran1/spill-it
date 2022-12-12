@@ -342,16 +342,27 @@ app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/likes/', uploadsMiddleware, (req, res, next) => {
+app.get('/api/likes/:userId', uploadsMiddleware, (req, res, next) => {
   const { userId } = req.user;
-  const postId = Number(req.body.postId);
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
   }
-  if (!Number.isInteger(postId) || postId <= 0) {
-    throw new ClientError(400, 'postId must be a positive integer');
-  }
+
+  const sql = `
+    select *
+    from "posts" as "p"
+    join "likes" as "l" using ("postId")
+    group by "l"."likesId"
+    where "userId" = $1
+  `;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
 });
 
 app.use(errorMiddleware);
