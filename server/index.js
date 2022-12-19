@@ -342,7 +342,7 @@ app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/likes/:userId', uploadsMiddleware, (req, res, next) => {
+app.get('/api/user/likes/:userId', uploadsMiddleware, (req, res, next) => {
   const { userId } = req.user;
 
   if (!userId) {
@@ -351,9 +351,7 @@ app.get('/api/likes/:userId', uploadsMiddleware, (req, res, next) => {
 
   const sql = `
     select *
-    from "posts" as "p"
-    join "likes" as "l" using ("postId")
-    group by "l"."likesId"
+    from "likes"
     where "userId" = $1
   `;
   const params = [userId];

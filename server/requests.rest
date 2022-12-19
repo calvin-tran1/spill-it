@@ -44,6 +44,6 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1
 }
 
 ###
-GET http://localhost:3000/api/likes/4
+GET http://localhost:3000/api/user/likes/4
 Content-Type: application/json
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjY3MjM3NDU5fQ.Ky5w_DuxZUwUarnbAqUc7p3_2D290mKRS56fDCxAA14
