@@ -351,7 +351,8 @@ app.get('/api/user/likes/:userId', uploadsMiddleware, (req, res, next) => {
 
   const sql = `
     select *
-    from "likes"
+    from "posts"
+    join "likes" using ("userId")
     where "userId" = $1
   `;
   const params = [userId];
