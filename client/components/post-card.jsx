@@ -4,7 +4,7 @@ import Avatar from './avatar';
 export default class PostCard extends React.Component {
   render() {
     return (
-      <article key={this.props.key}>
+      <article key={this.props.key} className={this.props.postsOrLikesView}>
         <div className="row m-0 p-0">
           <div className="col post-avatar-wrapper mb-3 px-3">
             <Avatar

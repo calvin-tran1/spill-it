@@ -18,6 +18,7 @@ export default class Profile extends React.Component {
     super(props);
     this.state = {
       user: null,
+      userId: '',
       username: '',
       displayName: '',
       avatar: '',
@@ -28,6 +29,7 @@ export default class Profile extends React.Component {
       mobileView: false,
       posts: [],
       likes: [],
+      likesView: false,
       deletePostId: null,
       optionsMenu: false,
       deleteModal: false
@@ -40,6 +42,8 @@ export default class Profile extends React.Component {
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleLike = this.handleLike.bind(this);
+    this.handlePostsTab = this.handlePostsTab.bind(this);
+    this.handleLikesTab = this.handleLikesTab.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +58,7 @@ export default class Profile extends React.Component {
       .then(res => res.json())
       .then(user => this.setState({
         user,
+        userId: user.userId,
         username: user.username,
         displayName: user.displayName,
         avatar: user.image,
@@ -169,13 +174,34 @@ export default class Profile extends React.Component {
       .catch(err => console.error(err));
   }
 
+  handlePostsTab() {
+    this.setState({ likesView: false });
+  }
+
+  handleLikesTab() {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/user/likes/${this.state.userId}`, req)
+      .then(res => res.json())
+      .then(likes => {
+        this.setState({ likes });
+      });
+
+    this.setState({ likesView: true });
+  }
+
   render() {
     const { user, handleSignOut } = this.context;
 
     if (!user) return <Redirect to="" />;
 
     let posts;
-    if (this.state.posts.length !== 0) {
+    if (this.state.posts.length !== 0 && this.state.likesView === false) {
       posts = this.state.posts.map(post => {
         let postOptions = false;
         if (this.state.deletePostId === post.postId) {
@@ -184,6 +210,7 @@ export default class Profile extends React.Component {
         return (
           <PostCard
             key={post.postId}
+            postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={post.postId}
             avatarImg={post.avatar}
             avatarName={post.username}
@@ -194,6 +221,37 @@ export default class Profile extends React.Component {
             textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
             postImg={post.image}
             postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
+            optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
+            postOptionsBtn={this.handleOptions}
+            postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
+            deleteBtn={this.handleDeleteModal}
+            likeBtn={this.handleLike}
+          />
+        );
+      });
+    }
+
+    let likes;
+    if (this.state.likes.length !== 0 && this.state.likesView === true) {
+      likes = this.state.likes.map(likedPost => {
+        let postOptions = false;
+        if (this.state.deletePostId === likedPost.postId) {
+          postOptions = true;
+        }
+        return (
+          <PostCard
+            key={likedPost.postId}
+            postsOrLikesView={this.likesView ? 'visible' : 'd-none'}
+            postId={likedPost.postId}
+            avatarImg={likedPost.avatar}
+            avatarName={likedPost.username}
+            displayName={likedPost.displayName}
+            username={likedPost.username}
+            date={dateFormat(likedPost.createdAt, 'mmm d, yyyy')}
+            textContent={likedPost.textContent}
+            textContentClass={likedPost.textContent ? 'row m-0 p-0' : 'd-none'}
+            postImg={likedPost.image}
+            postImgClass={likedPost.image ? 'row m-0 p-0' : 'd-none'}
             optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
             postOptionsBtn={this.handleOptions}
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
@@ -288,15 +346,16 @@ export default class Profile extends React.Component {
               </div>
               <div className="row tabs-border mt-2 mx-0 px-3">
                 <div className="col mx-0 px-0">
-                  <button type="button" className="posts-tab tab-active mx-1 px-0">Posts</button>
+                  <button type="button" className="posts-tab tab-active mx-1 px-0" onClick={this.handlePostsTab}>Posts</button>
                 </div>
                 <div className="col d-flex justify-content-end mx-0 px-0">
-                  <button type="button" className="likes-tab mx-1 px-0">Likes</button>
+                  <button type="button" className="likes-tab mx-1 px-0" onClick={this.handleLikesTab}>Likes</button>
                 </div>
               </div>
             </div>
             <div className="posts-container">
               {posts}
+              {likes}
               <div className="space-break" />
             </div>
           </div>
