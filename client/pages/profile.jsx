@@ -241,7 +241,7 @@ export default class Profile extends React.Component {
         return (
           <PostCard
             key={likedPost.postId}
-            postsOrLikesView={this.likesView ? 'visible' : 'd-none'}
+            postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={likedPost.postId}
             avatarImg={likedPost.avatar}
             avatarName={likedPost.username}
@@ -354,7 +354,7 @@ export default class Profile extends React.Component {
               </div>
             </div>
             <div className="posts-container">
-              {this.likesView ? likes : posts}
+              {this.state.likesView ? likes : posts}
               <div className="space-break" />
             </div>
           </div>
