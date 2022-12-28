@@ -304,9 +304,9 @@ app.delete('/api/posts/:postId', (req, res, next) => {
 
   const sql = `
     delete from "posts"
-    where "postId" = $1
-    and "userId" = $2
-    returning *
+    where       "postId" = $1
+    and         "userId" = $2
+    returning   *
   `;
   const params = [postId, userId];
 
@@ -342,20 +342,27 @@ app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/user/likes/:userId', uploadsMiddleware, (req, res, next) => {
-  const { userId } = req.user;
+app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
+  const profileId = Number(req.params.profileId);
 
-  if (!userId) {
-    throw new ClientError(400, 'could not find user');
+  if (!Number.isInteger(profileId) || profileId <= 0) {
+    throw new ClientError(400, 'profileId must be a positive integer');
   }
 
   const sql = `
-    select *
-    from "posts"
-    join "likes" using ("userId")
-    where "userId" = $1
+    select distinct "p"."postId",
+                    "p"."userId",
+                    "p"."displayName",
+                    "p"."avatar",
+                    "p"."textContent",
+                    "p"."image",
+                    "p"."createdAt"
+    from            "posts" as "p"
+    join            "likes" as "l" using ("userId")
+    where           "l"."userId" = $1
   `;
-  const params = [userId];
+
+  const params = [profileId];
 
   db.query(sql, params)
     .then(result => {

@@ -232,7 +232,7 @@ export default class Profile extends React.Component {
     }
 
     let likes;
-    if (this.state.likes.length !== 0 && this.state.likesView === true) {
+    if (this.state.likesView === true) {
       likes = this.state.likes.map(likedPost => {
         let postOptions = false;
         if (this.state.deletePostId === likedPost.postId) {
@@ -354,8 +354,7 @@ export default class Profile extends React.Component {
               </div>
             </div>
             <div className="posts-container">
-              {posts}
-              {likes}
+              {this.likesView ? likes : posts}
               <div className="space-break" />
             </div>
           </div>
