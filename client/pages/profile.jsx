@@ -346,10 +346,10 @@ export default class Profile extends React.Component {
               </div>
               <div className="row tabs-border mt-2 mx-0 px-3">
                 <div className="col mx-0 px-0">
-                  <button type="button" className="posts-tab tab-active mx-1 px-0" onClick={this.handlePostsTab}>Posts</button>
+                  <button type="button" className={this.state.likesView ? 'posts-tab mx-1 px-0' : 'posts-tab tab-active mx-1 px-0'} onClick={this.handlePostsTab}>Posts</button>
                 </div>
                 <div className="col d-flex justify-content-end mx-0 px-0">
-                  <button type="button" className="likes-tab mx-1 px-0" onClick={this.handleLikesTab}>Likes</button>
+                  <button type="button" className={this.state.likesView ? 'likes-tab tab-active mx-1 px-0' : 'likes-tab mx-1 px-0'} onClick={this.handleLikesTab}>Likes</button>
                 </div>
               </div>
             </div>
