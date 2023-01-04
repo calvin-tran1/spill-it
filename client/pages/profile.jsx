@@ -177,13 +177,25 @@ export default class Profile extends React.Component {
 
   handleLike(e) {
     const token = window.localStorage.getItem('jwt');
-    const req = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Token': token
-      }
-    };
+
+    let req;
+    if (e.target.className.includes('like-active')) {
+      req = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    } else {
+      req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    }
 
     fetch(`/api/likes/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
       .then(res => res.json())
