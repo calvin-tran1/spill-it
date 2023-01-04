@@ -196,6 +196,7 @@ export default class Profile extends React.Component {
   }
 
   render() {
+
     const { user, handleSignOut } = this.context;
 
     if (!user) return <Redirect to="" />;
@@ -206,6 +207,13 @@ export default class Profile extends React.Component {
         let postOptions = false;
         if (this.state.deletePostId === post.postId) {
           postOptions = true;
+        }
+
+        let likedStatus;
+        if (this.state.likes.find(likedPost => likedPost.postId === post.postId)) {
+          likedStatus = 'fa-solid fa-heart like-active';
+        } else {
+          likedStatus = 'fa-regular fa-heart';
         }
         return (
           <PostCard
@@ -226,6 +234,7 @@ export default class Profile extends React.Component {
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
             likeBtn={this.handleLike}
+            likeActive={likedStatus}
           />
         );
       });
@@ -257,6 +266,7 @@ export default class Profile extends React.Component {
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
             likeBtn={this.handleLike}
+            likeActive='fa-solid fa-heart like-active'
           />
         );
       });

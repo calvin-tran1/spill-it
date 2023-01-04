@@ -791,6 +791,10 @@ a:visited {
   color: #fa2c8b;
 }
 
+.like-active {
+  color: #fa2c8b;
+}
+
 .fa-circle {
   font-size: 3px;
   color: #aeb2b5;

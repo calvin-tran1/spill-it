@@ -342,6 +342,32 @@ app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const postId = Number(req.params.postId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a postiive integer');
+  }
+
+  const sql = `
+    delete from "likes"
+    where       "postId" = $1
+    and         "userId" = $2
+    returning   *
+  `;
+  const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
   const profileId = Number(req.params.profileId);
 
@@ -360,6 +386,7 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
     from            "posts" as "p"
     join            "likes" as "l" using ("userId")
     where           "l"."userId" = $1
+    and             "l"."postId" = "p"."postId"
   `;
 
   const params = [profileId];
