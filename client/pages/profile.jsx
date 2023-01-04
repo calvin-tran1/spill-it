@@ -75,6 +75,22 @@ export default class Profile extends React.Component {
     this.resize();
   }
 
+  componentDidUpdate() {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/user/likes/${this.state.userId}`, req)
+      .then(res => res.json())
+      .then(likes => {
+        this.setState({ likes });
+      });
+
+  }
+
   resize() {
     if (window.innerWidth <= 400) {
       return this.setState({ mobileView: true });
@@ -179,19 +195,6 @@ export default class Profile extends React.Component {
   }
 
   handleLikesTab() {
-    const token = window.localStorage.getItem('jwt');
-    const req = {
-      headers: {
-        'X-Access-Token': token
-      }
-    };
-
-    fetch(`/api/user/likes/${this.state.userId}`, req)
-      .then(res => res.json())
-      .then(likes => {
-        this.setState({ likes });
-      });
-
     this.setState({ likesView: true });
   }
 
