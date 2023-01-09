@@ -12,7 +12,7 @@ export default class MobileTopNav extends React.Component {
       image: '',
       bio: '',
       active: false,
-      search: true
+      search: false
     };
   }
 
@@ -41,7 +41,7 @@ export default class MobileTopNav extends React.Component {
     if (route.path === `${this.state.username}` && this.state.search === true) {
       return <DesktopSearchbar />;
     }
-    if (route.path === 'home' && this.state.search === false) {
+    if (route.path === 'home') {
       return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
                 <Avatar
                   imageUrl={this.state.image}
@@ -60,23 +60,21 @@ export default class MobileTopNav extends React.Component {
     }
   }
 
-  renderHeading() {
+  render() {
     const { route } = this.context;
 
+    let heading;
     if (route.path === 'home' && this.state.search === false) {
-      return <p className="mobile-nav-title pt-3">Home</p>;
+      heading = 'Home';
     }
     if (route.path === `${this.state.username}` && this.state.search === false) {
-      return <p className="mobile-nav-title pt-3">{this.state.displayName}</p>;
+      heading = `${this.state.displayName}`;
     }
-  }
-
-  render() {
     return (
       <div className="row top-nav p-0 m-0 position-fixed d-lg-block d-lg-none d-xl-block d-xl-none">
         <div className="col align-items-center">
           {this.renderNavComponent()}
-          {this.renderHeading()}
+          <p className="mobile-nav-title pt-3">{heading}</p>
         </div>
       </div>
     );
