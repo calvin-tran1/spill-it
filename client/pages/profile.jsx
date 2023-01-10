@@ -11,20 +11,25 @@ import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
 import PostCard from '../components/post-card';
 import dateFormat from 'dateformat';
+import MobileSearch from '../components/mobile-search';
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: null,
+      userId: '',
       username: '',
       displayName: '',
       avatar: '',
       bio: '',
       active: false,
       postForm: false,
+      mobileSearch: true,
       mobileView: false,
       posts: [],
+      likes: [],
+      likesView: false,
       deletePostId: null,
       optionsMenu: false,
       deleteModal: false
@@ -36,6 +41,9 @@ export default class Profile extends React.Component {
     this.handleResetOptions = this.handleResetOptions.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleLike = this.handleLike.bind(this);
+    this.handlePostsTab = this.handlePostsTab.bind(this);
+    this.handleLikesTab = this.handleLikesTab.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +58,7 @@ export default class Profile extends React.Component {
       .then(res => res.json())
       .then(user => this.setState({
         user,
+        userId: user.userId,
         username: user.username,
         displayName: user.displayName,
         avatar: user.image,
@@ -64,6 +73,22 @@ export default class Profile extends React.Component {
 
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+  }
+
+  componentDidUpdate() {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/user/likes/${this.state.userId}`, req)
+      .then(res => res.json())
+      .then(likes => {
+        this.setState({ likes });
+      });
+
   }
 
   resize() {
@@ -150,21 +175,65 @@ export default class Profile extends React.Component {
 
   }
 
+  handleLike(e) {
+    const token = window.localStorage.getItem('jwt');
+
+    let req;
+    if (e.target.className.includes('like-active')) {
+      req = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    } else {
+      req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    }
+
+    fetch(`/api/likes/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
+  handlePostsTab() {
+    this.setState({ likesView: false });
+  }
+
+  handleLikesTab() {
+    this.setState({ likesView: true });
+  }
+
   render() {
+
     const { user, handleSignOut } = this.context;
 
     if (!user) return <Redirect to="" />;
 
     let posts;
-    if (this.state.posts.length !== 0) {
+    if (this.state.posts.length !== 0 && this.state.likesView === false) {
       posts = this.state.posts.map(post => {
         let postOptions = false;
         if (this.state.deletePostId === post.postId) {
           postOptions = true;
         }
+
+        let likedStatus;
+        if (this.state.likes.find(likedPost => likedPost.postId === post.postId)) {
+          likedStatus = 'fa-solid fa-heart like-active';
+        } else {
+          likedStatus = 'fa-regular fa-heart';
+        }
         return (
           <PostCard
             key={post.postId}
+            postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={post.postId}
             avatarImg={post.avatar}
             avatarName={post.username}
@@ -179,6 +248,40 @@ export default class Profile extends React.Component {
             postOptionsBtn={this.handleOptions}
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
+            likeBtn={this.handleLike}
+            likeActive={likedStatus}
+          />
+        );
+      });
+    }
+
+    let likes;
+    if (this.state.likesView === true) {
+      likes = this.state.likes.map(likedPost => {
+        let postOptions = false;
+        if (this.state.deletePostId === likedPost.postId) {
+          postOptions = true;
+        }
+        return (
+          <PostCard
+            key={likedPost.postId}
+            postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
+            postId={likedPost.postId}
+            avatarImg={likedPost.avatar}
+            avatarName={likedPost.username}
+            displayName={likedPost.displayName}
+            username={likedPost.username}
+            date={dateFormat(likedPost.createdAt, 'mmm d, yyyy')}
+            textContent={likedPost.textContent}
+            textContentClass={likedPost.textContent ? 'row m-0 p-0' : 'd-none'}
+            postImg={likedPost.image}
+            postImgClass={likedPost.image ? 'row m-0 p-0' : 'd-none'}
+            optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
+            postOptionsBtn={this.handleOptions}
+            postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
+            deleteBtn={this.handleDeleteModal}
+            likeBtn={this.handleLike}
+            likeActive='fa-solid fa-heart like-active'
           />
         );
       });
@@ -230,6 +333,9 @@ export default class Profile extends React.Component {
               onClick={this.postModal}
               updatePosts={this.updatePosts}
             />
+            <MobileSearch
+              searchResults={this.state.mobileSearch ? 'mobile-search' : 'd-none'}
+            />
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">
                 <div className="col">
@@ -265,22 +371,25 @@ export default class Profile extends React.Component {
               </div>
               <div className="row tabs-border mt-2 mx-0 px-3">
                 <div className="col mx-0 px-0">
-                  <button type="button" className="posts-tab tab-active mx-1 px-0">Posts</button>
+                  <button type="button" className={this.state.likesView ? 'posts-tab mx-1 px-0' : 'posts-tab tab-active mx-1 px-0'} onClick={this.handlePostsTab}>Posts</button>
                 </div>
                 <div className="col d-flex justify-content-end mx-0 px-0">
-                  <button type="button" className="likes-tab mx-1 px-0">Likes</button>
+                  <button type="button" className={this.state.likesView ? 'likes-tab tab-active mx-1 px-0' : 'likes-tab mx-1 px-0'} onClick={this.handleLikesTab}>Likes</button>
                 </div>
               </div>
             </div>
             <div className="posts-container">
-              {posts}
+              {this.state.likesView ? likes : posts}
               <div className="space-break" />
             </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">
             <DesktopSearchbar />
           </div>
-          <MobileBotNav openPost={this.postModal} />
+          <MobileBotNav
+          openPost={this.postModal}
+          searchResults={this.mobileSearch}
+          />
         </div>
       </div>
     );

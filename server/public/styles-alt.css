@@ -791,6 +791,10 @@ a:visited {
   color: #fa2c8b;
 }
 
+.like-active {
+  color: #fa2c8b;
+}
+
 .fa-circle {
   font-size: 3px;
   color: #aeb2b5;
@@ -863,4 +867,13 @@ a:visited {
   border-radius: 30px;
   background-color: #aeb2b5;
   color: white;
+}
+
+.mobile-search {
+  display: none;
+}
+
+.post-card-btn {
+  border-style: none;
+  background-color: transparent;
 }
