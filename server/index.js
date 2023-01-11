@@ -18,21 +18,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-app.get('/api/search/users', (req, res, next) => {
-  const sql = `
-    select "userId",
-           "username",
-           "displayName",
-           "image",
-           "bio"
-      from "users"
-  `;
-
-  db.query(sql)
-    .then(result => res.json(result.rows))
-    .catch(err => next(err));
-});
-
 app.get('/api/users/:userId', (req, res, next) => {
   const userId = Number(req.params.userId);
 
@@ -390,6 +375,33 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
   `;
 
   const params = [profileId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/search/:users', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const { users } = req.params;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select "userId",
+           "username",
+           "displayName",
+           "image",
+           "bio",
+           "createdAt"
+    from   "users"
+    where  "username" like $1
+  `;
+  const params = [`%${users}%`];
 
   db.query(sql, params)
     .then(result => {
