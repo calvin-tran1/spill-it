@@ -383,9 +383,9 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/search/:users', uploadsMiddleware, (req, res, next) => {
+app.get('/api/search', uploadsMiddleware, (req, res, next) => {
   const { userId } = req.user;
-  const { users } = req.params;
+  const { users } = req.query;
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
