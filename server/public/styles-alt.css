@@ -877,3 +877,8 @@ a:visited {
   border-style: none;
   background-color: transparent;
 }
+
+.search-results-container {
+  width: 350px;
+  background-color: #41474b;
+}
