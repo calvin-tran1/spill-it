@@ -882,3 +882,20 @@ a:visited {
   width: 350px;
   background-color: #41474b;
 }
+
+.search-result {
+  width: 374px;
+  height: 80px;
+  padding: 12px 16px;
+  margin: 0;
+}
+
+.search-result-displayname {
+  font-weight: bold;
+  color: white;
+}
+
+.search-result-username {
+  font-size: 15px;
+  color: #aeb2b5;
+}

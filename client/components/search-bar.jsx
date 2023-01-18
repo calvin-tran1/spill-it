@@ -1,4 +1,5 @@
 import React from 'react';
+import Avatar from '../components/avatar';
 
 export default class DesktopSearchbar extends React.Component {
   constructor(props) {
@@ -28,6 +29,33 @@ export default class DesktopSearchbar extends React.Component {
   }
 
   render() {
+    let results;
+    if (this.state.searchResults !== 0) {
+      results = this.state.searchResults.map(result => {
+        const profileLink = `localhost:3000/#${result.username}`;
+        return (
+          <a key={result.userId} className="d-flex" href={profileLink}>
+            <div className="search-result d-flex">
+              <Avatar
+                imageUrl={result.image}
+                name={result.username}
+                width="58px"
+                height="58px"
+              />
+              <div className="search-result-user-info-wrapper px-2">
+                <span className="search-result-displayname d-block">
+                  {result.displayName}
+                </span>
+                <span className="search-result-username d-block">
+                  @{result.username}
+                </span>
+              </div>
+            </div>
+          </a>
+        );
+      });
+    }
+
     return (
       <div className="searchbar-wrapper">
         <form className="searchbar">
@@ -37,7 +65,7 @@ export default class DesktopSearchbar extends React.Component {
           <input type="text" placeholder="Search" name="searchbar" onChange={this.handleSearch}/>
         </form>
         <div className="search-results-container">
-          <a>test</a>
+          {results}
         </div>
       </div>
     );
