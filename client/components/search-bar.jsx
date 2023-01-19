@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from '../components/avatar';
 
-export default class DesktopSearchbar extends React.Component {
+export default class Searchbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +13,6 @@ export default class DesktopSearchbar extends React.Component {
   }
 
   handleSearch(e) {
-
     this.setState({ keystroke: e.target.value });
     const token = window.localStorage.getItem('jwt');
     const req = {

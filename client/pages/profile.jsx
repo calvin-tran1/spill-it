@@ -4,14 +4,14 @@ import AppContext from '../lib/app-context';
 import MobileTopNav from '../components/mobile-top-nav';
 import MobileBotNav from '../components/mobile-bottom-nav';
 import SidebarLeft from '../components/sidebar-left';
-import DesktopSearchbar from '../components/search-bar';
+import Searchbar from '../components/search-bar';
 import ModalOverlay from '../components/modal-overlay';
 import MobileNavMenu from '../components/mobile-nav-menu';
 import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
 import PostCard from '../components/post-card';
 import dateFormat from 'dateformat';
-import MobileSearch from '../components/mobile-search';
+// import MobileSearch from '../components/mobile-search';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ export default class Profile extends React.Component {
       bio: '',
       active: false,
       postForm: false,
-      mobileSearch: true,
+      mobileSearch: false,
       mobileView: false,
       posts: [],
       likes: [],
@@ -37,6 +37,7 @@ export default class Profile extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.postModal = this.postModal.bind(this);
     this.updatePosts = this.updatePosts.bind(this);
+    this.handleMobileSearch = this.handleMobileSearch.bind(this);
     this.handleOptions = this.handleOptions.bind(this);
     this.handleResetOptions = this.handleResetOptions.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
@@ -111,6 +112,12 @@ export default class Profile extends React.Component {
   postModal() {
     this.setState(prevState => ({
       postForm: !prevState.postForm
+    }));
+  }
+
+  handleMobileSearch() {
+    this.setState(prevState => ({
+      mobileSearch: !prevState.mobileSearch
     }));
   }
 
@@ -311,7 +318,11 @@ export default class Profile extends React.Component {
           onClick={this.handleClick}
         />
         <div className="row">
-          <MobileTopNav onClick={this.handleClick} />
+          <MobileTopNav
+            onClick={this.handleClick}
+            mobileSearch={this.state.mobileSearch}
+            back={this.handleMobileSearch}
+          />
           <div className="col bg-secondary-color d-none d-lg-block">
             <SidebarLeft
               onSignOut={handleSignOut}
@@ -333,9 +344,9 @@ export default class Profile extends React.Component {
               onClick={this.postModal}
               updatePosts={this.updatePosts}
             />
-            <MobileSearch
+            {/* <MobileSearch
               searchResults={this.state.mobileSearch ? 'mobile-search' : 'd-none'}
-            />
+            /> */}
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">
                 <div className="col">
@@ -384,11 +395,11 @@ export default class Profile extends React.Component {
             </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">
-            <DesktopSearchbar />
+            <Searchbar />
           </div>
           <MobileBotNav
-          openPost={this.postModal}
-          searchResults={this.mobileSearch}
+            openPost={this.postModal}
+            search={this.handleMobileSearch}
           />
         </div>
       </div>
