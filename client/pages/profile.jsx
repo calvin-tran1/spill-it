@@ -11,7 +11,6 @@ import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
 import PostCard from '../components/post-card';
 import dateFormat from 'dateformat';
-// import MobileSearch from '../components/mobile-search';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -344,9 +343,6 @@ export default class Profile extends React.Component {
               onClick={this.postModal}
               updatePosts={this.updatePosts}
             />
-            {/* <MobileSearch
-              searchResults={this.state.mobileSearch ? 'mobile-search' : 'd-none'}
-            /> */}
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">
                 <div className="col">

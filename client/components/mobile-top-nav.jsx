@@ -38,7 +38,7 @@ export default class MobileTopNav extends React.Component {
     const { route } = this.context;
     const { mobileSearch } = this.props;
 
-    if (route.path === `${this.state.username}` && mobileSearch === true) {
+    if ((route.path === `${this.state.username}` && mobileSearch === true) || (route.path === 'home' && mobileSearch === true)) {
       return <div className="d-flex m-0 p-0">
                 <button type="button" className="mobile-back-btn me-0 pe-0" onClick={this.props.back}>
                   <a>
