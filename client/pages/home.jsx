@@ -21,6 +21,7 @@ export default class Home extends React.Component {
       posts: []
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleHomeView = this.handleHomeView.bind(this);
     this.postModal = this.postModal.bind(this);
     this.handleMobileSearch = this.handleMobileSearch.bind(this);
     this.updatePosts = this.updatePosts.bind(this);
@@ -44,6 +45,10 @@ export default class Home extends React.Component {
     this.setState(prevState => ({
       active: !prevState.active
     }));
+  }
+
+  handleHomeView() {
+    this.setState({ mobileSearch: false });
   }
 
   postModal() {
@@ -159,6 +164,7 @@ export default class Home extends React.Component {
             <Searchbar />
           </div>
           <MobileBotNav
+            homeView={this.handleHomeView}
             openPost={this.postModal}
             search={this.handleMobileSearch}
           />
