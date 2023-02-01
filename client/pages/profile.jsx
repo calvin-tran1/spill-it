@@ -1,6 +1,7 @@
 import React from 'react';
 import Redirect from '../components/redirect';
 import AppContext from '../lib/app-context';
+import parseRoute from '../lib/parse-route';
 import MobileTopNav from '../components/mobile-top-nav';
 import MobileBotNav from '../components/mobile-bottom-nav';
 import SidebarLeft from '../components/sidebar-left';
@@ -31,7 +32,8 @@ export default class Profile extends React.Component {
       likesView: false,
       deletePostId: null,
       optionsMenu: false,
-      deleteModal: false
+      deleteModal: false,
+      route: parseRoute(window.location.hash)
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleHomeView = this.handleHomeView.bind(this);
@@ -66,17 +68,14 @@ export default class Profile extends React.Component {
         bio: user.bio
       }));
 
-    fetch('/api/posts', req)
-      .then(res => res.json())
-      .then(post => {
-        this.setState({ posts: post });
-      });
-
+    window.addEventListener('hashchange', () => {
+      this.setState({ route: parseRoute(window.location.hash) });
+    });
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     const token = window.localStorage.getItem('jwt');
     const req = {
       headers: {
@@ -84,12 +83,31 @@ export default class Profile extends React.Component {
       }
     };
 
-    fetch(`/api/user/likes/${this.state.userId}`, req)
-      .then(res => res.json())
-      .then(likes => {
-        this.setState({ likes });
-      });
+    if (prevState.username !== this.state.username) {
+      fetch(`/api/user/posts/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(post => {
+          this.setState({ posts: post });
+        });
 
+      fetch(`/api/user/likes/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(likes => {
+          this.setState({ likes });
+        });
+    }
+
+    if (prevState.route.path !== this.state.route.path) {
+      fetch(`/api/users/${this.state.route.path}`)
+        .then(res => res.json())
+        .then(user => this.setState({
+          userId: user.userId,
+          username: user.username,
+          displayName: user.displayName,
+          avatar: user.image,
+          bio: user.bio
+        }));
+    }
   }
 
   resize() {
@@ -133,7 +151,7 @@ export default class Profile extends React.Component {
       }
     };
 
-    fetch('/api/posts', req)
+    fetch(`/api/user/posts/${this.state.userId}`, req)
       .then(res => res.json())
       .then(newPosts => {
         this.setState({ posts: newPosts });

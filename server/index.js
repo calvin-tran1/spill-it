@@ -18,11 +18,23 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-app.get('/api/users/:userId', (req, res, next) => {
-  const userId = Number(req.params.userId);
+app.get('/api/users', (req, res, next) => {
+  const sql = `
+    select "username"
+    from   "users"
+  `;
+  db.query(sql)
+    .then(result => {
+      res.status(200).json(result.rows);
+    })
+    .catch(err => next(err));
+});
 
-  if (!userId) {
-    throw new ClientError(400, 'userId must be a positive integer');
+app.get('/api/users/:username', (req, res, next) => {
+  const username = String(req.params.username);
+
+  if (!username) {
+    throw new ClientError(400, 'user not found');
   }
 
   const sql = `
@@ -32,14 +44,14 @@ app.get('/api/users/:userId', (req, res, next) => {
            "image",
            "bio"
       from "users"
-     where "userId" = $1
+     where "username" = $1
   `;
-  const params = [userId];
+  const params = [username];
 
   db.query(sql, params)
     .then(result => {
       if (!result.rows[0]) {
-        throw new ClientError(404, `could not find userId: ${userId}`);
+        throw new ClientError(404, `could not find user: ${username}`);
       }
       res.status(200).json(result.rows[0]);
     })
@@ -123,6 +135,28 @@ app.post('/api/auth/sign-in', (req, res, next) => {
 
           res.json({ token, user: payload });
         });
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/user/posts/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select *
+      from "posts"
+     where "userId" = $1
+  order by "postId" DESC
+  `;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
     })
     .catch(err => next(err));
 });
