@@ -18,6 +18,7 @@ export default class Profile extends React.Component {
     super(props);
     this.state = {
       user: null,
+      loggedInUserId: '',
       userId: '',
       username: '',
       displayName: '',
@@ -28,6 +29,7 @@ export default class Profile extends React.Component {
       mobileSearch: false,
       mobileView: false,
       posts: [],
+      loggedInUserLikes: [],
       likes: [],
       likesView: false,
       deletePostId: null,
@@ -61,6 +63,7 @@ export default class Profile extends React.Component {
       .then(res => res.json())
       .then(user => this.setState({
         user,
+        loggedInUserId: user.userId,
         userId: user.userId,
         username: user.username,
         displayName: user.displayName,
@@ -97,8 +100,8 @@ export default class Profile extends React.Component {
         });
     }
 
-    if (prevState.route.path !== this.state.route.path) {
-      fetch(`/api/users/${this.state.route.path}`)
+    if (prevState.route.path !== this.state.route.path || this.state.username !== this.state.route.path) {
+      fetch(`/api/user/${this.state.route.path}`)
         .then(res => res.json())
         .then(user => this.setState({
           userId: user.userId,
@@ -107,6 +110,22 @@ export default class Profile extends React.Component {
           avatar: user.image,
           bio: user.bio
         }));
+    }
+
+    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || this.state.loggedInUserLikes.length === 0) {
+      fetch(`/api/user/likes/${this.state.loggedInUserId}`, req)
+        .then(res => res.json())
+        .then(loggedInUserLikes => {
+          this.setState({ loggedInUserLikes });
+        });
+    }
+
+    if (prevState.likes !== this.state.likes) {
+      fetch(`/api/user/likes/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(likes => {
+          this.setState({ likes });
+        });
     }
   }
 
@@ -254,7 +273,7 @@ export default class Profile extends React.Component {
         }
 
         let likedStatus;
-        if (this.state.likes.find(likedPost => likedPost.postId === post.postId)) {
+        if (this.state.loggedInUserLikes.find(likedPost => likedPost.postId === post.postId)) {
           likedStatus = 'fa-solid fa-heart like-active';
         } else {
           likedStatus = 'fa-regular fa-heart';

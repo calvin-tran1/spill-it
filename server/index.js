@@ -30,7 +30,7 @@ app.get('/api/users', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/users/:username', (req, res, next) => {
+app.get('/api/user/:username', (req, res, next) => {
   const username = String(req.params.username);
 
   if (!username) {
@@ -291,28 +291,6 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/posts', (req, res, next) => {
-  const { userId } = req.user;
-
-  if (!userId) {
-    throw new ClientError(400, 'could not find user');
-  }
-
-  const sql = `
-    select *
-      from "posts"
-     where "userId" = $1
-  order by "postId" DESC
-  `;
-  const params = [userId];
-
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows);
-    })
-    .catch(err => next(err));
-});
-
 app.delete('/api/posts/:postId', (req, res, next) => {
   const { userId } = req.user;
   const postId = Number(req.body.postId);
@@ -401,11 +379,13 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."avatar",
                     "p"."textContent",
                     "p"."image",
-                    "p"."createdAt"
+                    "p"."createdAt",
+                    "l"."likesId"
     from            "posts" as "p"
-    join            "likes" as "l" using ("userId")
+    join            "likes" as "l" using ("postId")
     where           "l"."userId" = $1
     and             "l"."postId" = "p"."postId"
+    order by        "l"."likesId" DESC
   `;
 
   const params = [profileId];
