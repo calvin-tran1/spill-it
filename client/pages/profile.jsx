@@ -112,7 +112,7 @@ export default class Profile extends React.Component {
         }));
     }
 
-    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || this.state.loggedInUserLikes.length === 0) {
+    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== this.state.loggedInUserId) {
       fetch(`/api/user/likes/${this.state.loggedInUserId}`, req)
         .then(res => res.json())
         .then(loggedInUserLikes => {
