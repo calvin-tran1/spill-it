@@ -31,7 +31,7 @@ export default class Searchbar extends React.Component {
     let results;
     if (this.state.searchResults !== 0) {
       results = this.state.searchResults.map(result => {
-        const profileLink = `localhost:3000/#${result.username}`;
+        const profileLink = `http://localhost:3000/#${result.username}`;
         return (
           <a key={result.userId} className="d-flex" href={profileLink}>
             <div className="search-result d-flex">

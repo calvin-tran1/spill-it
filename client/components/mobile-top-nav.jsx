@@ -7,6 +7,7 @@ export default class MobileTopNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      users: [],
       username: '',
       displayName: '',
       image: '',
@@ -24,6 +25,10 @@ export default class MobileTopNav extends React.Component {
       }
     };
 
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(users => this.setState({ users }));
+
     fetch('/api/user', req)
       .then(res => res.json())
       .then(user => this.setState({
@@ -34,37 +39,83 @@ export default class MobileTopNav extends React.Component {
       }));
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.users !== this.state.users) {
+      let username;
+      if (this.state.users.length > 0) {
+        username = this.state.users.map(user => user.username);
+        // console.log(username);
+        return username;
+      }
+    }
+  }
+
   renderNavComponent() {
     const { route } = this.context;
     const { mobileSearch } = this.props;
 
-    if ((route.path === `${this.state.username}` && mobileSearch === true) || (route.path === 'home' && mobileSearch === true)) {
-      return <div className="d-flex m-0 p-0">
-                <button type="button" className="mobile-back-btn me-0 pe-0" onClick={this.props.back}>
-                  <a>
-                    <i className="fa-solid fa-arrow-left" />
-                  </a>
-                </button>
-                <Searchbar />
-              </div>;
+    let username;
+    if (this.state.users.length > 0) {
+      username = this.state.users.map(user => user.username);
+      // console.log(username);
+      if ((username.includes(route.path) && mobileSearch === true) || (route.path === 'home' && mobileSearch === true)) {
+        return <div className="d-flex m-0 p-0">
+          <button type="button" className="mobile-back-btn me-0 pe-0" onClick={this.props.back}>
+            <a>
+              <i className="fa-solid fa-arrow-left" />
+            </a>
+          </button>
+          <Searchbar />
+        </div>;
+      }
+      if (route.path === 'home' && mobileSearch === false) {
+        return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
+          <Avatar
+            imageUrl={this.state.image}
+            name={this.state.displayName}
+            width="33px"
+            height="33px"
+          />
+        </button>;
+      }
+
+      if (username.includes(route.path) && mobileSearch === false) {
+        return <button type="button" className="mobile-back-btn">
+          <a href="#home">
+            <i className="fa-solid fa-arrow-left" />
+          </a>
+        </button>;
+      }
     }
-    if (route.path === 'home' && mobileSearch === false) {
-      return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
-                <Avatar
-                  imageUrl={this.state.image}
-                  name={this.state.displayName}
-                  width="33px"
-                  height="33px"
-                />
-              </button>;
-    }
-    if (route.path === `${this.state.username}` && mobileSearch === false) {
-      return <button type="button" className="mobile-back-btn">
-              <a href="#home">
-                <i className="fa-solid fa-arrow-left" />
-              </a>
-             </button>;
-    }
+
+    // if ((route.path === `${this.state.username}` && mobileSearch === true) || (route.path === 'home' && mobileSearch === true)) {
+    //   return <div className="d-flex m-0 p-0">
+    //             <button type="button" className="mobile-back-btn me-0 pe-0" onClick={this.props.back}>
+    //               <a>
+    //                 <i className="fa-solid fa-arrow-left" />
+    //               </a>
+    //             </button>
+    //             <Searchbar />
+    //           </div>;
+    // }
+    // if (route.path === 'home' && mobileSearch === false) {
+    //   return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
+    //             <Avatar
+    //               imageUrl={this.state.image}
+    //               name={this.state.displayName}
+    //               width="33px"
+    //               height="33px"
+    //             />
+    //           </button>;
+    // }
+
+    // if (route.path === `${this.state.username}` && mobileSearch === false) {
+    //   return <button type="button" className="mobile-back-btn">
+    //           <a href="#home">
+    //             <i className="fa-solid fa-arrow-left" />
+    //           </a>
+    //          </button>;
+    // }
   }
 
   render() {

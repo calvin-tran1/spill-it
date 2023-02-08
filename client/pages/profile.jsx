@@ -86,6 +86,13 @@ export default class Profile extends React.Component {
       }
     };
 
+    if (prevState.route.path !== this.state.route.path) {
+      this.setState({
+        mobileSearch: false,
+        likesView: false
+      });
+    }
+
     if (prevState.username !== this.state.username) {
       fetch(`/api/user/posts/${this.state.userId}`, req)
         .then(res => res.json())
