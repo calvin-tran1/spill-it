@@ -10,6 +10,7 @@ export default class Searchbar extends React.Component {
       keystroke: ''
     };
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleSearch(e) {
@@ -25,6 +26,10 @@ export default class Searchbar extends React.Component {
       .then(res => res.json())
       .then(searchResult =>
         this.setState({ searchResults: e.target.value ? searchResult : [] }));
+  }
+
+  handleKeyPress() {
+    window.history.replaceState({}, document.title, '/#' + `${this.state.searchResults[0].username}`);
   }
 
   render() {
@@ -57,11 +62,11 @@ export default class Searchbar extends React.Component {
 
     return (
       <div className="searchbar-wrapper">
-        <form className="searchbar">
+        <form className="searchbar" onSubmit={this.handleKeyPress}>
           <button type="submit" className="search-btn">
             <i className="fa-solid fa-magnifying-glass" />
           </button>
-          <input type="text" placeholder="Search" name="searchbar" onChange={this.handleSearch}/>
+          <input type="text" placeholder="Search" name="searchbar" onChange={this.handleSearch} />
         </form>
         <div className="search-results-container">
           {results}

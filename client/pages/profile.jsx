@@ -266,7 +266,6 @@ export default class Profile extends React.Component {
   }
 
   render() {
-
     const { user, handleSignOut } = this.context;
 
     if (!user) return <Redirect to="" />;
