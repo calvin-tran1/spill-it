@@ -93,6 +93,18 @@ export default class Profile extends React.Component {
       });
     }
 
+    if (prevState.route.path !== this.state.route.path || this.state.username !== this.state.route.path || prevState.username !== this.state.username) {
+      fetch(`/api/user/${this.state.route.path}`)
+        .then(res => res.json())
+        .then(user => this.setState({
+          userId: user.userId,
+          username: user.username,
+          displayName: user.displayName,
+          avatar: user.image,
+          bio: user.bio
+        }));
+    }
+
     if (prevState.username !== this.state.username) {
       fetch(`/api/user/posts/${this.state.userId}`, req)
         .then(res => res.json())
@@ -105,18 +117,6 @@ export default class Profile extends React.Component {
         .then(likes => {
           this.setState({ likes });
         });
-    }
-
-    if (prevState.route.path !== this.state.route.path || this.state.username !== this.state.route.path) {
-      fetch(`/api/user/${this.state.route.path}`)
-        .then(res => res.json())
-        .then(user => this.setState({
-          userId: user.userId,
-          username: user.username,
-          displayName: user.displayName,
-          avatar: user.image,
-          bio: user.bio
-        }));
     }
 
     if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== this.state.loggedInUserId) {
@@ -316,6 +316,12 @@ export default class Profile extends React.Component {
         if (this.state.deletePostId === likedPost.postId) {
           postOptions = true;
         }
+        let likedStatus;
+        if (this.state.loggedInUserLikes.find(loggedInUserLikes => loggedInUserLikes.postId === likedPost.postId)) {
+          likedStatus = 'fa-solid fa-heart like-active';
+        } else {
+          likedStatus = 'fa-regular fa-heart';
+        }
         return (
           <PostCard
             key={likedPost.postId}
@@ -335,7 +341,7 @@ export default class Profile extends React.Component {
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
             likeBtn={this.handleLike}
-            likeActive='fa-solid fa-heart like-active'
+            likeActive={likedStatus}
           />
         );
       });
