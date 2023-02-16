@@ -1,17 +1,17 @@
 import React from 'react';
 import Avatar from './avatar';
-import DesktopSearchbar from './search-bar';
+import Searchbar from './search-bar';
 import AppContext from '../lib/app-context';
 
 export default class MobileTopNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      users: [],
       username: '',
       displayName: '',
       image: '',
       bio: '',
-      active: false,
       search: false
     };
   }
@@ -25,6 +25,10 @@ export default class MobileTopNav extends React.Component {
       }
     };
 
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(users => this.setState({ users }));
+
     fetch('/api/user', req)
       .then(res => res.json())
       .then(user => this.setState({
@@ -35,13 +39,38 @@ export default class MobileTopNav extends React.Component {
       }));
   }
 
-  renderNavComponent() {
+  componentDidUpdate(prevProps, prevState) {
     const { route } = this.context;
 
-    if (route.path === `${this.state.username}` && this.state.search === true) {
-      return <DesktopSearchbar />;
+    if (prevState.users !== this.state.users || this.state.username !== route.path) {
+      if (this.state.users.find(user => user.username === route.path)) {
+        fetch(`/api/user/${route.path}`)
+          .then(res => res.json())
+          .then(user => this.setState({
+            username: user.username,
+            displayName: user.displayName,
+            image: user.image,
+            bio: user.bio
+          }));
+      }
     }
-    if (route.path === 'home') {
+  }
+
+  renderNavComponent() {
+    const { route } = this.context;
+    const { mobileSearch } = this.props;
+
+    if ((route.path === `${this.state.username}` && mobileSearch === true) || (route.path === 'home' && mobileSearch === true)) {
+      return <div className="d-flex m-0 p-0">
+                <button type="button" className="mobile-back-btn me-0 pe-0" onClick={this.props.back}>
+                  <a>
+                    <i className="fa-solid fa-arrow-left" />
+                  </a>
+                </button>
+                <Searchbar />
+              </div>;
+    }
+    if (route.path === 'home' && mobileSearch === false) {
       return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
                 <Avatar
                   imageUrl={this.state.image}
@@ -51,7 +80,8 @@ export default class MobileTopNav extends React.Component {
                 />
               </button>;
     }
-    if (route.path === `${this.state.username}` && this.state.search === false) {
+
+    if (route.path === `${this.state.username}` && mobileSearch === false) {
       return <button type="button" className="mobile-back-btn">
               <a href="#home">
                 <i className="fa-solid fa-arrow-left" />
@@ -62,13 +92,14 @@ export default class MobileTopNav extends React.Component {
 
   render() {
     const { route } = this.context;
+    const { mobileSearch } = this.props;
 
     let heading;
-    if (route.path === 'home' && this.state.search === false) {
+    if (route.path === 'home' && mobileSearch === false) {
       heading = 'Home';
     }
-    if (route.path === `${this.state.username}` && this.state.search === false) {
-      heading = `${this.state.displayName}`;
+    if (route.path === `${this.state.username}` && mobileSearch === false) {
+      heading = `${this.state.username}`;
     }
     return (
       <div className="row top-nav p-0 m-0 position-fixed d-lg-block d-lg-none d-xl-block d-xl-none">

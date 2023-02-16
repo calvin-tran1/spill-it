@@ -4,7 +4,7 @@ import AppContext from '../lib/app-context';
 import MobileTopNav from '../components/mobile-top-nav';
 import MobileBotNav from '../components/mobile-bottom-nav';
 import SidebarLeft from '../components/sidebar-left';
-import DesktopSearchbar from '../components/search-bar';
+import Searchbar from '../components/search-bar';
 import ModalOverlay from '../components/modal-overlay';
 import MobileNavMenu from '../components/mobile-nav-menu';
 import PostForm from '../components/post-form';
@@ -17,10 +17,13 @@ export default class Home extends React.Component {
       username: '',
       active: false,
       post: false,
+      mobileSearch: false,
       posts: []
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleHomeView = this.handleHomeView.bind(this);
     this.postModal = this.postModal.bind(this);
+    this.handleMobileSearch = this.handleMobileSearch.bind(this);
     this.updatePosts = this.updatePosts.bind(this);
   }
 
@@ -44,9 +47,19 @@ export default class Home extends React.Component {
     }));
   }
 
+  handleHomeView() {
+    this.setState({ mobileSearch: false });
+  }
+
   postModal() {
     this.setState(prevState => ({
       post: !prevState.post
+    }));
+  }
+
+  handleMobileSearch() {
+    this.setState(prevState => ({
+      mobileSearch: !prevState.mobileSearch
     }));
   }
 
@@ -82,7 +95,11 @@ export default class Home extends React.Component {
           onClick={this.handleClick}
         />
         <div className="row">
-          <MobileTopNav onClick={this.handleClick} />
+          <MobileTopNav
+            onClick={this.handleClick}
+            mobileSearch={this.state.mobileSearch}
+            back={this.handleMobileSearch}
+          />
           <div className="col bg-secondary-color d-none d-lg-block">
             <SidebarLeft
               onSignOut={handleSignOut}
@@ -144,10 +161,12 @@ export default class Home extends React.Component {
             </article>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">
-            <DesktopSearchbar />
+            <Searchbar />
           </div>
           <MobileBotNav
+            homeView={this.handleHomeView}
             openPost={this.postModal}
+            search={this.handleMobileSearch}
           />
         </div>
       </div>

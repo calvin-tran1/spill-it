@@ -18,26 +18,23 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-app.get('/api/search/users', (req, res, next) => {
+app.get('/api/users', (req, res, next) => {
   const sql = `
-    select "userId",
-           "username",
-           "displayName",
-           "image",
-           "bio"
-      from "users"
+    select "username"
+    from   "users"
   `;
-
   db.query(sql)
-    .then(result => res.json(result.rows))
+    .then(result => {
+      res.status(200).json(result.rows);
+    })
     .catch(err => next(err));
 });
 
-app.get('/api/users/:userId', (req, res, next) => {
-  const userId = Number(req.params.userId);
+app.get('/api/user/:username', (req, res, next) => {
+  const username = String(req.params.username);
 
-  if (!userId) {
-    throw new ClientError(400, 'userId must be a positive integer');
+  if (!username) {
+    throw new ClientError(400, 'user not found');
   }
 
   const sql = `
@@ -47,14 +44,14 @@ app.get('/api/users/:userId', (req, res, next) => {
            "image",
            "bio"
       from "users"
-     where "userId" = $1
+     where "username" = $1
   `;
-  const params = [userId];
+  const params = [username];
 
   db.query(sql, params)
     .then(result => {
       if (!result.rows[0]) {
-        throw new ClientError(404, `could not find userId: ${userId}`);
+        throw new ClientError(404, `could not find user: ${username}`);
       }
       res.status(200).json(result.rows[0]);
     })
@@ -138,6 +135,28 @@ app.post('/api/auth/sign-in', (req, res, next) => {
 
           res.json({ token, user: payload });
         });
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/user/posts/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select *
+      from "posts"
+     where "userId" = $1
+  order by "postId" DESC
+  `;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
     })
     .catch(err => next(err));
 });
@@ -272,28 +291,6 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/posts', (req, res, next) => {
-  const { userId } = req.user;
-
-  if (!userId) {
-    throw new ClientError(400, 'could not find user');
-  }
-
-  const sql = `
-    select *
-      from "posts"
-     where "userId" = $1
-  order by "postId" DESC
-  `;
-  const params = [userId];
-
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows);
-    })
-    .catch(err => next(err));
-});
-
 app.delete('/api/posts/:postId', (req, res, next) => {
   const { userId } = req.user;
   const postId = Number(req.body.postId);
@@ -382,14 +379,43 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."avatar",
                     "p"."textContent",
                     "p"."image",
-                    "p"."createdAt"
+                    "p"."createdAt",
+                    "l"."likesId"
     from            "posts" as "p"
-    join            "likes" as "l" using ("userId")
+    join            "likes" as "l" using ("postId")
     where           "l"."userId" = $1
     and             "l"."postId" = "p"."postId"
+    order by        "l"."likesId" DESC
   `;
 
   const params = [profileId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/search', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const { users } = req.query;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select "userId",
+           "username",
+           "displayName",
+           "image",
+           "bio",
+           "createdAt"
+    from   "users"
+    where  "username" like $1
+  `;
+  const params = [`%${users}%`];
 
   db.query(sql, params)
     .then(result => {

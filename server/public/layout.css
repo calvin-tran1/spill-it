@@ -29,10 +29,6 @@
   .mobile-search {
     display: block !important;
     position: fixed !important;
-
-    /* top: 0% !important; */
-
-    /* right: 0% !important; */
     width: 100% !important;
     max-width: 390px !important;
     height: 100% !important;
@@ -42,5 +38,12 @@
   .searchbar-wrapper,
   .searchbar {
     width: 275px !important;
+    margin-left: 0.77em !important;
+  }
+
+  .search-results-container {
+    width: 100vw !important;
+    height: 100vh !important;
+    margin-left: -3em !important;
   }
 }

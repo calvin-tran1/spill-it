@@ -1,23 +1,24 @@
 import React from 'react';
 import Redirect from '../components/redirect';
 import AppContext from '../lib/app-context';
+import parseRoute from '../lib/parse-route';
 import MobileTopNav from '../components/mobile-top-nav';
 import MobileBotNav from '../components/mobile-bottom-nav';
 import SidebarLeft from '../components/sidebar-left';
-import DesktopSearchbar from '../components/search-bar';
+import Searchbar from '../components/search-bar';
 import ModalOverlay from '../components/modal-overlay';
 import MobileNavMenu from '../components/mobile-nav-menu';
 import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
 import PostCard from '../components/post-card';
 import dateFormat from 'dateformat';
-import MobileSearch from '../components/mobile-search';
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: null,
+      loggedInUserId: '',
       userId: '',
       username: '',
       displayName: '',
@@ -25,18 +26,22 @@ export default class Profile extends React.Component {
       bio: '',
       active: false,
       postForm: false,
-      mobileSearch: true,
+      mobileSearch: false,
       mobileView: false,
       posts: [],
+      loggedInUserLikes: [],
       likes: [],
       likesView: false,
       deletePostId: null,
       optionsMenu: false,
-      deleteModal: false
+      deleteModal: false,
+      route: parseRoute(window.location.hash)
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleHomeView = this.handleHomeView.bind(this);
     this.postModal = this.postModal.bind(this);
     this.updatePosts = this.updatePosts.bind(this);
+    this.handleMobileSearch = this.handleMobileSearch.bind(this);
     this.handleOptions = this.handleOptions.bind(this);
     this.handleResetOptions = this.handleResetOptions.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
@@ -58,6 +63,7 @@ export default class Profile extends React.Component {
       .then(res => res.json())
       .then(user => this.setState({
         user,
+        loggedInUserId: user.userId,
         userId: user.userId,
         username: user.username,
         displayName: user.displayName,
@@ -65,17 +71,14 @@ export default class Profile extends React.Component {
         bio: user.bio
       }));
 
-    fetch('/api/posts', req)
-      .then(res => res.json())
-      .then(post => {
-        this.setState({ posts: post });
-      });
-
+    window.addEventListener('hashchange', () => {
+      this.setState({ route: parseRoute(window.location.hash) });
+    });
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     const token = window.localStorage.getItem('jwt');
     const req = {
       headers: {
@@ -83,12 +86,55 @@ export default class Profile extends React.Component {
       }
     };
 
-    fetch(`/api/user/likes/${this.state.userId}`, req)
-      .then(res => res.json())
-      .then(likes => {
-        this.setState({ likes });
+    if (prevState.route.path !== this.state.route.path) {
+      this.setState({
+        mobileSearch: false,
+        likesView: false,
+        posts: []
       });
+    }
 
+    if (prevState.route.path !== this.state.route.path || this.state.username !== this.state.route.path || prevState.username !== this.state.username) {
+      fetch(`/api/user/${this.state.route.path}`)
+        .then(res => res.json())
+        .then(user => this.setState({
+          userId: user.userId,
+          username: user.username,
+          displayName: user.displayName,
+          avatar: user.image,
+          bio: user.bio
+        }));
+    }
+
+    if (prevState.username !== this.state.username) {
+      fetch(`/api/user/posts/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(post => {
+          this.setState({ posts: post });
+        });
+
+      fetch(`/api/user/likes/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(likes => {
+          this.setState({ likes });
+        });
+    }
+
+    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== this.state.loggedInUserId) {
+      fetch(`/api/user/likes/${this.state.loggedInUserId}`, req)
+        .then(res => res.json())
+        .then(loggedInUserLikes => {
+          this.setState({ loggedInUserLikes });
+        });
+    }
+
+    if (prevState.likes !== this.state.likes) {
+      fetch(`/api/user/likes/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(likes => {
+          this.setState({ likes });
+        });
+    }
   }
 
   resize() {
@@ -108,9 +154,19 @@ export default class Profile extends React.Component {
     }));
   }
 
+  handleHomeView() {
+    this.setState({ mobileSearch: false });
+  }
+
   postModal() {
     this.setState(prevState => ({
       postForm: !prevState.postForm
+    }));
+  }
+
+  handleMobileSearch() {
+    this.setState(prevState => ({
+      mobileSearch: !prevState.mobileSearch
     }));
   }
 
@@ -122,7 +178,7 @@ export default class Profile extends React.Component {
       }
     };
 
-    fetch('/api/posts', req)
+    fetch(`/api/user/posts/${this.state.userId}`, req)
       .then(res => res.json())
       .then(newPosts => {
         this.setState({ posts: newPosts });
@@ -211,7 +267,6 @@ export default class Profile extends React.Component {
   }
 
   render() {
-
     const { user, handleSignOut } = this.context;
 
     if (!user) return <Redirect to="" />;
@@ -225,33 +280,37 @@ export default class Profile extends React.Component {
         }
 
         let likedStatus;
-        if (this.state.likes.find(likedPost => likedPost.postId === post.postId)) {
+        if (this.state.loggedInUserLikes.find(likedPost => likedPost.postId === post.postId)) {
           likedStatus = 'fa-solid fa-heart like-active';
         } else {
           likedStatus = 'fa-regular fa-heart';
         }
-        return (
-          <PostCard
-            key={post.postId}
-            postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
-            postId={post.postId}
-            avatarImg={post.avatar}
-            avatarName={post.username}
-            displayName={post.displayName}
-            username={post.username}
-            date={dateFormat(post.createdAt, 'mmm d, yyyy')}
-            textContent={post.textContent}
-            textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
-            postImg={post.image}
-            postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
-            optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
-            postOptionsBtn={this.handleOptions}
-            postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
-            deleteBtn={this.handleDeleteModal}
-            likeBtn={this.handleLike}
-            likeActive={likedStatus}
-          />
-        );
+        if (this.state.userId === post.userId) {
+          return (
+            <PostCard
+              key={post.postId}
+              postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
+              postId={post.postId}
+              avatarImg={post.avatar}
+              avatarName={post.username}
+              displayName={post.displayName}
+              username={post.username}
+              date={dateFormat(post.createdAt, 'mmm d, yyyy')}
+              textContent={post.textContent}
+              textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
+              postImg={post.image}
+              postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
+              optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
+              postOptionsBtn={this.handleOptions}
+              postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
+              deleteBtn={this.handleDeleteModal}
+              likeBtn={this.handleLike}
+              likeActive={likedStatus}
+            />
+          );
+        } else {
+          return <p />;
+        }
       });
     }
 
@@ -261,6 +320,12 @@ export default class Profile extends React.Component {
         let postOptions = false;
         if (this.state.deletePostId === likedPost.postId) {
           postOptions = true;
+        }
+        let likedStatus;
+        if (this.state.loggedInUserLikes.find(loggedInUserLikes => loggedInUserLikes.postId === likedPost.postId)) {
+          likedStatus = 'fa-solid fa-heart like-active';
+        } else {
+          likedStatus = 'fa-regular fa-heart';
         }
         return (
           <PostCard
@@ -281,10 +346,17 @@ export default class Profile extends React.Component {
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
             likeBtn={this.handleLike}
-            likeActive='fa-solid fa-heart like-active'
+            likeActive={likedStatus}
           />
         );
       });
+    }
+
+    let profileButton;
+    if (this.state.loggedInUserId !== this.state.userId) {
+      profileButton = 'Follow';
+    } else {
+      profileButton = 'Set up profile';
     }
 
     return (
@@ -311,7 +383,11 @@ export default class Profile extends React.Component {
           onClick={this.handleClick}
         />
         <div className="row">
-          <MobileTopNav onClick={this.handleClick} />
+          <MobileTopNav
+            onClick={this.handleClick}
+            mobileSearch={this.state.mobileSearch}
+            back={this.handleMobileSearch}
+          />
           <div className="col bg-secondary-color d-none d-lg-block">
             <SidebarLeft
               onSignOut={handleSignOut}
@@ -333,9 +409,6 @@ export default class Profile extends React.Component {
               onClick={this.postModal}
               updatePosts={this.updatePosts}
             />
-            <MobileSearch
-              searchResults={this.state.mobileSearch ? 'mobile-search' : 'd-none'}
-            />
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">
                 <div className="col">
@@ -349,7 +422,7 @@ export default class Profile extends React.Component {
                 <div className="col d-flex justify-content-end m-auto me-1">
                   <button type="submit" className="setup-profile-btn">
                     <a href="#profile-setup">
-                      Set up profile
+                      {profileButton}
                     </a>
                   </button>
                 </div>
@@ -384,11 +457,12 @@ export default class Profile extends React.Component {
             </div>
           </div>
           <div className="col bg-secondary-color d-none d-lg-block">
-            <DesktopSearchbar />
+            <Searchbar />
           </div>
           <MobileBotNav
-          openPost={this.postModal}
-          searchResults={this.mobileSearch}
+            homeView={this.handleHomeView}
+            openPost={this.postModal}
+            search={this.handleMobileSearch}
           />
         </div>
       </div>

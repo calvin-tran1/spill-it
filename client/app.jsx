@@ -14,6 +14,7 @@ export default class App extends React.Component {
     this.state = {
       user: null,
       username: '',
+      users: [],
       isAuthorizing: true,
       route: parseRoute(window.location.hash)
     };
@@ -31,6 +32,12 @@ export default class App extends React.Component {
     if (user) {
       this.setState({ username: user.username });
     }
+
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(username => {
+        this.setState({ users: username });
+      });
   }
 
   handleSignIn(result) {
@@ -45,7 +52,7 @@ export default class App extends React.Component {
   }
 
   renderPage() {
-    const { route, username } = this.state;
+    const { route, users } = this.state;
 
     if (route.path === '') {
       return <SignIn onSignIn={this.handleSignIn} />;
@@ -59,8 +66,12 @@ export default class App extends React.Component {
     if (route.path === 'home') {
       return <Home onSignOut={this.handleSignOut} />;
     }
-    if (route.path === `${username}`) {
-      return <Profile />;
+    const usernamesArray = users.map(user => user.username);
+    for (let i = 0; i < usernamesArray.length; i++) {
+      const username = usernamesArray[i];
+      if (route.path === `${username}`) {
+        return <Profile />;
+      }
     }
   }
 
