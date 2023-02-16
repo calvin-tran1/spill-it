@@ -424,6 +424,31 @@ app.get('/api/search', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/follow/:profileId', (req, res, next) => {
+  const { userId } = req.user;
+  const profileId = Number(req.params.profileId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(profileId) || profileId <= 0) {
+    throw new ClientError(400, 'profileId must be a positive integer');
+  }
+
+  const sql = `
+    insert into "following" ("userId", "followingId")
+    values ($1, $2)
+    returning *
+  `;
+  const params = [userId, profileId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
