@@ -89,7 +89,8 @@ export default class Profile extends React.Component {
     if (prevState.route.path !== this.state.route.path) {
       this.setState({
         mobileSearch: false,
-        likesView: false
+        likesView: false,
+        posts: []
       });
     }
 
@@ -284,28 +285,32 @@ export default class Profile extends React.Component {
         } else {
           likedStatus = 'fa-regular fa-heart';
         }
-        return (
-          <PostCard
-            key={post.postId}
-            postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
-            postId={post.postId}
-            avatarImg={post.avatar}
-            avatarName={post.username}
-            displayName={post.displayName}
-            username={post.username}
-            date={dateFormat(post.createdAt, 'mmm d, yyyy')}
-            textContent={post.textContent}
-            textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
-            postImg={post.image}
-            postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
-            optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
-            postOptionsBtn={this.handleOptions}
-            postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
-            deleteBtn={this.handleDeleteModal}
-            likeBtn={this.handleLike}
-            likeActive={likedStatus}
-          />
-        );
+        if (this.state.userId === post.userId) {
+          return (
+            <PostCard
+              key={post.postId}
+              postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
+              postId={post.postId}
+              avatarImg={post.avatar}
+              avatarName={post.username}
+              displayName={post.displayName}
+              username={post.username}
+              date={dateFormat(post.createdAt, 'mmm d, yyyy')}
+              textContent={post.textContent}
+              textContentClass={post.textContent ? 'row m-0 p-0' : 'd-none'}
+              postImg={post.image}
+              postImgClass={post.image ? 'row m-0 p-0' : 'd-none'}
+              optionsMenu={postOptions ? 'post-options-menu' : 'd-none'}
+              postOptionsBtn={this.handleOptions}
+              postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
+              deleteBtn={this.handleDeleteModal}
+              likeBtn={this.handleLike}
+              likeActive={likedStatus}
+            />
+          );
+        } else {
+          return <p />;
+        }
       });
     }
 
@@ -345,6 +350,13 @@ export default class Profile extends React.Component {
           />
         );
       });
+    }
+
+    let profileButton;
+    if (this.state.loggedInUserId !== this.state.userId) {
+      profileButton = 'Follow';
+    } else {
+      profileButton = 'Set up profile';
     }
 
     return (
@@ -410,7 +422,7 @@ export default class Profile extends React.Component {
                 <div className="col d-flex justify-content-end m-auto me-1">
                   <button type="submit" className="setup-profile-btn">
                     <a href="#profile-setup">
-                      Set up profile
+                      {profileButton}
                     </a>
                   </button>
                 </div>
