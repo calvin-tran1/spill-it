@@ -28,6 +28,7 @@ export default class Profile extends React.Component {
       postForm: false,
       mobileSearch: false,
       mobileView: false,
+      following: [],
       posts: [],
       loggedInUserLikes: [],
       likes: [],
@@ -49,6 +50,7 @@ export default class Profile extends React.Component {
     this.handleLike = this.handleLike.bind(this);
     this.handlePostsTab = this.handlePostsTab.bind(this);
     this.handleLikesTab = this.handleLikesTab.bind(this);
+    this.handleFollow = this.handleFollow.bind(this);
   }
 
   componentDidMount() {
@@ -85,6 +87,14 @@ export default class Profile extends React.Component {
         'X-Access-Token': token
       }
     };
+
+    if (prevState.user !== this.state.user || prevState.following !== this.state.following) {
+      fetch(`/api/user/follow/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(following => this.setState({
+          following
+        }));
+    }
 
     if (prevState.route.path !== this.state.route.path) {
       this.setState({
@@ -266,6 +276,21 @@ export default class Profile extends React.Component {
     this.setState({ likesView: true });
   }
 
+  handleFollow() {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/follow/${this.state.userId}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
   render() {
     const { user, handleSignOut } = this.context;
 
@@ -353,10 +378,23 @@ export default class Profile extends React.Component {
     }
 
     let profileButton;
-    if (this.state.loggedInUserId !== this.state.userId) {
-      profileButton = 'Follow';
+    if (this.state.following.find(following => following.followingId === this.state.userId)) {
+      profileButton =
+        <button type="submit" className="setup-profile-btn">
+            Following
+        </button>;
+    } else if (this.state.loggedInUserId === this.state.userId) {
+      profileButton =
+        <button type="submit" className="setup-profile-btn">
+          <a href="#profile-setup">
+            Set up profile
+          </a>
+        </button>;
     } else {
-      profileButton = 'Set up profile';
+      profileButton =
+        <button type="submit" className="setup-profile-btn" onClick={this.handleFollow}>
+          Follow
+        </button>;
     }
 
     return (
@@ -420,11 +458,7 @@ export default class Profile extends React.Component {
                   />
                 </div>
                 <div className="col d-flex justify-content-end m-auto me-1">
-                  <button type="submit" className="setup-profile-btn">
-                    <a href="#profile-setup">
-                      {profileButton}
-                    </a>
-                  </button>
+                  {profileButton}
                 </div>
               </div>
               <div className="row m-0 p-0">

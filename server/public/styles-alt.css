@@ -653,6 +653,7 @@ textarea::-webkit-scrollbar {
   border-style: solid;
   border-color: white;
   border-radius: 30px;
+  color: white;
 }
 
 .setup-profile-btn > a {
