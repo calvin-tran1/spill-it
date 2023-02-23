@@ -466,6 +466,31 @@ app.get('/api/user/follow/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/user/follow/:profileId', (req, res, next) => {
+  const { userId } = req.user;
+  const profileId = Number(req.params.profileId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(profileId) || profileId <= 0) {
+    throw new ClientError(400, 'profileId must be a positive integer');
+  }
+
+  const sql = `
+    delete from "following"
+    where       "followingId" = $1
+    returning   *
+  `;
+  const params = [profileId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
