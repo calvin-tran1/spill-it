@@ -466,7 +466,7 @@ app.get('/api/user/follow/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.delete('/api/user/follow/:profileId', (req, res, next) => {
+app.delete('/api/follow/:profileId', (req, res, next) => {
   const { userId } = req.user;
   const profileId = Number(req.params.profileId);
 
