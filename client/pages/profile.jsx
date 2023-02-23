@@ -278,13 +278,25 @@ export default class Profile extends React.Component {
 
   handleFollow() {
     const token = window.localStorage.getItem('jwt');
-    const req = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Token': token
-      }
-    };
+
+    let req;
+    if (this.state.following.find(following => following.followingId === this.state.userId)) {
+      req = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    } else {
+      req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    }
 
     fetch(`/api/follow/${this.state.userId}`, req)
       .then(res => res.json())
@@ -380,8 +392,8 @@ export default class Profile extends React.Component {
     let profileButton;
     if (this.state.following.find(following => following.followingId === this.state.userId)) {
       profileButton =
-        <button type="submit" className="setup-profile-btn">
-            Following
+        <button type="submit" className="following-profile-btn" onClick={this.handleFollow}>
+          <span>Following</span>
         </button>;
     } else if (this.state.loggedInUserId === this.state.userId) {
       profileButton =
@@ -392,7 +404,7 @@ export default class Profile extends React.Component {
         </button>;
     } else {
       profileButton =
-        <button type="submit" className="setup-profile-btn" onClick={this.handleFollow}>
+        <button type="submit" className="follow-profile-btn" onClick={this.handleFollow}>
           Follow
         </button>;
     }
@@ -400,7 +412,7 @@ export default class Profile extends React.Component {
     return (
       <div className="container-fluid bg-primary-color">
         <div className={this.state.deleteModal ? 'delete-modal py-3' : 'd-none'}>
-          <span>Delete Post?</span>
+          <span className='confirm-delete-post'>Delete Post?</span>
           <button type="button" className="confirm-delete-btn d-block" onClick={this.handleDelete}>Delete</button>
           <button type="button" className="cancel-delete-btn d-block" onClick={this.handleDeleteModal}>Cancel</button>
         </div>

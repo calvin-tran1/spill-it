@@ -646,7 +646,9 @@ textarea::-webkit-scrollbar {
   font-size: 20px;
 }
 
-.setup-profile-btn {
+.setup-profile-btn,
+.follow-profile-btn,
+.following-profile-btn {
   width: 129px;
   height: 34px;
   background-color: transparent;
@@ -658,6 +660,19 @@ textarea::-webkit-scrollbar {
 
 .setup-profile-btn > a {
   color: white !important;
+}
+
+.following-profile-btn:hover::before {
+  content: "Unfollow";
+}
+
+.following-profile-btn:hover {
+  border-color: red;
+  color: red;
+}
+
+.following-profile-btn:hover > span {
+  display: none;
 }
 
 a:hover {
@@ -844,7 +859,7 @@ a:visited {
   text-align: center;
 }
 
-.delete-modal > span {
+.delete-modal > .confirm-delete-post {
   color: white;
   font-size: 18px;
 }
