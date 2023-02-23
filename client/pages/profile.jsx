@@ -88,7 +88,7 @@ export default class Profile extends React.Component {
       }
     };
 
-    if (prevState.user !== this.state.user) {
+    if (prevState.user !== this.state.user || prevState.following !== this.state.following) {
       fetch(`/api/user/follow/${this.state.userId}`, req)
         .then(res => res.json())
         .then(following => this.setState({
@@ -383,17 +383,17 @@ export default class Profile extends React.Component {
         <button type="submit" className="setup-profile-btn">
             Following
         </button>;
-    } else if (this.state.loggedInUserId !== this.state.userId && this.state.following.find(following => this.state.loggedInUserId !== following.followingId)) {
-      profileButton =
-        <button type="submit" className="setup-profile-btn">
-            Follow
-        </button>;
-    } else {
+    } else if (this.state.loggedInUserId === this.state.userId) {
       profileButton =
         <button type="submit" className="setup-profile-btn">
           <a href="#profile-setup">
             Set up profile
           </a>
+        </button>;
+    } else {
+      profileButton =
+        <button type="submit" className="setup-profile-btn" onClick={this.handleFollow}>
+          Follow
         </button>;
     }
 
