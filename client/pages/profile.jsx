@@ -36,6 +36,7 @@ export default class Profile extends React.Component {
       deletePostId: null,
       optionsMenu: false,
       deleteModal: false,
+      unfollowModal: false,
       route: parseRoute(window.location.hash)
     };
     this.handleClick = this.handleClick.bind(this);
@@ -51,6 +52,7 @@ export default class Profile extends React.Component {
     this.handlePostsTab = this.handlePostsTab.bind(this);
     this.handleLikesTab = this.handleLikesTab.bind(this);
     this.handleFollow = this.handleFollow.bind(this);
+    this.handleUnfollowModal = this.handleUnfollowModal.bind(this);
   }
 
   componentDidMount() {
@@ -278,17 +280,37 @@ export default class Profile extends React.Component {
 
   handleFollow() {
     const token = window.localStorage.getItem('jwt');
-    const req = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Token': token
-      }
-    };
+
+    let req;
+    if (this.state.following.find(following => following.followingId === this.state.userId)) {
+      req = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    } else {
+      req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    }
 
     fetch(`/api/follow/${this.state.userId}`, req)
       .then(res => res.json())
       .catch(err => console.error(err));
+
+    this.setState({ unfollowModal: false });
+  }
+
+  handleUnfollowModal() {
+    this.setState(prevState => ({
+      unfollowModal: !prevState.unfollowModal
+    }));
   }
 
   render() {
@@ -378,10 +400,15 @@ export default class Profile extends React.Component {
     }
 
     let profileButton;
-    if (this.state.following.find(following => following.followingId === this.state.userId)) {
+    if (this.state.mobileView === false && this.state.following.find(following => following.followingId === this.state.userId)) {
       profileButton =
-        <button type="submit" className="setup-profile-btn">
-            Following
+        <button type="submit" className="following-profile-btn" onClick={this.handleFollow}>
+          <span>Following</span>
+        </button>;
+    } else if (this.state.mobileView === true && this.state.following.find(following => following.followingId === this.state.userId)) {
+      profileButton =
+        <button type="submit" className="following-profile-btn" onClick={this.handleUnfollowModal}>
+          <span>Following</span>
         </button>;
     } else if (this.state.loggedInUserId === this.state.userId) {
       profileButton =
@@ -392,7 +419,7 @@ export default class Profile extends React.Component {
         </button>;
     } else {
       profileButton =
-        <button type="submit" className="setup-profile-btn" onClick={this.handleFollow}>
+        <button type="submit" className="follow-profile-btn" onClick={this.handleFollow}>
           Follow
         </button>;
     }
@@ -400,13 +427,30 @@ export default class Profile extends React.Component {
     return (
       <div className="container-fluid bg-primary-color">
         <div className={this.state.deleteModal ? 'delete-modal py-3' : 'd-none'}>
-          <span>Delete Post?</span>
-          <button type="button" className="confirm-delete-btn d-block" onClick={this.handleDelete}>Delete</button>
-          <button type="button" className="cancel-delete-btn d-block" onClick={this.handleDeleteModal}>Cancel</button>
+          <span className='confirm-delete-post'>Delete Post?</span>
+          <button type="button" className="confirm-delete-btn d-block" onClick={this.handleDelete}>
+            Delete
+          </button>
+          <button type="button" className="cancel-delete-btn d-block" onClick={this.handleDeleteModal}>
+            Cancel
+          </button>
+        </div>
+        <div className={this.state.unfollowModal ? 'unfollow-modal py-3' : 'd-none'}>
+          <span className="confirm-unfollow">Unfollow @{this.state.username}?</span>
+          <button type="submit" className="unfollow-btn d-block" onClick={this.handleFollow}>
+            Unfollow
+          </button>
+          <button type="button" className="cancel-delete-btn d-block" onClick={this.handleUnfollowModal}>
+            Cancel
+          </button>
         </div>
         <ModalOverlay
           active={this.state.deleteModal ? 'delete-post-modal-overlay bg-opacity-40' : 'd-none'}
           onClick={this.handleDeleteModal}
+        />
+        <ModalOverlay
+          active={this.state.unfollowModal ? 'delete-post-modal-overlay bg-opacity-40' : 'd-none'}
+          onClick={this.handleUnfollowModal}
         />
         <ModalOverlay
           active={this.state.optionsMenu ? 'modal-overlay bg-transparent' : 'd-none'}
