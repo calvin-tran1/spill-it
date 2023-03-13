@@ -491,6 +491,31 @@ app.delete('/api/follow/:profileId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const postId = Number(req.params.postId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a positive integer');
+  }
+
+  const sql = `
+    insert into "shares" ("postId", "userId")
+    values ($1, $2)
+    returning *
+  `;
+  const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
