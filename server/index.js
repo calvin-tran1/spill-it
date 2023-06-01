@@ -557,7 +557,8 @@ app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."textContent",
                     "p"."image",
                     "p"."createdAt",
-                    "s"."sharesId"
+                    "s"."sharesId",
+                    "s"."sharedAt"
     from            "posts" as "p"
     join            "shares" as "s" using ("postId")
     where           "s"."userId" = $1

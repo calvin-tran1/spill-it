@@ -58,8 +58,8 @@ export default class PostCard extends React.Component {
                 </button>
               </div>
               <div className="col d-flex justify-content-center mx-0 mt-0 mb-1 p-0">
-                <button className="post-card-btn m0-p0">
-                  <i className="fa-solid fa-retweet" data-post-id={this.props.postId} />
+                <button className="post-card-btn m0-p0" onClick={this.props.shareBtn}>
+                  <i className={this.props.shareActive} data-post-id={this.props.postId} />
                 </button>
               </div>
               <div className="col d-flex justify-content-end mx-0 mt-0 mb-1 py-0 me-2">
