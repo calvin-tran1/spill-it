@@ -491,6 +491,91 @@ app.delete('/api/follow/:profileId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const postId = Number(req.params.postId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a positive integer');
+  }
+
+  const sql = `
+    insert into "shares" ("postId", "userId")
+    values ($1, $2)
+    returning *
+  `;
+  const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const postId = Number(req.params.postId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a postiive integer');
+  }
+
+  const sql = `
+    delete from "shares"
+    where       "postId" = $1
+    and         "userId" = $2
+    returning   *
+  `;
+  const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
+  const profileId = Number(req.params.profileId);
+
+  if (!Number.isInteger(profileId) || profileId <= 0) {
+    throw new ClientError(400, 'profileId must be a positive integer');
+  }
+
+  const sql = `
+    select distinct "p"."postId",
+                    "p"."userId",
+                    "p"."username",
+                    "p"."displayName",
+                    "p"."avatar",
+                    "p"."textContent",
+                    "p"."image",
+                    "p"."createdAt",
+                    "s"."sharesId",
+                    "s"."sharedAt"
+    from            "posts" as "p"
+    join            "shares" as "s" using ("postId")
+    where           "s"."userId" = $1
+    and             "s"."postId" = "p"."postId"
+    order by        "s"."sharesId" DESC
+  `;
+
+  const params = [profileId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
