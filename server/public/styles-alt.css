@@ -803,6 +803,11 @@ a:visited {
   color: #c5e9ea;
 }
 
+.shared-by-text {
+  color: rgb(201, 201, 201);
+  font-size: 15px;
+}
+
 .fa-heart {
   font-size: 18px;
   cursor: pointer;

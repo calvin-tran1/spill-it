@@ -6,6 +6,12 @@ export default class PostCard extends React.Component {
     return (
       <article className={this.props.postsOrLikesView}>
         <div className="row m-0 p-0">
+          <span className="shared-by-text mb-1 px-3">
+            <i className={this.props.sharedByIcon} />
+            {this.props.sharedBy}
+          </span>
+        </div>
+        <div className="row m-0 p-0">
           <div className="col post-avatar-wrapper mb-3 px-3">
             <Avatar
               imageUrl={this.props.avatarImg}
@@ -53,11 +59,6 @@ export default class PostCard extends React.Component {
             </div>
             <div className="row m-0 p-0">
               <div className="col mx-0 mt-0 mb-1 p-0">
-                <button className="post-card-btn m0-p0">
-                  <i className="fa-regular fa-comment" data-post-id={this.props.postId} />
-                </button>
-              </div>
-              <div className="col d-flex justify-content-center mx-0 mt-0 mb-1 p-0">
                 <button className="post-card-btn m0-p0" onClick={this.props.shareBtn}>
                   <i className={this.props.shareActive} data-post-id={this.props.postId} />
                 </button>

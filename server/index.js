@@ -552,6 +552,7 @@ app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
   const sql = `
     select distinct "p"."postId",
                     "p"."userId",
+                    "p"."username",
                     "p"."displayName",
                     "p"."avatar",
                     "p"."textContent",
