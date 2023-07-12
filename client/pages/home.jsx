@@ -18,7 +18,10 @@ export default class Home extends React.Component {
       active: false,
       post: false,
       mobileSearch: false,
-      posts: []
+      following: [],
+      posts: [],
+      shares: [],
+      postsAndShares: []
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleHomeView = this.handleHomeView.bind(this);
@@ -39,6 +42,81 @@ export default class Home extends React.Component {
     fetch('/api/user', req)
       .then(res => res.text())
       .then(user => this.setState({ user, username: user.username }));
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/user/follow/${this.state.userId}`, req)
+      .then(res => res.json())
+      .then(following => this.setState({
+        following
+      }));
+
+    // if (this.state.following.length > 0) {
+    //   const following = this.state.following;
+
+    //   following.map(following => {
+    //     const reqPosts = fetch(`/api/user/posts/${following.followingId}`, req);
+    //     const reqShares = fetch(`/api/user/shares/${following.followingId}`, req);
+
+    //     return Promise.all([reqPosts, reqShares])
+    //       .then(responses => Promise.all(responses.map(res => res.json())))
+    //       .then(([posts, shares]) => {
+    //         const postsAndShares = [...posts, ...shares];
+
+    //         postsAndShares.sort((a, b) => {
+    //           const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
+    //           const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
+
+    //           return timestampB - timestampA;
+    //         });
+
+    //         this.setState({ postsAndShares });
+    //       });
+    //   });
+    // }
+    if (this.state.following.length > 0) {
+      const following = this.state.following;
+
+      Promise.all(
+        following.map(following => {
+          const reqPosts = fetch(`/api/user/posts/${following.followingId}`, req);
+          const reqShares = fetch(`/api/user/shares/${following.followingId}`, req);
+
+          return Promise.all([reqPosts, reqShares])
+            .then(responses => Promise.all(responses.map(res => res.json())))
+            .then(([posts, shares]) => {
+              const postsAndShares = [...posts, ...shares];
+
+              postsAndShares.sort((a, b) => {
+                const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
+                const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
+
+                return timestampB - timestampA;
+              });
+
+              return postsAndShares;
+            });
+        })
+      )
+        .then(postsAndSharesArray => {
+          const mergedPostsAndShares = postsAndSharesArray.flat();
+
+          this.setState({ postsAndShares: mergedPostsAndShares });
+        })
+        .catch(error => {
+          console.error('Error fetching posts and shares:', error);
+          this.setState({ postsAndShares: [] });
+        });
+    }
+
   }
 
   handleClick() {
