@@ -67,35 +67,6 @@ export default class Home extends React.Component {
         }));
     }
 
-    // if (prevState.following !== this.state.following && this.state.following.length > 0) {
-
-    //   const followingIds = this.state.following.map(user => user.followingId);
-    //   const fetchPostsAndShares = followingIds.map(followingId => {
-    //     const reqPosts = fetch(`/api/user/posts/${followingId}`, req);
-    //     const reqShares = fetch(`/api/user/shares/${followingId}`, req);
-
-    //     return Promise.all([reqPosts, reqShares])
-    //       .then(responses => Promise.all(responses.map(res => res.json())))
-    //       .then(([posts, shares]) => {
-    //         return [...posts, ...shares];
-    //       });
-    //   });
-
-    //   Promise.all(fetchPostsAndShares)
-    //     .then(results => {
-    //       const postsAndShares = results.flat();
-
-    //       postsAndShares.sort((a, b) => {
-    //         const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
-    //         const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
-
-    //         return timestampB - timestampA;
-    //       });
-
-    //       this.setState({ postsAndShares });
-    //     });
-    // }
-
     if (prevState.following !== this.state.following && this.state.following.length > 0 && !this.state.isFetchPerformed) {
       const followingIds = this.state.following.map(user => user.followingId);
       const fetchPostsAndShares = followingIds.map(followingId => {
