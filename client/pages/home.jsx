@@ -1,6 +1,7 @@
 import React from 'react';
 import Redirect from '../components/redirect';
 import AppContext from '../lib/app-context';
+import parseRoute from '../lib/parse-route';
 import MobileTopNav from '../components/mobile-top-nav';
 import MobileBotNav from '../components/mobile-bottom-nav';
 import SidebarLeft from '../components/sidebar-left';
@@ -21,7 +22,8 @@ export default class Home extends React.Component {
       following: [],
       posts: [],
       shares: [],
-      postsAndShares: []
+      postsAndShares: [],
+      route: parseRoute(window.location.hash)
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleHomeView = this.handleHomeView.bind(this);
@@ -42,6 +44,10 @@ export default class Home extends React.Component {
     fetch('/api/user', req)
       .then(res => res.text())
       .then(user => this.setState({ user, username: user.username }));
+
+    window.addEventListener('hashchange', () => {
+      this.setState({ route: parseRoute(window.location.hash) });
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -53,68 +59,71 @@ export default class Home extends React.Component {
       }
     };
 
-    fetch(`/api/user/follow/${this.state.userId}`, req)
-      .then(res => res.json())
-      .then(following => this.setState({
-        following
-      }));
+    if (this.state.route.path === 'home') {
+      fetch(`/api/user/follow/${this.state.userId}`, req)
+        .then(res => res.json())
+        .then(following => this.setState({
+          following
+        }));
+    }
 
-    // if (this.state.following.length > 0) {
-    //   const following = this.state.following;
+    // if (prevState.following !== this.state.following && this.state.following.length > 0) {
 
-    //   following.map(following => {
-    //     const reqPosts = fetch(`/api/user/posts/${following.followingId}`, req);
-    //     const reqShares = fetch(`/api/user/shares/${following.followingId}`, req);
+    //   const followingIds = this.state.following.map(user => user.followingId);
+    //   const fetchPostsAndShares = followingIds.map(followingId => {
+    //     const reqPosts = fetch(`/api/user/posts/${followingId}`, req);
+    //     const reqShares = fetch(`/api/user/shares/${followingId}`, req);
 
     //     return Promise.all([reqPosts, reqShares])
     //       .then(responses => Promise.all(responses.map(res => res.json())))
     //       .then(([posts, shares]) => {
-    //         const postsAndShares = [...posts, ...shares];
-
-    //         postsAndShares.sort((a, b) => {
-    //           const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
-    //           const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
-
-    //           return timestampB - timestampA;
-    //         });
-
-    //         this.setState({ postsAndShares });
+    //         return [...posts, ...shares];
     //       });
     //   });
+
+    //   Promise.all(fetchPostsAndShares)
+    //     .then(results => {
+    //       const postsAndShares = results.flat();
+
+    //       postsAndShares.sort((a, b) => {
+    //         const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
+    //         const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
+
+    //         return timestampB - timestampA;
+    //       });
+
+    //       this.setState({ postsAndShares });
+    //     });
     // }
-    if (this.state.following.length > 0) {
-      const following = this.state.following;
 
-      Promise.all(
-        following.map(following => {
-          const reqPosts = fetch(`/api/user/posts/${following.followingId}`, req);
-          const reqShares = fetch(`/api/user/shares/${following.followingId}`, req);
+    if (prevState.following !== this.state.following && this.state.following.length > 0 && !this.state.isFetchPerformed) {
+      const followingIds = this.state.following.map(user => user.followingId);
+      const fetchPostsAndShares = followingIds.map(followingId => {
+        const reqPosts = fetch(`/api/user/posts/${followingId}`, req);
+        const reqShares = fetch(`/api/user/shares/${followingId}`, req);
 
-          return Promise.all([reqPosts, reqShares])
-            .then(responses => Promise.all(responses.map(res => res.json())))
-            .then(([posts, shares]) => {
-              const postsAndShares = [...posts, ...shares];
+        return Promise.all([reqPosts, reqShares])
+          .then(responses => Promise.all(responses.map(res => res.json())))
+          .then(([posts, shares]) => {
+            return [...posts, ...shares];
+          });
+      });
 
-              postsAndShares.sort((a, b) => {
-                const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
-                const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
+      Promise.all(fetchPostsAndShares)
+        .then(results => {
+          const postsAndShares = results.flat();
 
-                return timestampB - timestampA;
-              });
+          postsAndShares.sort((a, b) => {
+            const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
+            const timestampB = Math.max(new Date(b.createdAt).getTime(), new Date(b.sharedAt).getTime() || 0);
 
-              return postsAndShares;
-            });
-        })
-      )
-        .then(postsAndSharesArray => {
-          const mergedPostsAndShares = postsAndSharesArray.flat();
+            return timestampB - timestampA;
+          });
 
-          this.setState({ postsAndShares: mergedPostsAndShares });
-        })
-        .catch(error => {
-          console.error('Error fetching posts and shares:', error);
-          this.setState({ postsAndShares: [] });
+          this.setState({ postsAndShares });
         });
+
+      this.setState({ isFetchPerformed: true });
     }
 
   }
