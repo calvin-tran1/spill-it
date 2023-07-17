@@ -37,6 +37,8 @@ export default class Home extends React.Component {
     this.postModal = this.postModal.bind(this);
     this.handleMobileSearch = this.handleMobileSearch.bind(this);
     this.updatePosts = this.updatePosts.bind(this);
+    this.handleLike = this.handleLike.bind(this);
+    this.handleShare = this.handleShare.bind(this);
   }
 
   componentDidMount() {
@@ -182,6 +184,60 @@ export default class Home extends React.Component {
       .then(post => {
         this.setState({ posts: post });
       });
+  }
+
+  handleLike(e) {
+    const token = window.localStorage.getItem('jwt');
+
+    let req;
+    if (e.target.className.includes('like-active')) {
+      req = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    } else {
+      req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    }
+
+    fetch(`/api/likes/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
+  handleShare(e) {
+    const token = window.localStorage.getItem('jwt');
+
+    let req;
+    if (e.target.className.includes('share-active')) {
+      req = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    } else {
+      req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
+        }
+      };
+    }
+
+    fetch(`/api/shares/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
   }
 
   render() {
