@@ -558,6 +558,7 @@ app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."textContent",
                     "p"."image",
                     "p"."createdAt",
+                    "s"."userId" as "sharedUserId",
                     "s"."sharesId",
                     "s"."sharedAt"
     from            "posts" as "p"
