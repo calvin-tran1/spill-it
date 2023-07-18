@@ -315,7 +315,7 @@ app.delete('/api/posts/:postId', (req, res, next) => {
 });
 
 app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, username } = req.user;
   const postId = Number(req.params.postId);
 
   if (!userId) {
@@ -326,11 +326,11 @@ app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
   }
 
   const sql = `
-    insert into "likes" ("postId", "userId")
-    values ($1, $2)
+    insert into "likes" ("postId", "userId", "username")
+    values ($1, $2, $3)
     returning *
   `;
-  const params = [postId, userId];
+  const params = [postId, userId, username];
 
   db.query(sql, params)
     .then(result => {
@@ -494,7 +494,7 @@ app.delete('/api/follow/:profileId', (req, res, next) => {
 });
 
 app.post('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, username } = req.user;
   const postId = Number(req.params.postId);
 
   if (!userId) {
@@ -505,11 +505,11 @@ app.post('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
   }
 
   const sql = `
-    insert into "shares" ("postId", "userId")
-    values ($1, $2)
+    insert into "shares" ("postId", "userId", "username")
+    values ($1, $2, $3)
     returning *
   `;
-  const params = [postId, userId];
+  const params = [postId, userId, username];
 
   db.query(sql, params)
     .then(result => {
