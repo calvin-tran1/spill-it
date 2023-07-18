@@ -26,6 +26,7 @@ export default class Home extends React.Component {
       following: [],
       posts: [],
       shares: [],
+      likes: [],
       loggedInUserLikes: [],
       loggedInUserShares: [],
       feed: [],
@@ -103,11 +104,12 @@ export default class Home extends React.Component {
       const fetchFeed = followingIds.map(followingId => {
         const reqPosts = fetch(`/api/user/posts/${followingId}`, req);
         const reqShares = fetch(`/api/user/shares/${followingId}`, req);
+        const reqLikes = fetch(`/api/user/likes/${followingId}`, req);
 
-        return Promise.all([reqPosts, reqShares])
+        return Promise.all([reqPosts, reqShares, reqLikes])
           .then(responses => Promise.all(responses.map(res => res.json())))
-          .then(([posts, shares]) => {
-            return [...posts, ...shares];
+          .then(([posts, shares, likes]) => {
+            return [...posts, ...shares, ...likes];
           });
       });
 
@@ -125,10 +127,25 @@ export default class Home extends React.Component {
           });
       });
 
-      Promise.all([Promise.all(fetchFeed), Promise.all(fetchShares)])
-        .then(([feedResults, sharesResults]) => {
+      const fetchLikes = followingIds.map(followingId => {
+        return fetch(`/api/user/likes/${followingId}`, req)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to fetch likes');
+            }
+            return response.json();
+          })
+          .catch(error => {
+            console.error('Error fetching likes:', error);
+            return [];
+          });
+      });
+
+      Promise.all([Promise.all(fetchFeed), Promise.all(fetchShares), Promise.all(fetchLikes)])
+        .then(([feedResults, sharesResults, likesResults]) => {
           const feed = feedResults.flat();
           const shares = sharesResults.flat();
+          const likes = likesResults.flat();
 
           feed.sort((a, b) => {
             const timestampA = Math.max(new Date(a.createdAt).getTime(), new Date(a.sharedAt).getTime() || 0);
@@ -137,7 +154,7 @@ export default class Home extends React.Component {
             return timestampB - timestampA;
           });
 
-          this.setState({ feed, shares });
+          this.setState({ feed, shares, likes });
         })
         .catch(error => {
           console.error('Error fetching feed and shares:', error);
@@ -266,30 +283,35 @@ export default class Home extends React.Component {
           sharedStatus = 'fa-solid fa-retweet';
         }
 
-        let sharedBy = '';
-        let sharedByIcon = '';
-        const userId = this.state.user.userId;
-        const { loggedInUserShares, shares, username } = this.state;
-        const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
-        const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
-
-        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== this.state.userId) {
-          sharedBy = ` You and ${username} shared`;
-          sharedByIcon = 'fa-solid fa-retweet px-3';
-        } else if (isPostSharedByUser) {
-          sharedBy = ' You shared';
-          sharedByIcon = 'fa-solid fa-retweet px-3';
-        } else if (isPostSharedByOtherUser) {
-          sharedBy = ` ${username} shared`;
-          sharedByIcon = 'fa-solid fa-retweet px-3';
-        }
-
         let likedStatus;
         if (this.state.loggedInUserLikes.find(likedPost => likedPost.postId === latestSharedPost.postId)) {
           likedStatus = 'fa-solid fa-heart like-active';
         } else {
           likedStatus = 'fa-regular fa-heart';
         }
+
+        let likedOrSharedBy = '';
+        let likeOrShareIcon = '';
+        const userId = this.state.user.userId;
+        const { loggedInUserShares, shares, likes, username } = this.state;
+        const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
+        const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
+        const isPostLikedByOtherUser = likes.some(likedPost => likedPost.postId === latestSharedPost.postId);
+
+        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== this.state.userId) {
+          likedOrSharedBy = ` You and ${username} shared`;
+          likeOrShareIcon = 'fa-solid fa-retweet px-3';
+        } else if (isPostSharedByUser) {
+          likedOrSharedBy = ' You shared';
+          likeOrShareIcon = 'fa-solid fa-retweet px-3';
+        } else if (isPostSharedByOtherUser) {
+          likedOrSharedBy = ` ${username} shared`;
+          likeOrShareIcon = 'fa-solid fa-retweet px-3';
+        } else if (!isPostSharedByOtherUser && isPostLikedByOtherUser) {
+          likedOrSharedBy = ` ${username} liked`;
+          likeOrShareIcon = 'fa-solid fa-heart px-3';
+        }
+
         return (
           <PostCard
             key={latestSharedPost.postId}
@@ -312,8 +334,8 @@ export default class Home extends React.Component {
             shareActive={sharedPosts.indexOf(latestSharedPost) === 0 ? sharedStatus : ''}
             likeBtn={this.handleLike}
             likeActive={likedStatus}
-            sharedBy={sharedPosts.indexOf(latestSharedPost) === 0 ? sharedBy : ''}
-            sharedByIcon={sharedPosts.indexOf(latestSharedPost) === 0 ? sharedByIcon : ''}
+            sharedBy={sharedPosts.indexOf(latestSharedPost) === 0 ? likedOrSharedBy : ''}
+            sharedByIcon={sharedPosts.indexOf(latestSharedPost) === 0 ? likeOrShareIcon : ''}
           />
         );
       });
