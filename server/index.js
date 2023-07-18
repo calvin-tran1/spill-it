@@ -380,7 +380,9 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."textContent",
                     "p"."image",
                     "p"."createdAt",
-                    "l"."likesId"
+                    "l"."likesId",
+                    "l"."userId" as "likedUserId",
+                    "l"."username" as "likedUsername"
     from            "posts" as "p"
     join            "likes" as "l" using ("postId")
     where           "l"."userId" = $1
@@ -559,6 +561,7 @@ app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."image",
                     "p"."createdAt",
                     "s"."userId" as "sharedUserId",
+                    "s"."username" as "sharedUsername",
                     "s"."sharesId",
                     "s"."sharedAt"
     from            "posts" as "p"

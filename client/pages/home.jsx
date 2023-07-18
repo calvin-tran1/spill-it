@@ -292,22 +292,35 @@ export default class Home extends React.Component {
 
         let likedOrSharedBy = '';
         let likeOrShareIcon = '';
+        let username = '';
         const userId = this.state.user.userId;
-        const { loggedInUserShares, shares, likes, username } = this.state;
+        const { loggedInUserShares, shares, likes } = this.state;
         const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostLikedByOtherUser = likes.some(likedPost => likedPost.postId === latestSharedPost.postId);
 
         if (isPostSharedByUser && isPostSharedByOtherUser && userId !== this.state.userId) {
+          const sharedPost = shares.find(sharedPost => sharedPost.postId === latestSharedPost.postId);
+          if (sharedPost) {
+            username = sharedPost.sharedUsername;
+          }
           likedOrSharedBy = ` You and ${username} shared`;
           likeOrShareIcon = 'fa-solid fa-retweet px-3';
         } else if (isPostSharedByUser) {
           likedOrSharedBy = ' You shared';
           likeOrShareIcon = 'fa-solid fa-retweet px-3';
         } else if (isPostSharedByOtherUser) {
+          const sharedPost = shares.find(sharedPost => sharedPost.postId === latestSharedPost.postId);
+          if (sharedPost) {
+            username = sharedPost.sharedUsername;
+          }
           likedOrSharedBy = ` ${username} shared`;
           likeOrShareIcon = 'fa-solid fa-retweet px-3';
         } else if (!isPostSharedByOtherUser && isPostLikedByOtherUser) {
+          const likedPost = likes.find(likedPost => likedPost.postId === latestSharedPost.postId);
+          if (likedPost) {
+            username = likedPost.likedUsername;
+          }
           likedOrSharedBy = ` ${username} liked`;
           likeOrShareIcon = 'fa-solid fa-heart px-3';
         }
