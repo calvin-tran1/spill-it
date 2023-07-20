@@ -40,7 +40,8 @@ export default class Profile extends React.Component {
       optionsMenu: false,
       deleteModal: false,
       unfollowModal: false,
-      route: parseRoute(window.location.hash)
+      route: parseRoute(window.location.hash),
+      forceUpdateKey: 0
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleHomeView = this.handleHomeView.bind(this);
@@ -397,6 +398,11 @@ export default class Profile extends React.Component {
 
     fetch(`/api/shares/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
       .then(res => res.json())
+      .then(() => {
+        this.setState(prevState => ({
+          forceUpdateKey: prevState.forceUpdateKey + 1
+        }));
+      })
       .catch(err => console.error(err));
   }
 
@@ -556,7 +562,7 @@ export default class Profile extends React.Component {
     }
 
     return (
-      <div className="container-fluid bg-primary-color">
+      <div className="container-fluid bg-primary-color" key={this.state.forceUpdateKey}>
         <div className={this.state.deleteModal ? 'delete-modal py-3' : 'd-none'}>
           <span className='confirm-delete-post'>Delete Post?</span>
           <button type="button" className="confirm-delete-btn d-block" onClick={this.handleDelete}>

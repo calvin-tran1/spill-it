@@ -31,7 +31,8 @@ export default class Home extends React.Component {
       loggedInUserShares: [],
       feed: [],
       deletePostId: null,
-      route: parseRoute(window.location.hash)
+      route: parseRoute(window.location.hash),
+      forceUpdateKey: 0
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleHomeView = this.handleHomeView.bind(this);
@@ -40,6 +41,7 @@ export default class Home extends React.Component {
     this.updatePosts = this.updatePosts.bind(this);
     this.handleLike = this.handleLike.bind(this);
     this.handleShare = this.handleShare.bind(this);
+    this.homeRef = React.createRef();
   }
 
   componentDidMount() {
@@ -254,6 +256,11 @@ export default class Home extends React.Component {
 
     fetch(`/api/shares/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
       .then(res => res.json())
+      .then(() => {
+        this.setState(prevState => ({
+          forceUpdateKey: prevState.forceUpdateKey + 1
+        }));
+      })
       .catch(err => console.error(err));
   }
 
@@ -357,7 +364,7 @@ export default class Home extends React.Component {
     }
 
     return (
-      <div className="container-fluid bg-primary-color">
+      <div className="container-fluid bg-primary-color" key={this.state.forceUpdateKey}>
         <ModalOverlay
           active={this.state.active ? 'modal-overlay bg-opacity-40' : 'd-none'}
           onClick={this.handleClick}
