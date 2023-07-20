@@ -428,8 +428,7 @@ export default class Profile extends React.Component {
 
         let sharedBy = '';
         let sharedByIcon = '';
-        const userId = this.state.user.userId;
-        const { loggedInUserShares, shares, username } = this.state;
+        const { loggedInUserShares, shares, username, userId } = this.state;
         const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
 

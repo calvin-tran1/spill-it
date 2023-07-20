@@ -28,8 +28,15 @@ export default class Searchbar extends React.Component {
         this.setState({ searchResults: e.target.value ? searchResult : [] }));
   }
 
-  handleKeyPress() {
-    window.history.replaceState({}, document.title, '/#' + `${this.state.searchResults[0].username}`);
+  handleKeyPress(e) {
+    e.preventDefault();
+
+    if (this.state.searchResults.length > 0) {
+      const username = this.state.searchResults[0].username;
+      const newUrl = `/#${username}`;
+
+      window.location.assign(newUrl);
+    }
   }
 
   render() {
