@@ -485,7 +485,9 @@ export default class Profile extends React.Component {
         );
       });
     } else {
-      posts = <p />;
+      posts = <p className="post-text-content text-center mt-3">
+        Write your first post!
+      </p>;
     }
 
     let likes;

@@ -360,7 +360,9 @@ export default class Home extends React.Component {
         );
       });
     } else {
-      posts = <p />;
+      posts = <p className="post-text-content text-center mt-3">
+        Oops, find some friends to populate your home page!
+      </p>;
     }
 
     return (
