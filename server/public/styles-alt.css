@@ -747,10 +747,15 @@ a:visited {
   max-width: 70px !important;
 }
 
-.post-displayname {
+.post-displayname:link,
+.post-displayname:hover,
+.post-displayname:active,
+.post-displayname:visited {
   font-size: 15px;
   font-weight: 500;
   color: white;
+  text-decoration: none;
+  background-color: transparent;
 }
 
 .post-username {

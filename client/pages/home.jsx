@@ -300,13 +300,12 @@ export default class Home extends React.Component {
         let likedOrSharedBy = '';
         let likeOrShareIcon = '';
         let username = '';
-        const userId = this.state.user.userId;
         const { loggedInUserShares, shares, likes } = this.state;
         const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostLikedByOtherUser = likes.some(likedPost => likedPost.postId === latestSharedPost.postId);
 
-        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== this.state.userId) {
+        if (isPostSharedByUser && isPostSharedByOtherUser) {
           const sharedPost = shares.find(sharedPost => sharedPost.postId === latestSharedPost.postId);
           if (sharedPost) {
             username = sharedPost.sharedUsername;
@@ -339,6 +338,7 @@ export default class Home extends React.Component {
             postId={latestSharedPost.postId}
             avatarImg={latestSharedPost.avatar}
             avatarName={latestSharedPost.username}
+            profileLink={`http://localhost:3000/#${latestSharedPost.username}`}
             displayName={latestSharedPost.displayName}
             username={latestSharedPost.username}
             date={dateFormat(latestSharedPost.createdAt, 'mmm d, yyyy')}

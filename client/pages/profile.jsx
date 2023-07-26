@@ -434,11 +434,11 @@ export default class Profile extends React.Component {
 
         let sharedBy = '';
         let sharedByIcon = '';
-        const { loggedInUserShares, shares, username, userId } = this.state;
+        const { loggedInUserShares, shares, username, userId, loggedInUserId } = this.state;
         const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
 
-        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== this.state.userId) {
+        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== loggedInUserId) {
           sharedBy = ` You and ${username} shared`;
           sharedByIcon = 'fa-solid fa-retweet px-3';
         } else if (isPostSharedByUser) {
@@ -463,6 +463,7 @@ export default class Profile extends React.Component {
             postId={latestSharedPost.postId}
             avatarImg={latestSharedPost.avatar}
             avatarName={latestSharedPost.username}
+            profileLink={`http://localhost:3000/#${latestSharedPost.username}`}
             displayName={latestSharedPost.displayName}
             username={latestSharedPost.username}
             date={dateFormat(latestSharedPost.createdAt, 'mmm d, yyyy')}
@@ -488,7 +489,8 @@ export default class Profile extends React.Component {
     }
 
     let likes;
-    if (this.state.likesView === true) {
+    const { likesView } = this.state;
+    if (likesView === true) {
       likes = this.state.likes.map(likedPost => {
         let postOptions = false;
         if (this.state.deletePostId === likedPost.postId) {
@@ -516,6 +518,7 @@ export default class Profile extends React.Component {
             postId={likedPost.postId}
             avatarImg={likedPost.avatar}
             avatarName={likedPost.username}
+            profileLink={`http://localhost:3000/#${likedPost.username}`}
             displayName={likedPost.displayName}
             username={likedPost.username}
             date={dateFormat(likedPost.createdAt, 'mmm d, yyyy')}

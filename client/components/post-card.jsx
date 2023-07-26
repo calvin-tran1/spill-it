@@ -23,9 +23,9 @@ export default class PostCard extends React.Component {
           <div className="col mx-1 my-0 p-0">
             <div className="row m-0 p-0 d-flex justify-content-between text-nowrap">
               <div className="col d-flex m-0 p-0">
-                <p className="post-displayname my-0 py-0">
+                <a className="post-displayname my-0 py-0" href={this.props.profileLink}>
                   {this.props.displayName}
-                </p>
+                </a>
                 <p className="post-username my-0 py-0 ps-1 pe-0">
                   @{this.props.username}
                 </p>
