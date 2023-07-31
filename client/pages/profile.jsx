@@ -17,7 +17,7 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      user: '',
       loggedInUserId: '',
       userId: '',
       username: '',
@@ -485,8 +485,16 @@ export default class Profile extends React.Component {
         );
       });
     } else {
+      let noPost;
+      const { loggedInUserId, userId } = this.state;
+      if (loggedInUserId === userId) {
+        noPost = 'Create your first post!';
+      } else {
+        noPost = 'This user has not posted yet';
+      }
+
       posts = <p className="post-text-content text-center mt-3">
-        Create your first post!
+        {noPost}
       </p>;
     }
 

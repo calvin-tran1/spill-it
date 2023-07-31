@@ -12,7 +12,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      user: '',
       username: '',
       users: [],
       isAuthorizing: true,
@@ -48,7 +48,7 @@ export default class App extends React.Component {
 
   handleSignOut() {
     window.localStorage.removeItem('jwt');
-    this.setState({ user: null });
+    this.setState({ user: '' });
   }
 
   renderPage() {
