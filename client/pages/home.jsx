@@ -388,7 +388,7 @@ export default class Home extends React.Component {
             />
           </div>
           <div className="main-content full-height border-left border-right bg-primary-color p-0">
-            <div className="row page-head m-0 px-3">
+            <div className="row page-head-home m-0 px-3">
               <div className="col my-2 mx-0 p-0">
                 <span className="page-head-title m-0 p-0">Home</span>
               </div>

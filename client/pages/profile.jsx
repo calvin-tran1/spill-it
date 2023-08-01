@@ -88,6 +88,8 @@ export default class Profile extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { user, following, loggedInUserId, userId, likes, shares, username } = this.state;
+
     const token = window.localStorage.getItem('jwt');
     const req = {
       headers: {
@@ -95,8 +97,8 @@ export default class Profile extends React.Component {
       }
     };
 
-    if (prevState.user !== this.state.user || prevState.following !== this.state.following) {
-      fetch(`/api/user/follow/${this.state.userId}`, req)
+    if (prevState.user !== user || prevState.following !== following) {
+      fetch(`/api/user/follow/${userId}`, req)
         .then(res => res.json())
         .then(following => this.setState({
           following
@@ -111,7 +113,7 @@ export default class Profile extends React.Component {
       });
     }
 
-    if (prevState.route.path !== this.state.route.path || this.state.username !== this.state.route.path || prevState.username !== this.state.username) {
+    if (prevState.route.path !== this.state.route.path || username !== this.state.route.path || prevState.username !== username) {
       fetch(`/api/user/${this.state.route.path}`)
         .then(res => res.json())
         .then(user => this.setState({
@@ -123,21 +125,21 @@ export default class Profile extends React.Component {
         }));
     }
 
-    if (prevState.username !== this.state.username) {
-      fetch(`/api/user/likes/${this.state.userId}`, req)
+    if (prevState.username !== username) {
+      fetch(`/api/user/likes/${userId}`, req)
         .then(res => res.json())
         .then(likes => {
           this.setState({ likes });
         });
 
-      fetch(`/api/user/shares/${this.state.userId}`, req)
+      fetch(`/api/user/shares/${userId}`, req)
         .then(res => res.json())
         .then(shares => {
           this.setState({ shares });
         });
 
-      const reqPosts = fetch(`/api/user/posts/${this.state.userId}`, req);
-      const reqShares = fetch(`/api/user/shares/${this.state.userId}`, req);
+      const reqPosts = fetch(`/api/user/posts/${userId}`, req);
+      const reqShares = fetch(`/api/user/shares/${userId}`, req);
 
       Promise.all([reqPosts, reqShares])
         .then(responses => Promise.all(responses.map(res => res.json())))
@@ -155,33 +157,33 @@ export default class Profile extends React.Component {
         });
     }
 
-    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== this.state.loggedInUserId) {
-      fetch(`/api/user/likes/${this.state.loggedInUserId}`, req)
+    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== loggedInUserId) {
+      fetch(`/api/user/likes/${loggedInUserId}`, req)
         .then(res => res.json())
         .then(loggedInUserLikes => {
           this.setState({ loggedInUserLikes });
         });
     }
 
-    if (prevState.likes !== this.state.likes) {
-      fetch(`/api/user/likes/${this.state.userId}`, req)
+    if (prevState.likes !== likes) {
+      fetch(`/api/user/likes/${userId}`, req)
         .then(res => res.json())
         .then(likes => {
           this.setState({ likes });
         });
     }
 
-    if (prevState.loggedInUserShares !== this.state.loggedInUserShares || prevState.loggedInUserId !== this.state.loggedInUserId) {
-      fetch(`/api/user/shares/${this.state.loggedInUserId}`, req)
+    if (prevState.loggedInUserShares !== this.state.loggedInUserShares || prevState.loggedInUserId !== loggedInUserId) {
+      fetch(`/api/user/shares/${loggedInUserId}`, req)
         .then(res => res.json())
         .then(loggedInUserShares => {
           this.setState({ loggedInUserShares });
         });
     }
 
-    if (prevState.shares !== this.state.shares) {
-      const reqPosts = fetch(`/api/user/posts/${this.state.userId}`, req);
-      const reqShares = fetch(`/api/user/shares/${this.state.userId}`, req);
+    if (prevState.shares !== shares) {
+      const reqPosts = fetch(`/api/user/posts/${userId}`, req);
+      const reqShares = fetch(`/api/user/shares/${userId}`, req);
 
       Promise.all([reqPosts, reqShares])
         .then(responses => Promise.all(responses.map(res => res.json())))
@@ -198,7 +200,7 @@ export default class Profile extends React.Component {
           this.setState({ postsAndShares });
         });
 
-      fetch(`/api/user/shares/${this.state.userId}`, req)
+      fetch(`/api/user/shares/${userId}`, req)
         .then(res => res.json())
         .then(shares => {
           this.setState({ shares });
