@@ -29,6 +29,7 @@ export default class Home extends React.Component {
       loggedInUserLikes: [],
       loggedInUserShares: [],
       feed: [],
+      postCardUserData: [],
       deletePostId: null,
       route: parseRoute(window.location.hash),
       forceUpdateKey: 0
@@ -164,6 +165,43 @@ export default class Home extends React.Component {
       this.setState({ isFetchPerformed: true });
     }
 
+    if (prevState.feed.length !== this.state.feed.length) {
+      const token = window.localStorage.getItem('jwt');
+      const req = {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': token
+        }
+      };
+
+      const userIdSet = new Set();
+      const postCardUserIds = this.state.feed.map(post => {
+        if (!userIdSet.has(post.userId)) {
+          userIdSet.add(post.userId);
+          return post.userId;
+        }
+        return null;
+      }).filter(userId => userId !== null);
+
+      Promise.all(
+        postCardUserIds.map(userId => {
+          return fetch(`/api/user/data/${userId}`, req)
+            .then(res => res.json())
+            .then(postCardUserData => {
+              this.setState(prevState => ({
+                postCardUserData: {
+                  ...prevState.postCardUserData,
+                  [userId]: postCardUserData
+                }
+              }));
+            });
+        })
+      ).catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+
+    }
+
   }
 
   handleClick() {
@@ -281,6 +319,8 @@ export default class Home extends React.Component {
         if (this.state.deletePostId === latestSharedPost.postId) {
           postOptions = true;
         }
+
+        // map over all posts within the feed and find the matching userId within postCardUserData to get the avatar
 
         let sharedStatus;
         if (this.state.loggedInUserShares.find(sharedPost => sharedPost.postId === latestSharedPost.postId)) {
