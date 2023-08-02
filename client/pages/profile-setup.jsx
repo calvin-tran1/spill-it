@@ -136,7 +136,7 @@ export default class ProfileSetup extends React.Component {
                     type="text"
                     className="input-bio"
                     placeholder={this.state.bio === null || this.state.bio === '' ? 'Your bio' : this.state.bio}
-                    value={this.state.bio === '' ? '' : this.state.bio}
+                    value={this.state.bio === null || this.state.bio === '' ? '' : this.state.bio}
                     name="bio"
                     onChange={this.handleChange}
                   />

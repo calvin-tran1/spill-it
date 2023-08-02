@@ -18,7 +18,6 @@ export default class Home extends React.Component {
     this.state = {
       user: '',
       loggedInUserId: '',
-      userId: '',
       username: '',
       active: false,
       post: false,

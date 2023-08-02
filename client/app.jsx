@@ -40,6 +40,16 @@ export default class App extends React.Component {
       });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.route.path === 'profile-setup') {
+      fetch('/api/users')
+        .then(res => res.json())
+        .then(username => {
+          this.setState({ users: username });
+        });
+    }
+  }
+
   handleSignIn(result) {
     const { user, token } = result;
     window.localStorage.setItem('jwt', token);
