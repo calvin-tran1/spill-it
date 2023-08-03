@@ -35,6 +35,7 @@ export default class Profile extends React.Component {
       likes: [],
       shares: [],
       postsAndShares: [],
+      postCardUserData: [],
       likesView: false,
       deletePostId: null,
       optionsMenu: false,
@@ -204,6 +205,32 @@ export default class Profile extends React.Component {
         .then(res => res.json())
         .then(shares => {
           this.setState({ shares });
+        });
+    }
+
+    if (prevState.postsAndShares !== this.state.postsAndShares) {
+      const userIdSet = new Set();
+      const postCardUserIds = this.state.postsAndShares.map(post => {
+        if (!userIdSet.has(post.userId)) {
+          userIdSet.add(post.userId);
+          return post.userId;
+        }
+        return null;
+      }).filter(userId => userId !== null);
+
+      Promise.all(
+        postCardUserIds.map(userId => {
+          return fetch(`/api/user/data/${userId}`, req)
+            .then(res => res.json());
+        })
+      )
+        .then(postCardUserDataArray => {
+          this.setState({
+            postCardUserData: postCardUserDataArray
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
         });
     }
   }
@@ -422,6 +449,9 @@ export default class Profile extends React.Component {
           new Date(curr.createdAt) > new Date(prev.createdAt) ? curr : prev
         ));
 
+        const user = this.state.postCardUserData.find(userData => userData.userId === latestSharedPost.userId);
+        const avatar = user ? user.image : null;
+
         let postOptions = false;
         if (this.state.deletePostId === latestSharedPost.postId) {
           postOptions = true;
@@ -463,7 +493,7 @@ export default class Profile extends React.Component {
             key={latestSharedPost.postId}
             postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={latestSharedPost.postId}
-            avatarImg={latestSharedPost.avatar}
+            avatarImg={avatar}
             avatarName={latestSharedPost.username}
             profileLink={`http://localhost:3000/#${latestSharedPost.username}`}
             displayName={latestSharedPost.displayName}
@@ -509,6 +539,9 @@ export default class Profile extends React.Component {
           postOptions = true;
         }
 
+        const user = this.state.postCardUserData.find(userData => userData.userId === likedPost.userId);
+        const avatar = user ? user.image : null;
+
         let sharedStatus;
         if (this.state.shares.find(sharedPost => sharedPost.postId === likedPost.postId)) {
           sharedStatus = 'fa-solid fa-retweet share-active';
@@ -528,7 +561,7 @@ export default class Profile extends React.Component {
             key={likedPost.postId}
             postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={likedPost.postId}
-            avatarImg={likedPost.avatar}
+            avatarImg={avatar}
             avatarName={likedPost.username}
             profileLink={`http://localhost:3000/#${likedPost.username}`}
             displayName={likedPost.displayName}

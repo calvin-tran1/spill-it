@@ -313,8 +313,8 @@ export default class Home extends React.Component {
           new Date(curr.createdAt) > new Date(prev.createdAt) ? curr : prev
         ));
 
-        const userId = this.state.postCardUserData.find(userData => userData.userId === latestSharedPost.userId);
-        const avatar = userId ? userId.image : null;
+        const user = this.state.postCardUserData.find(userData => userData.userId === latestSharedPost.userId);
+        const avatar = user ? user.image : null;
 
         let postOptions = false;
         if (this.state.deletePostId === latestSharedPost.postId) {
