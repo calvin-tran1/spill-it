@@ -186,19 +186,17 @@ export default class Home extends React.Component {
       Promise.all(
         postCardUserIds.map(userId => {
           return fetch(`/api/user/data/${userId}`, req)
-            .then(res => res.json())
-            .then(postCardUserData => {
-              this.setState(prevState => ({
-                postCardUserData: {
-                  ...prevState.postCardUserData,
-                  [userId]: postCardUserData
-                }
-              }));
-            });
+            .then(res => res.json());
         })
-      ).catch(error => {
-        console.error('Error fetching user data:', error);
-      });
+      )
+        .then(postCardUserDataArray => {
+          this.setState({
+            postCardUserData: postCardUserDataArray
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
 
     }
 
@@ -315,12 +313,13 @@ export default class Home extends React.Component {
           new Date(curr.createdAt) > new Date(prev.createdAt) ? curr : prev
         ));
 
+        const userId = this.state.postCardUserData.find(userData => userData.userId === latestSharedPost.userId);
+        const avatar = userId ? userId.image : null;
+
         let postOptions = false;
         if (this.state.deletePostId === latestSharedPost.postId) {
           postOptions = true;
         }
-
-        // map over all posts within the feed and find the matching userId within postCardUserData to get the avatar
 
         let sharedStatus;
         if (this.state.loggedInUserShares.find(sharedPost => sharedPost.postId === latestSharedPost.postId)) {
@@ -375,7 +374,7 @@ export default class Home extends React.Component {
             key={latestSharedPost.postId}
             postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={latestSharedPost.postId}
-            avatarImg={latestSharedPost.avatar}
+            avatarImg={avatar}
             avatarName={latestSharedPost.username}
             profileLink={`http://localhost:3000/#${latestSharedPost.username}`}
             displayName={latestSharedPost.displayName}
