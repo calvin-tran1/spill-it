@@ -210,7 +210,8 @@ export default class Profile extends React.Component {
 
     if (prevState.postsAndShares !== this.state.postsAndShares) {
       const userIdSet = new Set();
-      const postCardUserIds = this.state.postsAndShares.map(post => {
+      const postsSharesLikes = this.state.postsAndShares.concat(this.state.loggedInUserLikes);
+      const postCardUserIds = postsSharesLikes.map(post => {
         if (!userIdSet.has(post.userId)) {
           userIdSet.add(post.userId);
           return post.userId;
