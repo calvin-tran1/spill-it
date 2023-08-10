@@ -315,7 +315,7 @@ app.delete('/api/posts/:postId', (req, res, next) => {
 });
 
 app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, username } = req.user;
   const postId = Number(req.params.postId);
 
   if (!userId) {
@@ -326,11 +326,11 @@ app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
   }
 
   const sql = `
-    insert into "likes" ("postId", "userId")
-    values ($1, $2)
+    insert into "likes" ("postId", "userId", "username")
+    values ($1, $2, $3)
     returning *
   `;
-  const params = [postId, userId];
+  const params = [postId, userId, username];
 
   db.query(sql, params)
     .then(result => {
@@ -375,12 +375,15 @@ app.get('/api/user/likes/:profileId', uploadsMiddleware, (req, res, next) => {
   const sql = `
     select distinct "p"."postId",
                     "p"."userId",
+                    "p"."username",
                     "p"."displayName",
                     "p"."avatar",
                     "p"."textContent",
                     "p"."image",
                     "p"."createdAt",
-                    "l"."likesId"
+                    "l"."likesId",
+                    "l"."userId" as "likedUserId",
+                    "l"."username" as "likedUsername"
     from            "posts" as "p"
     join            "likes" as "l" using ("postId")
     where           "l"."userId" = $1
@@ -492,7 +495,7 @@ app.delete('/api/follow/:profileId', (req, res, next) => {
 });
 
 app.post('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
-  const { userId } = req.user;
+  const { userId, username } = req.user;
   const postId = Number(req.params.postId);
 
   if (!userId) {
@@ -503,11 +506,11 @@ app.post('/api/shares/:postId', uploadsMiddleware, (req, res, next) => {
   }
 
   const sql = `
-    insert into "shares" ("postId", "userId")
-    values ($1, $2)
+    insert into "shares" ("postId", "userId", "username")
+    values ($1, $2, $3)
     returning *
   `;
-  const params = [postId, userId];
+  const params = [postId, userId, username];
 
   db.query(sql, params)
     .then(result => {
@@ -558,6 +561,8 @@ app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
                     "p"."textContent",
                     "p"."image",
                     "p"."createdAt",
+                    "s"."userId" as "sharedUserId",
+                    "s"."username" as "sharedUsername",
                     "s"."sharesId",
                     "s"."sharedAt"
     from            "posts" as "p"
@@ -572,6 +577,37 @@ app.get('/api/user/shares/:profileId', uploadsMiddleware, (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/user/data/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+
+  if (!userId) {
+    throw new ClientError(400, 'user not found');
+  }
+  if (!Number.isInteger(userId) || userId <= 0) {
+    throw new ClientError(400, 'userId must be a postiive integer');
+  }
+
+  const sql = `
+    select "userId",
+           "username",
+           "displayName",
+           "image",
+           "bio"
+      from "users"
+     where "userId" = $1
+  `;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, 'could not find user');
+      }
+      res.status(200).json(result.rows[0]);
     })
     .catch(err => next(err));
 });

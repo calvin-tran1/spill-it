@@ -17,7 +17,7 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      user: '',
       loggedInUserId: '',
       userId: '',
       username: '',
@@ -35,12 +35,14 @@ export default class Profile extends React.Component {
       likes: [],
       shares: [],
       postsAndShares: [],
+      postCardUserData: [],
       likesView: false,
       deletePostId: null,
       optionsMenu: false,
       deleteModal: false,
       unfollowModal: false,
-      route: parseRoute(window.location.hash)
+      route: parseRoute(window.location.hash),
+      forceUpdateKey: 0
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleHomeView = this.handleHomeView.bind(this);
@@ -87,6 +89,8 @@ export default class Profile extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { user, following, loggedInUserId, userId, likes, shares, username } = this.state;
+
     const token = window.localStorage.getItem('jwt');
     const req = {
       headers: {
@@ -94,8 +98,8 @@ export default class Profile extends React.Component {
       }
     };
 
-    if (prevState.user !== this.state.user || prevState.following !== this.state.following) {
-      fetch(`/api/user/follow/${this.state.userId}`, req)
+    if (prevState.user !== user || prevState.following !== following) {
+      fetch(`/api/user/follow/${userId}`, req)
         .then(res => res.json())
         .then(following => this.setState({
           following
@@ -110,7 +114,7 @@ export default class Profile extends React.Component {
       });
     }
 
-    if (prevState.route.path !== this.state.route.path || this.state.username !== this.state.route.path || prevState.username !== this.state.username) {
+    if (prevState.route.path !== this.state.route.path || username !== this.state.route.path || prevState.username !== username) {
       fetch(`/api/user/${this.state.route.path}`)
         .then(res => res.json())
         .then(user => this.setState({
@@ -122,21 +126,21 @@ export default class Profile extends React.Component {
         }));
     }
 
-    if (prevState.username !== this.state.username) {
-      fetch(`/api/user/likes/${this.state.userId}`, req)
+    if (prevState.username !== username) {
+      fetch(`/api/user/likes/${userId}`, req)
         .then(res => res.json())
         .then(likes => {
           this.setState({ likes });
         });
 
-      fetch(`/api/user/shares/${this.state.userId}`, req)
+      fetch(`/api/user/shares/${userId}`, req)
         .then(res => res.json())
         .then(shares => {
           this.setState({ shares });
         });
 
-      const reqPosts = fetch(`/api/user/posts/${this.state.userId}`, req);
-      const reqShares = fetch(`/api/user/shares/${this.state.userId}`, req);
+      const reqPosts = fetch(`/api/user/posts/${userId}`, req);
+      const reqShares = fetch(`/api/user/shares/${userId}`, req);
 
       Promise.all([reqPosts, reqShares])
         .then(responses => Promise.all(responses.map(res => res.json())))
@@ -154,33 +158,33 @@ export default class Profile extends React.Component {
         });
     }
 
-    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== this.state.loggedInUserId) {
-      fetch(`/api/user/likes/${this.state.loggedInUserId}`, req)
+    if (prevState.loggedInUserLikes !== this.state.loggedInUserLikes || prevState.loggedInUserId !== loggedInUserId) {
+      fetch(`/api/user/likes/${loggedInUserId}`, req)
         .then(res => res.json())
         .then(loggedInUserLikes => {
           this.setState({ loggedInUserLikes });
         });
     }
 
-    if (prevState.likes !== this.state.likes) {
-      fetch(`/api/user/likes/${this.state.userId}`, req)
+    if (prevState.likes !== likes) {
+      fetch(`/api/user/likes/${userId}`, req)
         .then(res => res.json())
         .then(likes => {
           this.setState({ likes });
         });
     }
 
-    if (prevState.loggedInUserShares !== this.state.loggedInUserShares || prevState.loggedInUserId !== this.state.loggedInUserId) {
-      fetch(`/api/user/shares/${this.state.loggedInUserId}`, req)
+    if (prevState.loggedInUserShares !== this.state.loggedInUserShares || prevState.loggedInUserId !== loggedInUserId) {
+      fetch(`/api/user/shares/${loggedInUserId}`, req)
         .then(res => res.json())
         .then(loggedInUserShares => {
           this.setState({ loggedInUserShares });
         });
     }
 
-    if (prevState.shares !== this.state.shares) {
-      const reqPosts = fetch(`/api/user/posts/${this.state.userId}`, req);
-      const reqShares = fetch(`/api/user/shares/${this.state.userId}`, req);
+    if (prevState.shares !== shares) {
+      const reqPosts = fetch(`/api/user/posts/${userId}`, req);
+      const reqShares = fetch(`/api/user/shares/${userId}`, req);
 
       Promise.all([reqPosts, reqShares])
         .then(responses => Promise.all(responses.map(res => res.json())))
@@ -197,10 +201,37 @@ export default class Profile extends React.Component {
           this.setState({ postsAndShares });
         });
 
-      fetch(`/api/user/shares/${this.state.userId}`, req)
+      fetch(`/api/user/shares/${userId}`, req)
         .then(res => res.json())
         .then(shares => {
           this.setState({ shares });
+        });
+    }
+
+    if (prevState.postsAndShares !== this.state.postsAndShares) {
+      const userIdSet = new Set();
+      const postsSharesLikes = this.state.postsAndShares.concat(this.state.loggedInUserLikes);
+      const postCardUserIds = postsSharesLikes.map(post => {
+        if (!userIdSet.has(post.userId)) {
+          userIdSet.add(post.userId);
+          return post.userId;
+        }
+        return null;
+      }).filter(userId => userId !== null);
+
+      Promise.all(
+        postCardUserIds.map(userId => {
+          return fetch(`/api/user/data/${userId}`, req)
+            .then(res => res.json());
+        })
+      )
+        .then(postCardUserDataArray => {
+          this.setState({
+            postCardUserData: postCardUserDataArray
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
         });
     }
   }
@@ -397,6 +428,11 @@ export default class Profile extends React.Component {
 
     fetch(`/api/shares/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
       .then(res => res.json())
+      .then(() => {
+        this.setState(prevState => ({
+          forceUpdateKey: prevState.forceUpdateKey + 1
+        }));
+      })
       .catch(err => console.error(err));
   }
 
@@ -414,6 +450,9 @@ export default class Profile extends React.Component {
           new Date(curr.createdAt) > new Date(prev.createdAt) ? curr : prev
         ));
 
+        const user = this.state.postCardUserData.find(userData => userData.userId === latestSharedPost.userId);
+        const avatar = user ? user.image : null;
+
         let postOptions = false;
         if (this.state.deletePostId === latestSharedPost.postId) {
           postOptions = true;
@@ -428,12 +467,11 @@ export default class Profile extends React.Component {
 
         let sharedBy = '';
         let sharedByIcon = '';
-        const userId = this.state.user.userId;
-        const { loggedInUserShares, shares, username } = this.state;
+        const { loggedInUserShares, shares, username, userId, loggedInUserId } = this.state;
         const isPostSharedByUser = loggedInUserShares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
         const isPostSharedByOtherUser = shares.some(sharedPost => sharedPost.postId === latestSharedPost.postId);
 
-        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== this.state.userId) {
+        if (isPostSharedByUser && isPostSharedByOtherUser && userId !== loggedInUserId) {
           sharedBy = ` You and ${username} shared`;
           sharedByIcon = 'fa-solid fa-retweet px-3';
         } else if (isPostSharedByUser) {
@@ -456,8 +494,9 @@ export default class Profile extends React.Component {
             key={latestSharedPost.postId}
             postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={latestSharedPost.postId}
-            avatarImg={latestSharedPost.avatar}
+            avatarImg={avatar}
             avatarName={latestSharedPost.username}
+            profileLink={`http://localhost:3000/#${latestSharedPost.username}`}
             displayName={latestSharedPost.displayName}
             username={latestSharedPost.username}
             date={dateFormat(latestSharedPost.createdAt, 'mmm d, yyyy')}
@@ -479,16 +518,30 @@ export default class Profile extends React.Component {
         );
       });
     } else {
-      posts = <p />;
+      let noPost;
+      const { loggedInUserId, userId } = this.state;
+      if (loggedInUserId === userId) {
+        noPost = 'Create your first post!';
+      } else {
+        noPost = 'This user has not posted yet';
+      }
+
+      posts = <p className="post-text-content text-center mt-3">
+        {noPost}
+      </p>;
     }
 
     let likes;
-    if (this.state.likesView === true) {
+    const { likesView } = this.state;
+    if (likesView === true) {
       likes = this.state.likes.map(likedPost => {
         let postOptions = false;
         if (this.state.deletePostId === likedPost.postId) {
           postOptions = true;
         }
+
+        const user = this.state.postCardUserData.find(userData => userData.userId === likedPost.userId);
+        const avatar = user ? user.image : null;
 
         let sharedStatus;
         if (this.state.shares.find(sharedPost => sharedPost.postId === likedPost.postId)) {
@@ -509,8 +562,9 @@ export default class Profile extends React.Component {
             key={likedPost.postId}
             postsOrLikesView={this.likesView ? 'd-none' : 'visible'}
             postId={likedPost.postId}
-            avatarImg={likedPost.avatar}
+            avatarImg={avatar}
             avatarName={likedPost.username}
+            profileLink={`http://localhost:3000/#${likedPost.username}`}
             displayName={likedPost.displayName}
             username={likedPost.username}
             date={dateFormat(likedPost.createdAt, 'mmm d, yyyy')}
@@ -557,7 +611,7 @@ export default class Profile extends React.Component {
     }
 
     return (
-      <div className="container-fluid bg-primary-color">
+      <div className="container-fluid bg-primary-color" key={this.state.forceUpdateKey}>
         <div className={this.state.deleteModal ? 'delete-modal py-3' : 'd-none'}>
           <span className='confirm-delete-post'>Delete Post?</span>
           <button type="button" className="confirm-delete-btn d-block" onClick={this.handleDelete}>

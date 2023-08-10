@@ -14,6 +14,7 @@ export default class MobileTopNav extends React.Component {
       bio: '',
       search: false
     };
+    this.handleBack = this.handleBack.bind(this);
   }
 
   componentDidMount() {
@@ -56,6 +57,10 @@ export default class MobileTopNav extends React.Component {
     }
   }
 
+  handleBack() {
+    window.history.back();
+  }
+
   renderNavComponent() {
     const { route } = this.context;
     const { mobileSearch } = this.props;
@@ -82,10 +87,8 @@ export default class MobileTopNav extends React.Component {
     }
 
     if (route.path === `${this.state.username}` && mobileSearch === false) {
-      return <button type="button" className="mobile-back-btn">
-              <a href="#home">
+      return <button type="button" className="mobile-back-btn" onClick={this.handleBack}>
                 <i className="fa-solid fa-arrow-left" />
-              </a>
              </button>;
     }
   }

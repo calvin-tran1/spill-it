@@ -23,9 +23,9 @@ export default class PostCard extends React.Component {
           <div className="col mx-1 my-0 p-0">
             <div className="row m-0 p-0 d-flex justify-content-between text-nowrap">
               <div className="col d-flex m-0 p-0">
-                <p className="post-displayname my-0 py-0">
+                <a className="post-displayname my-0 py-0" href={this.props.profileLink}>
                   {this.props.displayName}
-                </p>
+                </a>
                 <p className="post-username my-0 py-0 ps-1 pe-0">
                   @{this.props.username}
                 </p>
@@ -59,12 +59,12 @@ export default class PostCard extends React.Component {
             </div>
             <div className="row m-0 p-0">
               <div className="col mx-0 mt-0 mb-1 p-0">
-                <button className="post-card-btn m0-p0" onClick={this.props.shareBtn}>
+                <button className="post-card-btn m-0 p-0" onClick={this.props.shareBtn}>
                   <i className={this.props.shareActive} data-post-id={this.props.postId} />
                 </button>
               </div>
-              <div className="col d-flex justify-content-end mx-0 mt-0 mb-1 py-0 me-2">
-                <button className="post-card-btn m0-p0" onClick={this.props.likeBtn}>
+              <div className="col d-flex justify-content-end mx-0 mt-0 mb-1 py-0">
+                <button className="post-card-btn" onClick={this.props.likeBtn}>
                   <i className={this.props.likeActive} data-post-id={this.props.postId} />
                 </button>
               </div>

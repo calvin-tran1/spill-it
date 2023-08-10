@@ -12,7 +12,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      user: '',
       username: '',
       users: [],
       isAuthorizing: true,
@@ -40,6 +40,16 @@ export default class App extends React.Component {
       });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.route.path === 'profile-setup') {
+      fetch('/api/users')
+        .then(res => res.json())
+        .then(username => {
+          this.setState({ users: username });
+        });
+    }
+  }
+
   handleSignIn(result) {
     const { user, token } = result;
     window.localStorage.setItem('jwt', token);
@@ -48,7 +58,7 @@ export default class App extends React.Component {
 
   handleSignOut() {
     window.localStorage.removeItem('jwt');
-    this.setState({ user: null });
+    this.setState({ user: '' });
   }
 
   renderPage() {

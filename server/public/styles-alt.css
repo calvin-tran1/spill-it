@@ -747,10 +747,15 @@ a:visited {
   max-width: 70px !important;
 }
 
-.post-displayname {
+.post-displayname:link,
+.post-displayname:hover,
+.post-displayname:active,
+.post-displayname:visited {
   font-size: 15px;
   font-weight: 500;
   color: white;
+  text-decoration: none;
+  background-color: transparent;
 }
 
 .post-username {
@@ -769,6 +774,13 @@ a:visited {
   position: sticky;
   top: 0;
   backdrop-filter: blur(1.5em);
+}
+
+.page-head-home {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(1.5em);
+  border-bottom: solid black 0.08em;
 }
 
 .page-head-title {

@@ -78,7 +78,7 @@ export default class ProfileSetup extends React.Component {
     fetch(path, req)
       .then(res => res.json())
       .then(() => {
-        this.fileInputRef.current.value = null;
+        this.fileInputRef.current.value = '';
         window.location.hash = 'home';
       })
       .catch(err => console.error(err));
@@ -126,7 +126,7 @@ export default class ProfileSetup extends React.Component {
                     type="text"
                     className="input-display-name my-3"
                     placeholder="Display Name"
-                    value={!this.state.displayName ? null : this.state.displayName}
+                    value={!this.state.displayName ? '' : this.state.displayName}
                     name="displayName"
                     onChange={this.handleChange}
                   />
@@ -136,7 +136,7 @@ export default class ProfileSetup extends React.Component {
                     type="text"
                     className="input-bio"
                     placeholder={this.state.bio === null || this.state.bio === '' ? 'Your bio' : this.state.bio}
-                    value={this.state.bio === '' ? null : this.state.bio}
+                    value={this.state.bio === null || this.state.bio === '' ? '' : this.state.bio}
                     name="bio"
                     onChange={this.handleChange}
                   />
