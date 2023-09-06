@@ -31,6 +31,7 @@ CREATE TABLE "public"."posts" (
 CREATE TABLE "public"."likes" (
     "likesId" serial NOT NULL,
     "userId" integer NOT NULL,
+    "username" text NOT NULL,
     "postId" integer default null,
     CONSTRAINT "likes_pk" PRIMARY KEY ("likesId")
 ) WITH (
@@ -46,6 +47,7 @@ CREATE TABLE "public"."following" (
 CREATE TABLE "public"."shares" (
 	"sharesId" serial NOT NULL,
 	"userId" integer NOT NULL,
+  "username" text NOT NULL,
 	"postId" integer NOT NULL,
   "sharedAt" timestamptz NOT NULL default now(),
 	CONSTRAINT "shares_pk" PRIMARY KEY ("sharesId")
