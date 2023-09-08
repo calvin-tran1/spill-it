@@ -496,7 +496,7 @@ export default class Profile extends React.Component {
             postId={latestSharedPost.postId}
             avatarImg={avatar}
             avatarName={latestSharedPost.username}
-            profileLink={`${process.env.URL}/#${latestSharedPost.username}`}
+            profileLink={`spillit.xyz/#${latestSharedPost.username}`}
             displayName={latestSharedPost.displayName}
             username={latestSharedPost.username}
             date={dateFormat(latestSharedPost.createdAt, 'mmm d, yyyy')}
