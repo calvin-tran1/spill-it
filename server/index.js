@@ -293,7 +293,7 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
 
 app.delete('/api/posts/:postId', (req, res, next) => {
   const { userId } = req.user;
-  const postId = Number(req.body.postId);
+  const postId = Number(req.params.postId);
 
   if (!Number.isInteger(postId) || postId <= 0) {
     throw new ClientError(400, 'postId must be a positive integer');
