@@ -44,9 +44,9 @@ export default class Searchbar extends React.Component {
     if (this.state.searchResults !== 0) {
       const searchResults = this.state.searchResults.slice(0, 8);
       results = searchResults.map(result => {
-        const profileLink = `spillit.xyz/#${result.username}`;
+        const username = result.username;
         return (
-          <a key={result.userId} className="d-flex" href={profileLink}>
+          <a key={result.userId} className="d-flex" href={`spillit.xyz/#${username}`}>
             <div className="search-result d-flex">
               <Avatar
                 imageUrl={result.image}
