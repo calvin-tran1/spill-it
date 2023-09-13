@@ -46,7 +46,7 @@ export default class Searchbar extends React.Component {
       results = searchResults.map(result => {
         const username = result.username;
         return (
-          <a key={result.userId} className="d-flex" href={`spillit.xyz/#${username}`}>
+          <a key={result.userId} className="d-flex" href={`#${username}`}>
             <div className="search-result d-flex">
               <Avatar
                 imageUrl={result.image}
