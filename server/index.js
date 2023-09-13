@@ -193,7 +193,7 @@ app.get('/api/user', (req, res, next) => {
 app.patch('/api/user/profile', uploadsMiddleware, (req, res, next) => {
   const { userId } = req.user;
   const { displayName, bio } = req.body;
-  const image = `/images/${req.file.filename}`;
+  const image = req.file.location;
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
@@ -271,7 +271,7 @@ app.post('/api/new/post/no-image', (req, res, next) => {
 app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
   const { userId, username } = req.user;
   const { displayName, avatar, textContent } = req.body;
-  const image = `/images/${req.file.filename}`;
+  const image = req.file.location;
 
   if (!userId) {
     throw new ClientError(400, 'could not find user');
@@ -293,7 +293,7 @@ app.post('/api/new/post', uploadsMiddleware, (req, res, next) => {
 
 app.delete('/api/posts/:postId', (req, res, next) => {
   const { userId } = req.user;
-  const postId = Number(req.body.postId);
+  const postId = Number(req.params.postId);
 
   if (!Number.isInteger(postId) || postId <= 0) {
     throw new ClientError(400, 'postId must be a positive integer');
