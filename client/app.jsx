@@ -62,8 +62,11 @@ export default class App extends React.Component {
   }
 
   renderPage() {
-    const { route, users } = this.state;
+    const { route, user, users } = this.state;
 
+    if (user && route.path === '') {
+      return <Home onSignOut={this.handleSignOut} />;
+    }
     if (route.path === '') {
       return <SignIn onSignIn={this.handleSignIn} />;
     }
