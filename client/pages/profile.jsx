@@ -703,7 +703,7 @@ export default class Profile extends React.Component {
               </div>
               <div className="row m-0 p-0">
                 <div className="col mx-0 my-1 p-0">
-                  <span className="profile-bio mx-1 my-0 px-3">{this.state.bio}</span>
+                  <span className="profile-bio mx-1 my-0 px-3">{this.state.bio === null ? '' : `${this.state.bio}`}</span>
                 </div>
               </div>
               <div className="row tabs-border mt-2 mx-0 px-3">
